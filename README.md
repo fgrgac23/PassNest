@@ -34,3 +34,24 @@ Podaci se pohranjuju lokalno, u enkriptiranom obliku, čime se smanjuje mogućno
 | FZ-13 | Provjera sigurnosti spremljenih lozinka | Korisnik može pokrenuti analizu spremljenih lozinki i upozoriti korisnika na slabe lozinke. |
 | FZ-14 | Pristup aplikacije putem globalne tipkovničke kombinacije | Korisnik može u svakom trenutnu prikazati glavni prozor apliakcije pomoću unaprijed definirane kombinacije tipki, neovisno o tome koja je aplikacija trenutno aktivna. |
 | FZ-15 | Opcionalna dvofaktorska prijava putem e-maila | Korisnik može, po želji, omogućiti dodatni faktor autorizacije putem e-maila prilikom prijave u aplikaciju gdje se na e-mail šalje jednokratni kod koji je potrebno unijeti za potpunu prijavu. |
+
+## Tehnologije i oprema
+### Tehnologije
+| Kategorija | Tehnologija | Namjena |
+| ---------- | ----------- | ------- |
+| Platforma  | .NET 8      | Osnovna razvojna platforma aplikacije |
+| Programski jezik | C#    | Implementacija poslovne logike i komponenti |
+| Frontend / UI | Avalonia UI | Izrada multiplatformskog grafičkog korisničkog sučelja |
+| Baza podataka | SQLite | Lokalna, datotečna relacijska baza podataka za pohranu enkriptiranih podataka |
+| ORM / pristup podacima | Entitiy Framework Core | Komunikacija aplikacije s SQLite bazom podataka |
+| Enkripcija | AES-256, PBKDF2/Argon2 | Enkripcija pohranjenih lozinki i izvođenje ključa iz master lozinke |
+| Slanje e-mail koda (2FA) | MailKit + SMTP servis | Slanje jednokratnog koda e-mail prilikomo opcionalne dvofaktorske prijave |
+| Simulacija unosa | Windows API za Windows operacijski sustav | Automatsko popunjavanje prijavnih obrazaca u drugim aplikacijama |
+| Verzioniranje koda | Git / GitHub | Praćenje promjena koda i izrada wiki dokumentacije |
+
+### Oprema
+| Oprema | Namjena |
+| ------ | ------- |
+| Osobno računalo | Razvoj i testiranje aplikaicje |
+| Integrirano razvojno okruženje - Visual Studio | Pisanje, otklanjanje pogrešaka i izgradnja aplikaicje |
+| Git repozitorij (GitHub) | Pohrana izvornog koda i wiki dokumentaicje završnog rada |
