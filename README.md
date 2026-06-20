@@ -8,11 +8,11 @@ Mentor: Vjeran Strahonja, prof. emer.
 Završni rad: **Dizajn temeljen na komponentama**
 
 ## Opis domene
-Upravljanje korisničkim računima zahtjeva pamćenje velikog broja kombinacija korisničkih imena i lozinki za različite servise i aplikaicje. Najčešći problem korisnika je zaboravljena lozinka i korištenje iste ili slabe lozinke na više mjesta. Takvi problemi su jedan od najčešćih uzroka sigurnosnih incidenata i neovlaštenog pristupa računima.
+Upravljanje korisničkim računima zahtjeva pamćenje velikog broja kombinacija korisničkih imena i lozinki za različite servise i aplikacije. Najčešći problem korisnika je zaboravljena lozinka i korištenje iste ili slabe lozinke na više mjesta. Takvi problemi su jedan od najčešćih uzroka sigurnosnih incidenata i neovlaštenog pristupa računima.
 
 **PassNest** je desktop aplikacija namijenjena pojedinačnom korisniku za sigurno i organizirano čuvanje pristupnih podataka (korisničko ime/e-mail i lozinka) za neograničen broj korisničkih računa na različitim servisima. Svaki spremljeni račun, s oznakom servisa, prikazuje se korisniku u obliku zasebne kartice na početnom zaslonu aplikacije.
 
-Apliakcija je osmišljena kao primjer dizajna temeljenog na komponentama (component-based design). Svaka funkcionalna cjelina (prikaz kartica, generator lozinki, enkripcijski modul, pritup bazi podataka, modul za autentifikaciju, modul za automatsko popunjavanje obrazaca) razvija se kao samostalna, ponovno upotrebljiva komponenta s jasno definiranim sučeljem prema ostatku sustava. Ovakav pristup omogućuje lakše testiranje, održavanje i proširivost aplikaicje.
+Aplikacija je osmišljena kao primjer dizajna temeljenog na komponentama (component-based design). Svaka funkcionalna cjelina (prikaz kartica, generator lozinki, enkripcijski modul, pristup bazi podataka, modul za autentifikaciju, modul za automatsko popunjavanje obrazaca) razvija se kao samostalna, ponovno upotrebljiva komponenta s jasno definiranim sučeljem prema ostatku sustava. Ovakav pristup omogućuje lakše testiranje, održavanje i proširivost aplikacije.
 
 Podaci se pohranjuju lokalno, u enkriptiranom obliku, čime se smanjuje mogućnost za potencijalne sigurnosne napade, dok korisnik ostaje jedini vlasnik svojih podataka.
 
@@ -24,15 +24,15 @@ Podaci se pohranjuju lokalno, u enkriptiranom obliku, čime se smanjuje mogućno
 | FZ-03 | Prikaz računa u obliku kartica | Svi spremljeni računi prikazuju se na početnom zaslonu u obliku kartice s nazivom servisa i osnovnim podacima. |
 | FZ-04 | Uređivanje postojećeg računa | Korisnik može izmijeniti podatke (naziv, korisničko ime, lozinku) već spremljenog računa. |
 | FZ-05 | Brisanje korisničkog računa | Korisnik može trajno ukloniti odabrani zapis iz baze podataka. |
-| FZ-06 | Generiranje nasumične lozinke | Aplikacija generira nasumičnu lozinku prema odabranim paramterima (dužina, velika/mala slova, brojevi, posebni znakovi). |
+| FZ-06 | Generiranje nasumične lozinke | Aplikacija generira nasumičnu lozinku prema odabranim parametrima (dužina, velika/mala slova, brojevi, posebni znakovi). |
 | FZ-07 | Kategorizacija računa | Korisnik može dodijeliti kategoriju/oznaku svakom računu radi lakšeg filtriranja i pregleda. |
-| FZ-08 | Pretraživanje i filtriranje računa | Korisnik može pretraživati spremljene račune po nazivu servisa ili filtriranje prikaza po kategoriji. |
-| FZ-09 | Kopiranje podataka u međuspremnik | Korisnik može jednim klikom kopirati korisničko ime ili lozinku u međuspremnik radi jednostavnog korištenja u drugim aplikaicjama. |
+| FZ-08 | Pretraživanje i filtriranje računa | Korisnik može pretraživati spremljene račune po nazivu servisa ili filtrira prikaz po kategoriji. |
+| FZ-09 | Kopiranje podataka u međuspremnik | Korisnik može jednim klikom kopirati korisničko ime ili lozinku u međuspremnik radi jednostavnog korištenja u drugim aplikacijama. |
 | FZ-10 | Automatsko popunjavanje obrazaca | Na zahtjev korisnika, aplikacija putem simulacije unosa tipkovnice popunjava prijavna polja (korisničko ime i lozinka) u trenutno aktivnom prozoru drugog programa. |
-| FZ-11 | Inicijalno postavljanje master lozinke | Prilikom registracije korisnik definira master lozinku iz koje se izvodi ključ za enkripciju svih budućih podataka. |
-| FZ-12 | Prijava putem master lozinke | Pri svakom pokretanju aplikacije, detaljan pristup spremljenim podacima omogućen je isključivo unosom prethodno postavljene master lozinke. |
+| FZ-11 | Inicijalno postavljanje master lozinke | Prilikom procesa registracije korisnik definira master lozinku iz koje se izvodi ključ za enkripciju svih budućih podataka. |
+| FZ-12 | Prijava putem master lozinke | Pri svakom pokretanju aplikacije, detaljni pristup spremljenim podacima omogućen je isključivo unosom prethodno postavljene master lozinke. |
 | FZ-13 | Provjera sigurnosti spremljenih lozinka | Korisnik može pokrenuti analizu spremljenih lozinki i upozoriti korisnika na slabe lozinke. |
-| FZ-14 | Pristup aplikacije putem globalne tipkovničke kombinacije | Korisnik može u svakom trenutnu prikazati glavni prozor apliakcije pomoću unaprijed definirane kombinacije tipki, neovisno o tome koja je aplikacija trenutno aktivna. |
+| FZ-14 | Pristup aplikacije putem globalne tipkovničke kombinacije | Korisnik može u svakom trenutku prikazati glavni prozor apliakcije pomoću unaprijed definirane kombinacije tipki, neovisno o tome koja je aplikacija trenutno aktivna. |
 | FZ-15 | Opcionalna dvofaktorska prijava putem e-maila | Korisnik može, po želji, omogućiti dodatni faktor autorizacije putem e-maila prilikom prijave u aplikaciju gdje se na e-mail šalje jednokratni kod koji je potrebno unijeti za potpunu prijavu. |
 
 ## Tehnologije i oprema
@@ -43,7 +43,7 @@ Podaci se pohranjuju lokalno, u enkriptiranom obliku, čime se smanjuje mogućno
 | Programski jezik | C#    | Implementacija poslovne logike i komponenti |
 | Frontend / UI | Avalonia UI | Izrada multiplatformskog grafičkog korisničkog sučelja |
 | Baza podataka | SQLite | Lokalna, datotečna relacijska baza podataka za pohranu enkriptiranih podataka |
-| ORM / pristup podacima | Entitiy Framework Core | Komunikacija aplikacije s SQLite bazom podataka |
+| ORM / pristup podacima | Entity Framework Core | Komunikacija aplikacije s SQLite bazom podataka |
 | Enkripcija | AES-256, PBKDF2/Argon2 | Enkripcija pohranjenih lozinki i izvođenje ključa iz master lozinke |
 | Slanje e-mail koda (2FA) | MailKit + SMTP servis | Slanje jednokratnog koda e-mail prilikomo opcionalne dvofaktorske prijave |
 | Simulacija unosa | Windows API za Windows operacijski sustav | Automatsko popunjavanje prijavnih obrazaca u drugim aplikacijama |
