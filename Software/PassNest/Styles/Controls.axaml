@@ -1,0 +1,55 @@
+﻿<Style xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Style Selector="TextBlock.field-label">
+        <Setter Property="FontFamily" Value="{StaticResource PlexSans}"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+        <Setter Property="Margin" Value="0,0,0,6"/>
+    </Style>
+
+    <Style Selector="TextBox.form">
+        <Setter Property="FontFamily" Value="{StaticResource PlexSans}"/>
+        <Setter Property="Padding" Value="12,10"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Border}"/>
+        <Setter Property="Background" Value="{StaticResource Surface}"/>
+        <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+    </Style>
+
+    <Style Selector="TextBox.form:focus">
+        <Setter Property="BorderBrush" Value="{StaticResource Accent}"/>
+    </Style>
+
+    <Style Selector="Button.primary">
+        <Setter Property="FontFamily" Value="{StaticResource PlexSans}"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="Padding" Value="0,14"/>
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Background" Value="{StaticResource Accent}"/>
+        <Setter Property="Foreground" Value="{StaticResource TextOnDarkPrimary}"/>
+    </Style>
+
+    <Style Selector="Button.primary:pointerover">
+        <Setter Property="Background" Value="{StaticResource AccentHover}"/>
+    </Style>
+
+     <Style Selector="Button.secondary">
+        <Setter Property="FontFamily" Value="{StaticResource PlexSans}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderStrong}"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Padding" Value="0,14"/>
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="BorderThickness" Value="1"/>"
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{StaticResource TextSecondary}"/>
+    </Style>
+</Style>
