@@ -1,0 +1,114 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:PassNest.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="670"
+        x:Class="PassNest.Views.RegisterView"
+        x:DataType="vm:RegisterViewModel">
+
+    <Design.DataContext>
+        <vm:RegisterViewModel/>
+    </Design.DataContext>
+
+    <UserControl.Styles>
+        <Style Selector="Border.progress-segment">
+            <Setter Property="Background" Value="{StaticResource Border}"/>
+        </Style>
+        <Style Selector="Border.progress-segment.step-active">
+            <Setter Property="Background" Value="{StaticResource Strong}"/>
+        </Style>
+    </UserControl.Styles>
+    
+    <Grid RowDefinitions="Auto,Auto,*" Background="{StaticResource Canvas}">
+        <Border Grid.Row="0" Background="{StaticResource GraphiteDark}" Padding="24,16">
+            <TextBlock Text="PassNest - Registracija"
+                       FontFamily="{StaticResource PlexSans}"
+                       FontSize="16"
+                       FontWeight="SemiBold"
+                       Foreground="{StaticResource TextOnDarkPrimary}"/>
+        </Border>
+
+        <Grid Grid.Row="1" ColumnDefinitions="*,*" Margin="40,24,40,0">
+            <Border Grid.Column="0" Height="4" CornerRadius="2" Background="{StaticResource Strong}" Margin="0,0,4,0"/>
+            <Border Grid.Column="1" Height="4" CornerRadius="2" Classes="progress-segment" Classes.step-active="{Binding IsStep2Visible}" Margin="4,0,0,0"/>
+        </Grid>
+
+        <ScrollViewer Grid.Row="2">
+            <Panel Margin="40,16,40,32" HorizontalAlignment="Center" VerticalAlignment="Top">
+                <StackPanel IsVisible="{Binding IsStep1Visible}" Width="440" Spacing="20">
+                    <Image Source="avares://PassNest/Assets/PassNest-Logo.png" Height="150" Stretch="Uniform" HorizontalAlignment="Center"/>
+                    <StackPanel>
+                        <TextBlock Classes="field-label" Text="Ime"/>
+                        <TextBox Classes="form" Watermark="Upišite svoje ime..." Text="{Binding FirstName}"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <TextBlock Classes="field-label" Text="Prezime"/>
+                        <TextBox Classes="form" Watermark="Upišite svoje prezime..." Text="{Binding LastName}"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <TextBlock Classes="field-label" Text="E-mail"/>
+                        <TextBox Classes="form" Watermark="Upišite svoju e-mail adresu..." Text="{Binding Email}"/>
+                    </StackPanel>
+                    <Button Classes="primary" Content="Sljedeće" Command="{Binding NextStepCommand}" HorizontalAlignment="Stretch" Margin="0,12,0,0"/>
+                </StackPanel>
+
+                <StackPanel IsVisible="{Binding IsStep2Visible}" Width="440" Spacing="20">
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="Stvorite glavnu lozinku" FontFamily="{StaticResource PlexSans}" FontWeight="Bold" FontSize="22" Foreground="{StaticResource TextPrimary}"/>
+                        <TextBlock TextWrapping="Wrap" FontFamily="{StaticResource PlexSans}" FontSize="13" Foreground="{StaticResource TextSecondary}" Text="Glavna lozinka štiti cijeli trezor i temelj je enkripcije. Pohranjuje se samo njezin hash. Ne može se obnoviti!"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <TextBlock Classes="field-label" Text="Glavna lozinka"/>
+                        <TextBox Classes="form" Text="{Binding MasterPassword}" PasswordChar="*" RevealPassword="{Binding IsPasswordRevealed}">
+                            <TextBox.InnerRightContent>
+                                <Button Classes="icon-toggle" Command="{Binding TogglePasswordRevealCommand}">
+                                    <Panel Width="18" Height="18">
+                                        <Path Data="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" Stretch="Uniform" Stroke="{StaticResource TextMuted}" StrokeThickness="1.6" StrokeJoin="Round" StrokeLineCap="Round" IsVisible="{Binding IsPasswordRevealed}"/>
+                                        <Path Data="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" Stretch="Uniform" Stroke="{StaticResource TextMuted}" StrokeThickness="1.6" StrokeJoin="Round" StrokeLineCap="Round" IsVisible="{Binding !IsPasswordRevealed}"/>
+                                    </Panel>
+                                </Button>
+                            </TextBox.InnerRightContent>
+                        </TextBox>
+                    </StackPanel>
+                    <StackPanel>
+                        <TextBlock Classes="field-label" Text="Potvrdite glavnu lozinku"/>
+                        <TextBox Classes="form" Text="{Binding ConfirmMasterPassword}" PasswordChar="*" RevealPassword="{Binding IsConfirmPasswordRevealed}">
+                            <TextBox.InnerRightContent>
+                                <Button Classes="icon-toggle" Command="{Binding ToggleConfirmPasswordRevealCommand}">
+                                    <Panel Width="18" Height="18">
+                                        <Path Data="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" Stretch="Uniform" Stroke="{StaticResource TextMuted}" StrokeThickness="1.6" StrokeJoin="Round" StrokeLineCap="Round" IsVisible="{Binding IsConfirmPasswordRevealed}"/>
+                                        <Path Data="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" Stretch="Uniform" Stroke="{StaticResource TextMuted}" StrokeThickness="1.6" StrokeJoin="Round" StrokeLineCap="Round" IsVisible="{Binding !IsConfirmPasswordRevealed}"/>
+                                    </Panel>
+                                </Button>
+                            </TextBox.InnerRightContent>
+                        </TextBox>
+                    </StackPanel>
+
+                    <StackPanel Spacing="6">
+                        <Grid ColumnDefinitions="*, Auto">
+                            <TextBlock Grid.Column="0" Text="Jačina lozinke" FontFamily="{StaticResource PlexSans}" FontSize="13" Foreground="{StaticResource TextSecondary}"/>
+                            <TextBlock Grid.Column="1" Text="Jaka" FontFamily="{StaticResource PlexSans}" FontSize="13" FontWeight="SemiBold" Foreground="{StaticResource Strong}"/>
+                        </Grid>
+                        <Grid ColumnDefinitions="*,*,*,*">
+                            <Border Grid.Column="0" Height="4" CornerRadius="2" Background="{StaticResource Strong}" Margin="0,0,4,0"/>
+                            <Border Grid.Column="1" Height="4" CornerRadius="2" Background="{StaticResource Strong}" Margin="0,0,4,0"/>
+                            <Border Grid.Column="2" Height="4" CornerRadius="2" Background="{StaticResource Strong}" Margin="0,0,4,0"/>
+                            <Border Grid.Column="3" Height="4" CornerRadius="2" Background="{StaticResource Strong}"/>
+                        </Grid>
+                    </StackPanel>
+
+                    <Border Background="#1FE0952E" BorderBrush="{StaticResource Medium}" BorderThickness="1" CornerRadius="8" Padding="12">
+                        <TextBlock TextWrapping="Wrap" FontFamily="{StaticResource PlexSans}" FontSize="13" Foreground="{StaticResource TextPrimary}">
+                            <Run Text="Zapamtite je." FontWeight="Bold"/>
+                            <Run Text="Gubitak lozinke znači trajan gubitak pristupa svim podacima."/>
+                        </TextBlock>
+                    </Border>
+
+                    <Button Classes="primary" Content="Stvori trezor" Command="{Binding CreateValutCommand}" HorizontalAlignment="Stretch" Margin="0,4,0,0"/>
+                    <Button Classes="secondary" Content="Natrag" Command="{Binding PreviousStepCommand}" HorizontalAlignment="Stretch"/>
+                </StackPanel>
+            </Panel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>
