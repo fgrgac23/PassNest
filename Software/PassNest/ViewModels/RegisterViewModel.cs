@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using PassNest.ViewModels;
 
 namespace PassNest.ViewModels
 {
@@ -33,17 +32,10 @@ namespace PassNest.ViewModels
         public bool IsStep1Visible => CurrentStep == 1;
         public bool IsStep2Visible => CurrentStep == 2;
 
-        public string RevealButtonText => IsPasswordRevealed ? "Hide" : "Reveal";
-
         partial void OnCurrentStepChanged(int value)
         {
             OnPropertyChanged(nameof(IsStep1Visible));
             OnPropertyChanged(nameof(IsStep2Visible));
-        }
-
-        partial void OnIsPasswordRevealedChanged(bool value)
-        {
-            OnPropertyChanged(nameof(RevealButtonText));
         }
 
         [RelayCommand]

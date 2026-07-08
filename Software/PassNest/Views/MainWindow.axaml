@@ -11,6 +11,7 @@
         Title="PassNest"
         Width="600"
         Height="670"
+        CanResize="False"
         WindowStartupLocation="CenterScreen">
 
     <Design.DataContext>
