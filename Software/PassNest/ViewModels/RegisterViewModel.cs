@@ -65,7 +65,6 @@ namespace PassNest.ViewModels
         [RelayCommand]
         private void CreateValut()
         {
-            // Implement registration logic here
         }
     }
 }
