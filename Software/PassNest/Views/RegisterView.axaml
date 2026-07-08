@@ -20,7 +20,7 @@
         </Style>
     </UserControl.Styles>
     
-    <Grid RowDefinitions="Auto,Auto,*" Background="{StaticResource Canvas}">
+    <Grid RowDefinitions="Auto,Auto,*" Width="600" Height="670" Background="{StaticResource Canvas}">
         <Border Grid.Row="0" Background="{StaticResource GraphiteDark}" Padding="24,16">
             <TextBlock Text="PassNest - Registracija"
                        FontFamily="{StaticResource PlexSans}"

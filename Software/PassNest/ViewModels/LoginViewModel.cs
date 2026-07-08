@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace PassNest.ViewModels
 {
-    public partial class LoginVewModel : ViewModelBase
+    public partial class LoginViewModel : ViewModelBase
     {
         [ObservableProperty]
         private string masterPassword = string.Empty;

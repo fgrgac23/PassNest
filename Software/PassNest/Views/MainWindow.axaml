@@ -9,8 +9,7 @@
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/PassNest-icon.ico"
         Title="PassNest"
-        Width="600"
-        Height="670"
+        SizeToContent="WidthAndHeight"
         CanResize="False"
         WindowStartupLocation="CenterScreen">
 
@@ -18,9 +17,9 @@
        <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-    <views:RegisterView>
-        <views:RegisterView.DataContext>
-            <vm:RegisterViewModel/>
-        </views:RegisterView.DataContext>
-    </views:RegisterView>
+    <views:LoginView>
+        <views:LoginView.DataContext>
+            <vm:LoginViewModel/>
+        </views:LoginView.DataContext>
+    </views:LoginView>
 </Window>

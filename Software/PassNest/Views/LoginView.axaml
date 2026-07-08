@@ -1,0 +1,55 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:PassNest.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="670"
+        x:Class="PassNest.Views.LoginView"
+        x:DataType="vm:LoginViewModel">
+    
+    <Design.DataContext>
+        <vm:LoginViewModel/>
+    </Design.DataContext>
+
+    <Grid RowDefinitions="Auto,*" Width="600" Height="600" Background="{StaticResource Canvas}">
+        <Border Grid.Row="0" Background="{StaticResource GraphiteDark}" Padding="24,16">
+            <TextBlock Text="PassNest - Prijava"
+                       FontFamily="{StaticResource PlexSans}"
+                       FontSize="16"
+                       FontWeight="SemiBold"
+                       Foreground="{StaticResource TextOnDarkPrimary}"/>
+        </Border>
+        <ScrollViewer Grid.Row="1">
+        <Panel Margin="40,32,40,32" HorizontalAlignment="Center" VerticalAlignment="Top">
+            <StackPanel Width="440" Spacing="20" HorizontalAlignment="Center">
+                <Image Source="avares://PassNest/Assets/PassNest-Logo.png" Height="120" Stretch="Uniform" HorizontalAlignment="Center"/>
+                <StackPanel Spacing="4" HorizontalAlignment="Center">
+                    <TextBlock Text="Otključajte trezor" FontFamily="{StaticResource PlexSans}" FontSize="22" FontWeight="Bold" HorizontalAlignment="Center" Foreground="{StaticResource TextPrimary}"/>
+                    <TextBlock Text="Unesite glavnu lozinku za nastavak." FontFamily="{StaticResource PlexSans}" FontSize="13" HorizontalAlignment="Center" Foreground="{StaticResource TextSecondary}"/>
+                </StackPanel>
+                <StackPanel>
+                    <TextBlock Classes="field-label" Text="Glavna lozinka"/>
+                    <TextBox Classes="form" Text="{Binding MasterPassword}" PasswordChar="*" RevealPassword="{Binding IsPasswordRevealed}">
+                        <TextBox.InnerRightContent>
+                            <Button Classes="icon-toggle" Command="{Binding TogglePasswordRevealCommand}">
+                                <Panel Width="18" Height="18">
+                                    <Panel IsVisible="{Binding IsPasswordRevealed}">
+                                        <Ellipse Width="16" Height="9" Fill="Transparent" Stroke="{StaticResource TextMuted}" StrokeThickness="1.6"/>
+                                        <Ellipse Width="5" Height="5" Fill="{StaticResource TextMuted}"/>
+                                    </Panel>
+                                    <Panel IsVisible="{Binding !IsPasswordRevealed}">
+                                        <Ellipse Width="16" Height="9" Fill="Transparent" Stroke="{StaticResource TextMuted}" StrokeThickness="1.6"/>
+                                        <Line StartPoint="1,1" EndPoint="17,17" Stroke="{StaticResource TextMuted}" StrokeThickness="1.6"/>
+                                    </Panel>
+                                </Panel>
+                            </Button>
+                        </TextBox.InnerRightContent>
+                    </TextBox>
+                </StackPanel>
+                <Button Classes="primary" Content="Otključaj" Command="{Binding UnlockCommand}" HorizontalAlignment="Stretch"/>
+                <TextBlock Text="Zabrovaljena lozinka znači gubitak podataka." FontFamily="{StaticResource PlexSans}" FontSize="12" HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center" Foreground="{StaticResource TextMuted}"/>
+            </StackPanel>
+        </Panel>
+            </ScrollViewer>
+        </Grid>
+</UserControl>
