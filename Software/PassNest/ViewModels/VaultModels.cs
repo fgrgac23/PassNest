@@ -1,10 +1,11 @@
 ﻿using Avalonia.Media;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace PassNest.ViewModels
 {
     public class AccountCardViewModel
     {
-        public string Inital { get; }
+        public string Initial { get; }
         public string ServiceName { get; }
         public string Username { get; }
         public IBrush AvatarColor { get; }
@@ -13,15 +14,15 @@ namespace PassNest.ViewModels
         public IBrush CategoryTint { get; }
         public IBrush StatusColor { get; }
 
-        public AccountCardViewModel(string inital, string serviceName, string username, string avatarColorHex, string categoryName, string categoryColorHex, string strength)
+        public AccountCardViewModel(string initial, string serviceName, string username, string avatarColorHex, string categoryName, string categoryColorHex, string strength)
         {
-            Inital = inital;
+            Initial = initial;
             ServiceName = serviceName;
             Username = username;
             AvatarColor = new SolidColorBrush(Color.Parse(avatarColorHex));
             CategoryName = categoryName;
             CategoryColor = new SolidColorBrush(Color.Parse(categoryColorHex));
-            CategoryTint = new SolidColorBrush(Color.Parse(categoryColorHex),0.15);
+            CategoryTint = new SolidColorBrush(Color.Parse(categoryColorHex), 0.15);
             StatusColor = new SolidColorBrush(Color.Parse(strength switch
             {
                 "Strong" => "#2AA26A",
@@ -29,20 +30,22 @@ namespace PassNest.ViewModels
                 _ => "#D6503C"
             }));
         }
+    }
 
-        public class CategoryNavItem
+    public partial class CategoryNavItem : ObservableObject
+    {
+        public string Name { get; }
+        public int Count { get; }
+        public IBrush DotColor { get; }
+
+        [ObservableProperty]
+        private bool isSelected;
+        public CategoryNavItem(string name, int count, string dotColorHex, bool isSelected = false)
         {
-            public string Name { get; }
-            public int Count { get; }
-            public IBrush DotColor { get; }
-
-            public CategoryNavItem(string name, int count, string dotColorHex)
-            {
-                Name = name;
-                Count = count;
-                DotColor = new SolidColorBrush(Color.Parse(dotColorHex));
-            }
+            Name = name;
+            Count = count;
+            DotColor = new SolidColorBrush(Color.Parse(dotColorHex));
+            this.isSelected = isSelected;
         }
-
     }
 }

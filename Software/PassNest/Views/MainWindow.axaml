@@ -17,9 +17,9 @@
        <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-    <views:LoginView>
-        <views:LoginView.DataContext>
-            <vm:LoginViewModel/>
-        </views:LoginView.DataContext>
-    </views:LoginView>
+    <views:VaultView>
+        <views:VaultView.DataContext>
+            <vm:VaultViewModel/>
+        </views:VaultView.DataContext>
+    </views:VaultView>
 </Window>

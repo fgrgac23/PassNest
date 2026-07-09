@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
-using static PassNest.ViewModels.AccountCardViewModel;
 
 namespace PassNest.ViewModels
 {
@@ -16,18 +15,14 @@ namespace PassNest.ViewModels
         [ObservableProperty]
         private string searchText = string.Empty;
 
-        private bool IsTrezorActive => SelectedNavItem == "Trezor";
-        private bool IsGeneratorActive => SelectedNavItem == "Generator";
-        private bool IsSafetyActive => SelectedNavItem == "Sigurnost";
-        private bool IsSettingsActive => SelectedNavItem == "Postavke";
-
-        private bool IsAllFiltersActive => SelectedCategoryFilter == "Sve";
-        private bool IsFinanceFiltersActive => SelectedCategoryFilter == "Financije";
-        private bool IsWorkFiltersActive => SelectedCategoryFilter == "Posao";
+        public bool IsTrezorActive => SelectedNavItem == "Trezor";
+        public bool IsGeneratorActive => SelectedNavItem == "Generator";
+        public bool IsSafetyActive => SelectedNavItem == "Sigurnost";
+        public bool IsSettingsActive => SelectedNavItem == "Postavke";
 
         public ObservableCollection<CategoryNavItem> Categories { get; } = new()
         {
-            new CategoryNavItem("Sve", 24, "#1E8A91"),
+            new CategoryNavItem("Sve", 24, "#1E8A91", isSelected:true),
             new CategoryNavItem("Financije", 5, "#E0952E"),
             new CategoryNavItem("Posao", 7, "#7C5CD6"),
             new CategoryNavItem("Zabava", 8, "#D6503C"),
@@ -36,7 +31,7 @@ namespace PassNest.ViewModels
 
         public ObservableCollection<AccountCardViewModel> Accounts { get; } = new()
         {
-            new AccountCardViewModel("G", "Gmail", "ivan.ivic@gmail.com", "#15B4D", "Osobno", "#2AA26A", "Strong"),
+            new AccountCardViewModel("G", "Gmail", "ivan.ivic@gmail.com", "#E15B4D", "Osobno", "#2AA26A", "Strong"),
             new("G", "GitHub", "iivic", "#1B1F24", "Posao", "#7C5CD6", "Strong"),
             new("N", "Netflix", "ivan.ivic@gmail.com", "#D6503C", "Zabava", "#D6503C", "Medium"),
             new("P", "PayPal", "ivan.ivic@gmail.com", "#2563EB", "Financije", "#E0952E", "Strong"),
@@ -55,18 +50,17 @@ namespace PassNest.ViewModels
             OnPropertyChanged(nameof(IsSettingsActive));
         }
 
-        partial void OnSelectedCategoryFilterChanged(string value)
-        {
-            OnPropertyChanged(nameof(IsAllFiltersActive));
-            OnPropertyChanged(nameof(IsFinanceFiltersActive));
-            OnPropertyChanged(nameof(IsWorkFiltersActive));
-        }
-
         [RelayCommand]
         private void SelectNav(string item) => SelectedNavItem = item;
 
         [RelayCommand]
-        private void SelectCategory(string category) => SelectedCategoryFilter = category;
+        private void SelectCategory(CategoryNavItem category)
+        {
+            foreach (var item in Categories)
+                item.IsSelected = item == category;
+
+            SelectedCategoryFilter = category.Name;
+        }
 
         [RelayCommand]
         private void AddAccount()
@@ -75,6 +69,11 @@ namespace PassNest.ViewModels
 
         [RelayCommand]
         private void LockVault()
+        {
+        }
+
+        [RelayCommand]
+        private void OpenAccountDetails(AccountCardViewModel account)
         {
         }
     }

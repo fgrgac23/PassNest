@@ -6,7 +6,7 @@
     <Color x:Key="AccentColor">#1E8A91</Color>
     <Color x:Key="AccentHoverColor">#2A9AA1</Color>
     <Color x:Key="AccentTintColor">#E6F2F3</Color>
-    <Color x:Key="CanvasColor">#F6F7F9</Color>
+    <Color x:Key="CanvasColor">#EBEDF1</Color>
     <Color x:Key="SurfaceColor">#FFFFFF</Color>
     <Color x:Key="BorderColor">#E8EAEE</Color>
     <Color x:Key="BorderStrongColor">#D8DCE2</Color>

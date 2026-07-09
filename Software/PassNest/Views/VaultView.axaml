@@ -1,0 +1,152 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:PassNest.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="using:PassNest.Views"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="670"
+        x:Class="PassNest.Views.VaultView"
+        x:Name="Root"
+        x:DataType="vm:VaultViewModel">
+
+    <Design.DataContext>
+        <vm:VaultViewModel/>
+    </Design.DataContext>
+
+    <Grid Width="1160" Height="760" ColumnDefinitions="240,*">
+        <Grid Grid.Column="0" RowDefinitions="Auto,*,Auto" Background="{StaticResource GraphiteDark}">
+            <Image Grid.Row="0" Source="avares://PassNest/Assets/PassNest-Logo-Transparent.png" Height="70" Stretch="Uniform" HorizontalAlignment="Left" Margin="10,20,20,20"/>
+            <ScrollViewer Grid.Row="1">
+               <StackPanel Margin="23,8,12,12" Spacing="20">
+                  <StackPanel Spacing="2">
+                      <TextBlock Classes="sidebar-label" Text="NAVIGACIJA"/>
+                      <Button Classes="nav-item" Classes.active="{Binding IsTrezorActive}" Command="{Binding SelectNavCommand}" CommandParameter="Trezor">
+                          <StackPanel Orientation="Horizontal" Spacing="10">
+                             <Border Width="18" Height="18" Background="{Binding $parent[Button].Foreground}">
+                                 <Border.OpacityMask>
+                                    <ImageBrush Source="avares://PassNest/Assets/vault.png" Stretch="Uniform"/>
+                                 </Border.OpacityMask>
+                             </Border>
+                              <TextBlock Text="Trezor" Foreground="{Binding $parent[Button].Foreground}"/>
+                          </StackPanel>
+                      </Button>
+                      <Button Classes="nav-item" Classes.active="{Binding IsGeneratorActive}" Command="{Binding SelectNavCommand}" CommandParameter="Generator">
+                          <StackPanel Orientation="Horizontal" Spacing="10">
+                             <Border Width="18" Height="18" Background="{Binding $parent[Button].Foreground}">
+                                 <Border.OpacityMask>
+                                    <ImageBrush Source="avares://PassNest/Assets/generator.png" Stretch="Uniform"/>
+                                 </Border.OpacityMask>
+                             </Border>
+                              <TextBlock Text="Generator" Foreground="{Binding $parent[Button].Foreground}"/>
+                          </StackPanel>
+                      </Button>
+                      <Button Classes="nav-item" Classes.active="{Binding IsSafetyActive}" Command="{Binding SelectNavCommand}" CommandParameter="Sigurnost">
+                          <StackPanel Orientation="Horizontal" Spacing="10">
+                              <Border Width="18" Height="18" Background="{Binding $parent[Button].Foreground}">
+                                  <Border.OpacityMask>
+                                      <ImageBrush Source="avares://PassNest/Assets/security.png" Stretch="Uniform"/>
+                                  </Border.OpacityMask>
+                              </Border>
+                              <TextBlock Text="Sigurnost" Foreground="{Binding $parent[Button].Foreground}"/>
+                          </StackPanel>
+                      </Button>
+                      <Button Classes="nav-item" Classes.active="{Binding IsSettingsActive}" Command="{Binding SelectNavCommand}" CommandParameter="Postavke">
+                          <StackPanel Orientation="Horizontal" Spacing="10">
+                              <Border Width="18" Height="18" Background="{Binding $parent[Button].Foreground}">
+                                  <Border.OpacityMask>
+                                      <ImageBrush Source="avares://PassNest/Assets/settings.png" Stretch="Uniform"/>
+                                  </Border.OpacityMask>
+                              </Border>
+                              <TextBlock Text="Postavke" Foreground="{Binding $parent[Button].Foreground}"/>
+                          </StackPanel>
+                      </Button>
+                  </StackPanel> 
+                  <StackPanel Spacing="2">
+                      <TextBlock Classes="sidebar-label" Text="KATEGORIJE"/>
+                      <ItemsControl ItemsSource="{Binding Categories}">
+                          <ItemsControl.ItemTemplate>
+                              <DataTemplate x:DataType="vm:CategoryNavItem">
+                                  <Button Classes="category-item" Classes.active="{Binding IsSelected}" Command="{Binding #Root.((vm:VaultViewModel)DataContext).SelectCategoryCommand}" CommandParameter="{Binding}">
+                                      <Grid ColumnDefinitions="Auto,*,Auto">
+                                          <Ellipse Grid.Column="0" Width="8" Height="8" Fill="{Binding DotColor}" VerticalAlignment="Center"/>
+                                          <TextBlock Grid.Column="1" Text="{Binding Name}" FontFamily="{StaticResource PlexSans}" FontSize="14" Margin="10,0,0,0" VerticalAlignment="Center" Foreground="{Binding $parent[Button].Foreground}"/>
+                                          <TextBlock Grid.Column="2" Text="{Binding Count}" FontFamily="{StaticResource PlexSans}" FontSize="13" VerticalAlignment="Center" Foreground="{Binding $parent[Button].Foreground}"/>
+                                      </Grid>
+                                  </Button>
+                              </DataTemplate> 
+                          </ItemsControl.ItemTemplate> 
+                        </ItemsControl>
+                  </StackPanel>
+               </StackPanel> 
+            </ScrollViewer>
+            <Button Grid.Row="2" Classes="secondary-dark" Command="{Binding LockVaultCommand}" Margin="16" HorizontalAlignment="Stretch">
+                <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
+                    <Border Width="16" Height="16" Background="{StaticResource Weak}">
+                        <Border.OpacityMask>
+                            <ImageBrush Source="avares://PassNest/Assets/lock.png" Stretch="Uniform"/>
+                        </Border.OpacityMask>
+                    </Border>
+                    <TextBlock Text="Zaključaj trezor" Foreground="{StaticResource Weak}"/>
+                </StackPanel>
+            </Button>
+        </Grid>
+        <Grid Grid.Column="1" RowDefinitions="Auto,Auto,*" Background="{StaticResource Canvas}">
+            <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="32,24,32,16">
+                    <Border Grid.Column="0" Width="320" Height="42" CornerRadius="21" Background="{StaticResource Surface}" BorderBrush="{StaticResource Border}" BorderThickness="1" HorizontalAlignment="Left" BoxShadow="0 1 3 0 #14000000">
+                        <Grid ColumnDefinitions="Auto,*" Margin="14,0">
+                            <Panel Grid.Column="0" Width="16" Height="16" VerticalAlignment="Center">
+                                <Ellipse Width="10" Height="10" Fill="Transparent" Stroke="{StaticResource TextMuted}" StrokeThickness="1.4" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                <Line StartPoint="9,9" EndPoint="14,14" Stroke="{StaticResource TextMuted}" StrokeThickness="1.4"/>
+                            </Panel>
+                            <TextBox Classes="form" Grid.Column="1" Text="{Binding SearchText}" PlaceholderText="Pretraži servis..." BorderThickness="0" Background="Transparent" Padding="0" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="8,0,0,0">
+                                <TextBox.Resources>
+                                    <SolidColorBrush x:Key="TextControlBorderBrushFocused">Transparent</SolidColorBrush>
+                                    <SolidColorBrush x:Key="TextControlBorderBrushPointOver">Transparent</SolidColorBrush>
+                                </TextBox.Resources>
+                            </TextBox>
+                        </Grid>
+                    </Border>
+                <Button Grid.Column="1" Classes="primary" Content="+ Novi račun" Command="{Binding AddAccountCommand}" Padding="20,10"/>
+            </Grid>
+            <Border Grid.Row="1" Height="1" Background="{StaticResource BorderStrong}" Margin="32,0,32,0"/>
+            <ScrollViewer Grid.Row="2">
+                <ItemsControl ItemsSource="{Binding Accounts}" Margin="32,20,32,32" HorizontalAlignment="Center">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal" ItemWidth="282" ItemHeight="152"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="vm:AccountCardViewModel">
+                            <Border Classes="account-card" Margin="0,0,16,16">
+                                <Grid RowDefinitions="Auto,*,Auto">
+                                    <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto">
+                                        <Border Grid.Column="0" Width="40" Height="40" CornerRadius="10" Background="{Binding AvatarColor}">
+                                            <TextBlock Text="{Binding Initial}" FontFamily="{StaticResource PlexSans}" FontWeight="Bold" FontSize="16" Foreground="{StaticResource TextOnDarkPrimary}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                        <StackPanel Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding ServiceName}" FontFamily="{StaticResource PlexSans}" FontWeight="Bold" FontSize="14" Foreground="{StaticResource TextPrimary}"/>
+                                            <TextBlock Text="{Binding Username}" FontFamily="{StaticResource PlexMono}" FontSize="12" Foreground="{StaticResource TextSecondary}"/>
+                                        </StackPanel>
+                                        <Ellipse Grid.Column="2" Width="8" Height="8" Fill="{Binding StatusColor}" VerticalAlignment="Top" Margin="0,2,2,0"/>
+                                    </Grid>
+                                    <Grid Grid.Row="2" ColumnDefinitions="*,Auto,Auto" Margin="0,14,0,0">
+                                        <Border Grid.Column="0" Background="{Binding CategoryTint}" CornerRadius="6" Padding="8,3" HorizontalAlignment="Left" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding CategoryName}" FontFamily="{StaticResource PlexSans}" FontSize="11" FontWeight="SemiBold" Foreground="{Binding CategoryColor}" HorizontalAlignment="Center"/>
+                                        </Border>
+                                        <Button Grid.Column="1" Classes="icon-action-accent" Command="{Binding #Root.((vm:VaultViewModel)DataContext).OpenAccountDetailsCommand}" CommandParameter="{Binding}">
+                                            <Panel Width="16" Height="16">
+                                                <Ellipse Width="14" Height="8" Fill="Transparent" Stroke="{StaticResource Accent}" StrokeThickness="1.4"/>
+                                                <Ellipse Width="4" Height="4" Fill="{StaticResource Accent}"/>
+                                            </Panel>
+                                        </Button>
+                                    </Grid>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</UserControl>

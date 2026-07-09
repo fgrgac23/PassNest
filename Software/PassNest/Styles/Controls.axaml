@@ -80,38 +80,47 @@
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="Padding" Value="12,10"/>
         <Setter Property="CornerRadius" Value="8"/>
-        <Setter Property="HorizontalAlignment" Value="Stretch"/>"
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
         <Setter Property="HorizontalContentAlignment" Value="Left"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="Foreground" Value="{StaticResource TextOnDarkMuted}"/> 
     </Style>
 
-    <Style Selector="Button.nav-ItemsControl:pointerover">
-       <Setter Property="Background" Value="{StaticResource Graphite}"/> 
+    <Style Selector="Button.nav-item:pointerover">
+        <Setter Property="Background" Value="{StaticResource Graphite}"/>
+        <Setter Property="Foreground" Value="{StaticResource TextOnDarkPrimary}"/>
     </Style>
 
-    <Style Selector="Button.nav-ItemsControl.active">
+    <Style Selector="Button.nav-item.active">
         <Setter Property="Background" Value="{StaticResource Graphite}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Accent}"/>
         <Setter Property="Foreground" Value="{StaticResource TextOnDarkPrimary}"/> 
     </Style>
 
-    <Style Selector="Button.filter-pill">
+    <Style Selector="Button.category-item">
         <Setter Property="FontFamily" Value="{StaticResource PlexSans}"/>
-        <Setter Property="FontSize" Value="13"/>
-        <Setter Property="FontWeight" Value="SemiBold"/>
-        <Setter Property="Padding" Value="16,8"/>
-        <Setter Property="CornerRadius" Value="20"/>
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="BorderBrush" Value="{StaticResource Border}"/>
+        <Setter Property="Padding" Value="12,8"/>
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
         <Setter Property="Cursor" Value="Hand"/>
-        <Setter Property="Background" Value="{StaticResource Surface}"/>
-        <Setter Property="Foreground" Value="{StaticResource TextSecondary}"/> 
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{StaticResource TextOnDarkMuted}"/> 
     </Style>
 
-    <Style Selector="Button.filter-pill.active">
+    <Style Selector="Button.category-item:pointerover">
+        <Setter Property="Background" Value="{StaticResource Graphite}"/> 
+        <Setter Property="Foreground" Value="{StaticResource TextOnDarkPrimary}"/>
+    </Style>
+
+    <Style Selector="Button.category-item.active">
         <Setter Property="Background" Value="{StaticResource Graphite}"/>
-        <Setter Property="BorderBrush" Value="{StaticResource Graphite}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Accent}"/>
         <Setter Property="Foreground" Value="{StaticResource TextOnDarkPrimary}"/> 
     </Style>
 
@@ -172,6 +181,12 @@
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="CornerRadius" Value="12"/>
         <Setter Property="Padding" Value="16"/>
-        <Setter Property="Width" Value="250"/>
+        <Setter Property="Width" Value="270"/>
+        <Setter Property="BoxShadow" Value="0 1 3 0 #14000000"/>
+    </Style>
+
+    <Style Selector="Border.account-card:pointerover">
+       <Setter Property="BorderBrush" Value="{StaticResource BorderStrong}"/>
+       <Setter Property="BoxShadow" Value="0 4 12 0 #1F000000"/>
     </Style>
 </Styles>
