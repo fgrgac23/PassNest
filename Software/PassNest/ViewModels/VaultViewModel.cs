@@ -76,5 +76,10 @@ namespace PassNest.ViewModels
         private void OpenAccountDetails(AccountCardViewModel account)
         {
         }
+
+        [RelayCommand]
+        private void CopyPassword(AccountCardViewModel account)
+        {
+        }
     }
 }

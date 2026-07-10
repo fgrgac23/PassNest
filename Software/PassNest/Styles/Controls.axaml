@@ -158,6 +158,26 @@
         <Setter Property="Background" Value="{StaticResource Accent}"/>
     </Style>
 
+    <Style Selector="Button.copy-action">
+        <Setter Property="FontFamily" Value="{StaticResource PlexSans}"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Padding" Value="10,6"/>
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Accent}"/>
+        <Setter Property="Background" Value="{StaticResource AccentTint}"/>
+        <Setter Property="Foreground" Value="{StaticResource Accent}"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+
+    <Style Selector="Button.copy-action:pointerover">
+        <Setter Property="Background" Value="{StaticResource Accent}"/>
+        <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+    </Style>
+
     <Style Selector="Button.secondary-dark">
         <Setter Property="FontFamily" Value="{StaticResource PlexSans}"/>
         <Setter Property="FontSize" Value="14"/>
@@ -175,18 +195,37 @@
         <Setter Property="Background" Value="{StaticResource Graphite}"/>
     </Style>
 
-    <Style Selector="Border.account-card">
+    <Style Selector="Button.account-card">
         <Setter Property="Background" Value="{StaticResource Surface}"/>
         <Setter Property="BorderBrush" Value="{StaticResource Border}"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="CornerRadius" Value="12"/>
         <Setter Property="Padding" Value="16"/>
         <Setter Property="Width" Value="270"/>
-        <Setter Property="BoxShadow" Value="0 1 3 0 #14000000"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+        <Setter Property="RenderTransform" Value="none"/>
+        <Setter Property="Transitions">
+           <Transitions>
+              <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.15"/> 
+           </Transitions> 
+        </Setter>
+        <Setter Property="Template">
+           <ControlTemplate>
+              <Border Name="CardBorder" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="{TemplateBinding CornerRadius}" Padding="{TemplateBinding Padding}" BoxShadow="0 2 8 0 #1A000000">
+                 <ContentPresenter Content="{TemplateBinding Content}"/> 
+              </Border>
+           </ControlTemplate> 
+        </Setter>
     </Style>
 
-    <Style Selector="Border.account-card:pointerover">
-       <Setter Property="BorderBrush" Value="{StaticResource BorderStrong}"/>
-       <Setter Property="BoxShadow" Value="0 4 12 0 #1F000000"/>
+    <Style Selector="Button.account-card:pointerover">
+        <Setter Property="BorderBrush" Value="{StaticResource BorderStrong}"/>
+        <Setter Property="RenderTransform" Value="translateY(-3px)"/>
+    </Style>
+
+    <Style Selector="Button.account-card:pointerover /template/ Border#CardBorder">
+       <Setter Property="BoxShadow" Value="0 10 28 0 #26000000"/>
     </Style>
 </Styles>
