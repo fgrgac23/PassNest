@@ -7,18 +7,10 @@ namespace PassNest.ViewModels
     public partial class VaultViewModel : ViewModelBase
     {
         [ObservableProperty]
-        private string selectedNavItem = "Trezor";
-
-        [ObservableProperty]
         private string selectedCategoryFilter = "Sve";
 
         [ObservableProperty]
         private string searchText = string.Empty;
-
-        public bool IsTrezorActive => SelectedNavItem == "Trezor";
-        public bool IsGeneratorActive => SelectedNavItem == "Generator";
-        public bool IsSafetyActive => SelectedNavItem == "Sigurnost";
-        public bool IsSettingsActive => SelectedNavItem == "Postavke";
 
         public ObservableCollection<CategoryNavItem> Categories { get; } = new()
         {
@@ -42,17 +34,6 @@ namespace PassNest.ViewModels
             new("L", "LinkedIn", "ivan.ivic@gmail.com", "#0F7B8A", "Posao", "#7C5CD6", "Medium"),
         };
 
-        partial void OnSelectedNavItemChanged(string value)
-        {
-            OnPropertyChanged(nameof(IsTrezorActive));
-            OnPropertyChanged(nameof(IsGeneratorActive));
-            OnPropertyChanged(nameof(IsSafetyActive));
-            OnPropertyChanged(nameof(IsSettingsActive));
-        }
-
-        [RelayCommand]
-        private void SelectNav(string item) => SelectedNavItem = item;
-
         [RelayCommand]
         private void SelectCategory(CategoryNavItem category)
         {
@@ -64,11 +45,6 @@ namespace PassNest.ViewModels
 
         [RelayCommand]
         private void AddAccount()
-        {
-        }
-
-        [RelayCommand]
-        private void LockVault()
         {
         }
 

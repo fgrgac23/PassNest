@@ -86,7 +86,14 @@
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
-        <Setter Property="Foreground" Value="{StaticResource TextOnDarkMuted}"/> 
+        <Setter Property="Foreground" Value="{StaticResource TextOnDarkMuted}"/>
+        <Setter Property="Template">
+           <ControlTemplate>
+              <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"  BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="{TemplateBinding CornerRadius}" Padding="{TemplateBinding Padding}">
+                 <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalAlignment}"/> 
+              </Border>
+           </ControlTemplate> 
+        </Setter>
     </Style>
 
     <Style Selector="Button.nav-item:pointerover">
@@ -110,7 +117,14 @@
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
-        <Setter Property="Foreground" Value="{StaticResource TextOnDarkMuted}"/> 
+        <Setter Property="Foreground" Value="{StaticResource TextOnDarkMuted}"/>
+        <Setter Property="Template">
+           <ControlTemplate>
+              <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"  BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="{TemplateBinding CornerRadius}" Padding="{TemplateBinding Padding}">
+                 <ContentPresenter Content="{TemplateBinding Content}"/> 
+              </Border>
+           </ControlTemplate> 
+        </Setter>
     </Style>
 
     <Style Selector="Button.category-item:pointerover">

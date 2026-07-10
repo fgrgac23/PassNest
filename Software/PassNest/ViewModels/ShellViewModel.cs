@@ -11,6 +11,8 @@ namespace PassNest.ViewModels
         [ObservableProperty]
         private ViewModelBase currentPage;
 
+        public VaultViewModel? CurrentVault => CurrentPage as VaultViewModel;
+
         public bool IsTrezorActive => SelectedNavItem == "Trezor";
         public bool IsGeneratorActive => SelectedNavItem == "Generator";
         public bool IsSafetyActive => SelectedNavItem == "Sigurnost";
@@ -33,6 +35,11 @@ namespace PassNest.ViewModels
                 "Trezor" => new VaultViewModel(),
                 _ => currentPage
             }; 
+        }
+
+        partial void OnCurrentPageChanged(ViewModelBase value)
+        {
+            OnPropertyChanged(nameof(CurrentVault));
         }
 
         [RelayCommand]

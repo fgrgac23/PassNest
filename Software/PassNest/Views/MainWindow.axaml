@@ -17,9 +17,9 @@
        <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-    <views:VaultView>
-        <views:VaultView.DataContext>
-            <vm:VaultViewModel/>
-        </views:VaultView.DataContext>
-    </views:VaultView>
+    <views:ShellView>
+        <views:ShellView.DataContext>
+            <vm:ShellViewModel/>
+        </views:ShellView.DataContext>
+    </views:ShellView>
 </Window>
