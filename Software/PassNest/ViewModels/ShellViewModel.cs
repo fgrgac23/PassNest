@@ -33,6 +33,7 @@ namespace PassNest.ViewModels
             CurrentPage = value switch
             {
                 "Trezor" => new VaultViewModel(),
+                "Sigurnost" => new SecurityViewModel(),
                 _ => currentPage
             }; 
         }

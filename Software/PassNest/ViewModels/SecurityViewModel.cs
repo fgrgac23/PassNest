@@ -4,6 +4,7 @@ using System.Globalization;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Avalonia.Collections;
 
 namespace PassNest.ViewModels
 {
@@ -17,6 +18,9 @@ namespace PassNest.ViewModels
 
         [ObservableProperty]
         private int weakCount = 3;
+
+        [ObservableProperty]
+        private int mediumCount = 5;
 
         [ObservableProperty]
         private int strongCount = 19;
@@ -37,14 +41,14 @@ namespace PassNest.ViewModels
             _ => new SolidColorBrush(Color.Parse("#D6503C"))
         };
 
-        public string ScoreDashArray
+        public AvaloniaList<double> ScoreDashArray
         {
             get
             {
                 double circumferenceUnits = (2 * Math.PI * RingRadius) / RingStrokeThickness;
                 double onUnits = circumferenceUnits * (Score / 100.00);
                 double offUnits = circumferenceUnits - onUnits;
-                return $"{onUnits.ToString(CultureInfo.InvariantCulture)}, {offUnits.ToString(CultureInfo.InvariantCulture)}";
+                return new AvaloniaList<double> { onUnits, offUnits };
             }
         }
 

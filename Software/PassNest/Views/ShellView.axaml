@@ -81,6 +81,9 @@
                                    </ItemsControl>
                                </StackPanel>
                            </DataTemplate>
+                           <DataTemplate DataType="vm:SecurityViewModel">
+                               <Panel/>
+                           </DataTemplate>
                        </ContentControl.DataTemplates>
                    </ContentControl>
                 </StackPanel>
