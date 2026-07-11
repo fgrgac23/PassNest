@@ -245,7 +245,7 @@
 
     <Style Selector="TextBlock.section-label-light">
         <Setter Property="FontFamily" Value="{StaticResource PlexSans}"/>
-        <Setter Property="FontSize" Value="11"/>
+        <Setter Property="FontSize" Value="13"/>
         <Setter Property="FontWeight" Value="SemiBold"/>
         <Setter Property="Foreground" Value="{StaticResource TextSecondary}"/>
         <Setter Property="LetterSpacing" Value="1"/>
@@ -292,10 +292,21 @@
         <Setter Property="CornerRadius" Value="12"/>
         <Setter Property="Background" Value="{StaticResource Border}"/>
         <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Transitions">
+           <Transitions>
+              <BrushTransition Property="Background" Duration="0:0:0.15"/> 
+           </Transitions> 
+        </Setter>
         <Setter Property="Template">
            <ControlTemplate>
               <Border Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}">
-                 <Border Name="Thumb" Width="18" Height="18" CornerRadius="9" Background="{StaticResource Surface}" HorizontalAlignment="Left" Margin="3,0,0,0"/>
+                 <Border Name="Thumb" Width="18" Height="18" CornerRadius="9" Background="{StaticResource Surface}" HorizontalAlignment="Left" Margin="3,0,0,0">
+                    <Border.Transitions>
+                       <Transitions>
+                          <ThicknessTransition Property="Margin" Duration="0:0:0.15"/>
+                       </Transitions> 
+                    </Border.Transitions> 
+                 </Border>
               </Border> 
            </ControlTemplate> 
         </Setter>
@@ -306,8 +317,7 @@
     </Style>
 
     <Style Selector="ToggleButton.switch:checked /template/ Border#Thumb">
-        <Setter Property="HorizontalAlignment" Value="Right"/>
-        <Setter Property="Margin" Value="0,0,3,0"/>
+        <Setter Property="Margin" Value="23,0,0,0"/>
     </Style>
 
     <Style Selector="ComboBox.settings-dropdown">
@@ -327,5 +337,9 @@
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="BorderBrush" Value="{StaticResource BorderStrong}"/>
         <Setter Property="Background" Value="{StaticResource Canvas}"/>
+    </Style>
+
+    <Style Selector="Button.primary.backup-export:pointerover">
+       <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/> 
     </Style>
 </Styles>

@@ -34,6 +34,7 @@ namespace PassNest.ViewModels
             {
                 "Trezor" => new VaultViewModel(),
                 "Sigurnost" => new SecurityViewModel(),
+                "Postavke" => new SettingsViewModel(),
                 _ => currentPage
             }; 
         }
