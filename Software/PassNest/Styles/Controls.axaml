@@ -408,4 +408,8 @@
     <Style Selector="TextBox.otp-digit.filled">
         <Setter Property="BorderBrush" Value="{StaticResource Accent}"/>
     </Style>
+    
+    <Style Selector="Slider">
+       <Setter Property="Foreground" Value="{StaticResource Accent}"/> 
+    </Style>
 </Styles>
