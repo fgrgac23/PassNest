@@ -135,7 +135,7 @@
             <TextBlock FontFamily="{StaticResource PlexSans}" FontSize="12" Foreground="{StaticResource TextMuted}">
                 <Run Text="Zadnja izmjena: "/>
                 <Run Text="{Binding LastModified}"/>
-                <Run Text=" · Stvoreno: "/>
+                <Run Text=" ·  Stvoreno: "/>
                 <Run Text="{Binding CreatedAt}"/>
             </TextBlock>
         </StackPanel>
