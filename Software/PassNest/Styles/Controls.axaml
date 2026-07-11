@@ -367,4 +367,24 @@
     <Style Selector="Button.outline-weak:pointerover">
         <Setter Property="Background" Value="#1FD6503C"/>
     </Style>
+
+    <Style Selector="Button.back-link">
+        <Setter Property="FontFamily" Value="{StaticResource PlexSans}"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Foreground" Value="{StaticResource TextSecondary}"/>
+        <Setter Property="Template">
+           <ControlTemplate>  
+               <ContentPresenter Content="{TemplateBinding Content}"/> 
+           </ControlTemplate> 
+        </Setter>
+    </Style>
+
+    <Style Selector="Button.back-link:pointerover">
+       <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/> 
+    </Style>
 </Styles>

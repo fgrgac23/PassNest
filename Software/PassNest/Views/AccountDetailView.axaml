@@ -15,6 +15,16 @@
 
     <ScrollViewer Background="{StaticResource Canvas}">
         <StackPanel Margin="32,28,32,32" Spacing="24">
+            <Button Classes="back-link" Command="{Binding GoBackCommand}" HorizontalAlignment="Left">
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                    <Border Width="14" Height="14" Background="{Binding $parent[Button].Foreground}">
+                        <Border.OpacityMask>
+                            <ImageBrush Source="avares://PassNest/Assets/back.png" Stretch="Uniform"/>
+                        </Border.OpacityMask>
+                    </Border>
+                    <TextBlock Text="Natrag" Foreground="{Binding $parent[Button].Foreground}"/>
+                </StackPanel>
+            </Button>
             <Grid ColumnDefinitions="Auto,*,Auto">
                 <Border Grid.Column="0" Width="56" Height="56" CornerRadius="14" Background="{Binding AvatarColor}">
                     <TextBlock Text="{Binding Initial}" FontFamily="{StaticResource PlexSans}" FontWeight="Bold" FontSize="22" Foreground="{StaticResource TextOnDarkPrimary}" HorizontalAlignment="Center" VerticalAlignment="Center"/>

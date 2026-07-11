@@ -33,7 +33,14 @@ namespace PassNest.ViewModels
 
         private void OnAccountOpened(AccountCardViewModel account)
         {
-            CurrentPage = new AccountDetailViewModel(account);
+            var detail = new AccountDetailViewModel(account);
+            detail.BackRequested += OnAccountDetailBackRequested;
+            CurrentPage = detail;
+        }
+
+        private void OnAccountDetailBackRequested()
+        {
+            CurrentPage = CreateVaultPage();
         }
 
         partial void OnSelectedNavItemChanged(string value)

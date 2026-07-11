@@ -1,4 +1,5 @@
 ﻿using Avalonia.Media;
+using System;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using PassNest.ViewModels;
@@ -48,6 +49,8 @@ namespace PassNest.ViewModels
 
         [ObservableProperty]
         private string createdAt = "03.01.2025.";
+
+        public event Action? BackRequested;
 
         public AccountDetailViewModel()
         {
@@ -106,6 +109,12 @@ namespace PassNest.ViewModels
         private void TogglePasswordReveal()
         {
             IsPasswordRevealed = !IsPasswordRevealed;
+        }
+
+        [RelayCommand]
+        private void GoBack()
+        {
+            BackRequested?.Invoke();
         }
     }
 }
