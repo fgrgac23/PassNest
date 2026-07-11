@@ -13,8 +13,13 @@ namespace PassNest.ViewModels
         public IBrush CategoryColor { get; }
         public IBrush CategoryTint { get; }
         public IBrush StatusColor { get; }
+        public string StrengthLabel { get; }
+        public string Password { get; }
+        public string Url { get; }
+        public string LastModified { get; }
+        public string CreatedAt { get; }
 
-        public AccountCardViewModel(string initial, string serviceName, string username, string avatarColorHex, string categoryName, string categoryColorHex, string strength)
+        public AccountCardViewModel(string initial, string serviceName, string username, string avatarColorHex, string categoryName, string categoryColorHex, string strength, string password, string url, string lastModified, string createdAt)
         {
             Initial = initial;
             ServiceName = serviceName;
@@ -29,6 +34,16 @@ namespace PassNest.ViewModels
                 "Medium" => "#E0952E",
                 _ => "#D6503C"
             }));
+            StrengthLabel = strength switch
+            {
+                "Strong" => "Jaka lozinka",
+                "Medium" => "Srednja lozinka",
+                _ => "Slaba lozinka"
+            };
+            Password = password;
+            Url = url;
+            LastModified = lastModified;
+            CreatedAt = createdAt;
         }
     }
 

@@ -87,6 +87,9 @@
                            <DataTemplate DataType="vm:SettingsViewModel">
                                <Panel/>
                            </DataTemplate>
+                           <DataTemplate DataType="vm:AccountDetailViewModel">
+                               <Panel/>
+                           </DataTemplate>
                        </ContentControl.DataTemplates>
                    </ContentControl>
                 </StackPanel>

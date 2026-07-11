@@ -49,6 +49,27 @@ namespace PassNest.ViewModels
         [ObservableProperty]
         private string createdAt = "03.01.2025.";
 
+        public AccountDetailViewModel()
+        {
+        }
+
+        public AccountDetailViewModel(AccountCardViewModel account)
+        {
+            initial = account.Initial;
+            avatarColor = account.AvatarColor;
+            serviceName = account.ServiceName;
+            categoryName = account.CategoryName;
+            categoryColor = account.CategoryColor;
+            categoryTint = account.CategoryTint;
+            strengthLabel = account.StrengthLabel;
+            strengthColor = account.StatusColor;
+            username = account.Username;
+            password = account.Password;
+            url = account.Url;
+            lastModified = account.LastModified;
+            createdAt = account.CreatedAt;
+        }
+
         public string MaskedPassword => new string('*', Password?.Length ?? 0);
 
         partial void OnPasswordChanged(string value)
@@ -84,6 +105,7 @@ namespace PassNest.ViewModels
         [RelayCommand]
         private void TogglePasswordReveal()
         {
+            IsPasswordRevealed = !IsPasswordRevealed;
         }
     }
 }

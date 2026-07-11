@@ -34,6 +34,13 @@
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Background" Value="{StaticResource Accent}"/>
         <Setter Property="Foreground" Value="{StaticResource TextOnDarkPrimary}"/>
+        <Setter Property="Template">
+           <ControlTemplate>
+              <Border Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}" Padding="{TemplateBinding Padding}">
+                 <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalAlignment}"/> 
+              </Border>
+           </ControlTemplate> 
+        </Setter>
     </Style>
 
     <Style Selector="Button.primary:pointerover">

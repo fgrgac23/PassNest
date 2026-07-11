@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using Avalonia.Automation.Peers;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 namespace PassNest.ViewModels
@@ -20,7 +21,19 @@ namespace PassNest.ViewModels
 
         public ShellViewModel()
         {
-            currentPage = new VaultViewModel();
+            currentPage = CreateVaultPage();
+        }
+
+        private VaultViewModel CreateVaultPage()
+        {
+            var page = new VaultViewModel();
+            page.AccountOpened += OnAccountOpened;
+            return page;
+        }
+
+        private void OnAccountOpened(AccountCardViewModel account)
+        {
+            CurrentPage = new AccountDetailViewModel(account);
         }
 
         partial void OnSelectedNavItemChanged(string value)
@@ -32,7 +45,7 @@ namespace PassNest.ViewModels
 
             CurrentPage = value switch
             {
-                "Trezor" => new VaultViewModel(),
+                "Trezor" => CreateVaultPage(),
                 "Sigurnost" => new SecurityViewModel(),
                 "Postavke" => new SettingsViewModel(),
                 _ => currentPage
