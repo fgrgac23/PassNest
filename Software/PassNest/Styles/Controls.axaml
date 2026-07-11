@@ -342,4 +342,22 @@
     <Style Selector="Button.primary.backup-export:pointerover">
        <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/> 
     </Style>
+
+    <Style Selector="Button.outline-weak">
+        <Setter Property="FontFamily" Value="{StaticResource PlexSans}"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Padding" Value="16,8"/>
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Weak}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{StaticResource Weak}"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+    </Style>
+
+    <Style Selector="Button.outline-weak:pointerover">
+        <Setter Property="Background" Value="#1FD6503C"/>
+    </Style>
 </Styles>
