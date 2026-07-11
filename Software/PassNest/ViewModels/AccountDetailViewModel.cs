@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using PassNest.ViewModels;
 
-namespace PassNest.Styles
+namespace PassNest.ViewModels
 {
     public partial class AccountDetailViewModel : ViewModelBase
     {
