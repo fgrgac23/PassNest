@@ -387,4 +387,25 @@
     <Style Selector="Button.back-link:pointerover">
        <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/> 
     </Style>
+
+    <Style Selector="TextBox.otp-digit">
+        <Setter Property="Width" Value="52"/>
+        <Setter Property="Height" Value="60"/>
+        <Setter Property="FontFamily" Value="{StaticResource PlexMono}"/>
+        <Setter Property="FontSize" Value="24"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="TextAlignment" Value="Center"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="CornerRadius" Value="10"/>
+        <Setter Property="BorderThickness" Value="1.5"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Border}"/>
+        <Setter Property="Background" Value="{StaticResource Surface}"/>
+        <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="MaxLength" Value="1"/>
+    </Style>
+
+    <Style Selector="TextBox.otp-digit.filled">
+        <Setter Property="BorderBrush" Value="{StaticResource Accent}"/>
+    </Style>
 </Styles>
