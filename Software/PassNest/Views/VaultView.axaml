@@ -12,6 +12,7 @@
     <Design.DataContext>
         <vm:VaultViewModel/>
     </Design.DataContext>
+    <Panel>
         <Grid RowDefinitions="Auto,Auto,*" Background="{StaticResource Canvas}">
             <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="32,24,32,16">
                     <Border Grid.Column="0" Width="320" Height="42" CornerRadius="21" Background="{StaticResource Surface}" BorderBrush="{StaticResource Border}" BorderThickness="1" HorizontalAlignment="Left" BoxShadow="0 1 3 0 #14000000">
@@ -74,4 +75,103 @@
                 </ItemsControl>
             </ScrollViewer>
         </Grid>
+        <Border Background="#99101620" IsVisible="{Binding IsAddAccountDialogOpen}">
+            <Border Background="{StaticResource Surface}" CornerRadius="16" BoxShadow="0 20 60 0 #40000000" HorizontalAlignment="Center" VerticalAlignment="Center" DataContext="{Binding NewAccount}">
+                <Grid ColumnDefinitions="*,1,300" x:DataType="vm:NewAccountViewModel">
+                    <StackPanel Grid.Column="0" Width="380" Margin="28" Spacing="16">
+                        <StackPanel Spacing="4">
+                            <TextBlock Text="Novi račun" FontFamily="{StaticResource PlexSans}" FontWeight="Bold" FontSize="20" Foreground="{StaticResource TextPrimary}"/>
+                            <TextBlock Text="Podaci se spremaju enkriptirano u lokalnu bazu." FontFamily="{StaticResource PlexSans}" Foreground="{StaticResource TextSecondary}"/>
+                        </StackPanel>
+                        <StackPanel Spacing="6">
+                            <TextBlock Classes="field-label" Text="Naziv servisa"/>
+                            <TextBox Classes="form" Text="{Binding ServiceName}"/>
+                        </StackPanel>
+                        <StackPanel Spacing="6">
+                            <TextBlock Classes="field-label" Text="Korisničko ime"/>
+                            <TextBox Classes="form" Text="{Binding Username}"/>
+                        </StackPanel>
+                        <StackPanel Spacing="6">
+                            <TextBlock Classes="field-label" Text="Lozinka"/>
+                            <TextBox Classes="form" Text="{Binding Password}">
+                                <TextBox.InnerRightContent>
+                                    <Button Classes="icon-toggle" Command="{Binding ToggleGeneratorCommand}">
+                                        <Border Width="16" Height="16" Background="{StaticResource Accent}">
+                                            <Border.OpacityMask>
+                                                <ImageBrush Source="avares://PassNest/Assets/generator.png" Stretch="Uniform"/>
+                                            </Border.OpacityMask>
+                                        </Border>
+                                    </Button>
+                                </TextBox.InnerRightContent>
+                            </TextBox>
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <Ellipse Width="8" Height="8" Fill="{Binding StrengthColor}"/>
+                                <TextBlock Text="{Binding StrengthLabel}" FontFamily="{StaticResource PlexSans}" FontSize="12" Foreground="{StaticResource TextSecondary}"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <StackPanel Spacing="6">
+                            <TextBlock Classes="field-label" Text="Kategorija"/>
+                            <ComboBox Classes="settings-dropdown" HorizontalAlignment="Stretch" ItemsSource="{Binding Categories}" SelectedItem="{Binding SelectedCategory}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate x:DataType="vm:CategoryOption">
+                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                            <Ellipse  Width="8" Height="8" Fill="{Binding DotColor}"/>
+                                            <TextBlock Text="{Binding Name}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </StackPanel>
+                        <Grid ColumnDefinitions="*,*" Margin="0,8,0,0">
+                            <Button Grid.Column="0" Classes="secondary" Content="Odustani" Command="{Binding CancelCommand}" Margin="0,0,8,0"/>
+                            <Button Grid.Column="1" Classes="primary" Content="Spremi račun" Command="{Binding SaveCommand}"/>
+                        </Grid>
+                    </StackPanel>
+                    <Border Grid.Column="1" Background="{StaticResource Border}" IsVisible="{Binding IsGeneratorOpen}"/>
+                    <StackPanel Grid.Column="2" Width="300" Margin="24,28,28,28" Spacing="16" IsVisible="{Binding IsGeneratorOpen}">
+                        <TextBlock Text="Generator" FontFamily="{StaticResource PlexSans}" FontWeight="Bold" FontSize="15" Foreground="{StaticResource TextPrimary}"/>
+                        <Border Background="{StaticResource Canvas}" BorderBrush="{StaticResource Border}" BorderThickness="1" CornerRadius="8" Padding="12">
+                            <TextBlock Text="{Binding Password}" FontFamily="{StaticResource PlexMono}" FontSize="14" FontWeight="Bold" Foreground="{StaticResource TextPrimary}" TextWrapping="Wrap"/>
+                        </Border>
+                        <Button Classes="outline-accent" Command="{Binding CopyPasswordCommand}" HorizontalAlignment="Stretch">
+                            <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Center">
+                                <Border Width="14" Height="14" Background="{Binding $parent[Button].Foreground}">
+                                    <Border.OpacityMask>
+                                        <ImageBrush Source="avares://PassNest/Assets/copy.png" Stretch="Uniform"/>
+                                    </Border.OpacityMask>
+                                </Border>
+                                <TextBlock Text="Kopiraj" Foreground="{Binding $parent[Button].Foreground}"/>
+                            </StackPanel>
+                        </Button>
+                        <StackPanel Spacing="6">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <TextBlock Grid.Column="0" Text="Dužina" FontFamily="{StaticResource PlexSans}" FontSize="13" FontWeight="SemiBold" Foreground="{StaticResource TextPrimary}"/>
+                                <TextBlock Grid.Column="1" Text="{Binding Length}" FontFamily="{StaticResource PlexSans}" FontSize="13" FontWeight="Bold" Foreground="{StaticResource TextPrimary}"/>
+                            </Grid>
+                            <Slider Minimum="6" Maximum="32" Value="{Binding Length}"/>
+                        </StackPanel>
+                        <StackPanel Spacing="10">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <TextBlock Text="Velika slova" FontFamily="{StaticResource PlexSans}" FontSize="13" Foreground="{StaticResource TextPrimary}" VerticalAlignment="Center"/>
+                                <ToggleButton Grid.Column="1" Classes="switch" IsChecked="{Binding UseUpperCase}"/>
+                            </Grid>
+                            <Grid ColumnDefinitions="*,Auto">
+                                <TextBlock Text="Mala slova" FontFamily="{StaticResource PlexSans}" FontSize="13" Foreground="{StaticResource TextPrimary}" VerticalAlignment="Center"/>
+                                <ToggleButton Grid.Column="1" Classes="switch" IsChecked="{Binding UseLowerCase}"/>
+                            </Grid>
+                            <Grid ColumnDefinitions="*,Auto">
+                                <TextBlock Text="Brojevi" FontFamily="{StaticResource PlexSans}" FontSize="13" Foreground="{StaticResource TextPrimary}" VerticalAlignment="Center"/>
+                                <ToggleButton Grid.Column="1" Classes="switch" IsChecked="{Binding UseNumbers}"/>
+                            </Grid>
+                            <Grid ColumnDefinitions="*,Auto">
+                                <TextBlock Text="Posebni znakovi" FontFamily="{StaticResource PlexSans}" FontSize="13" Foreground="{StaticResource TextPrimary}" VerticalAlignment="Center"/>
+                                <ToggleButton Grid.Column="1" Classes="switch" IsChecked="{Binding UseSpecialChars}"/>
+                            </Grid>
+                        </StackPanel>
+                        <Button Classes="secondary" Content="Generiraj ponovno" Command="{Binding GenerateCommand}" HorizontalAlignment="Stretch"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Border>
+    </Panel>
 </UserControl>

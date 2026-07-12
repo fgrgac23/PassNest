@@ -13,6 +13,12 @@ namespace PassNest.ViewModels
         [ObservableProperty]
         private string searchText = string.Empty;
 
+        [ObservableProperty]
+        private bool isAddAccountDialogOpen;
+
+        [ObservableProperty]
+        private NewAccountViewModel? newAccount;
+
         public event Action<AccountCardViewModel>? AccountOpened;
 
         public ObservableCollection<CategoryNavItem> Categories { get; } = new()
@@ -49,6 +55,10 @@ namespace PassNest.ViewModels
         [RelayCommand]
         private void AddAccount()
         {
+            var dialog = new NewAccountViewModel();
+            dialog.Closed += () => IsAddAccountDialogOpen = false;
+            NewAccount = dialog;
+            IsAddAccountDialogOpen = true;
         }
 
         [RelayCommand]

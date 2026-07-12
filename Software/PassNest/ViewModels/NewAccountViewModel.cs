@@ -67,7 +67,7 @@ namespace PassNest.ViewModels
             selectedCategory = Categories[1];
         }
 
-        private void OnPasswordChanged(string value)
+        partial void OnPasswordChanged(string value)
         {
             OnPropertyChanged(nameof(StrengthLabel));
             OnPropertyChanged(nameof(StrengthColor));
