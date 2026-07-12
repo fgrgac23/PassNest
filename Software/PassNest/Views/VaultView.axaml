@@ -76,9 +76,14 @@
             </ScrollViewer>
         </Grid>
         <Border Background="#99101620" IsVisible="{Binding IsAddAccountDialogOpen}">
-            <Border Background="{StaticResource Surface}" CornerRadius="16" BoxShadow="0 20 60 0 #40000000" HorizontalAlignment="Center" VerticalAlignment="Center" DataContext="{Binding NewAccount}">
-                <Grid ColumnDefinitions="*,1,300" x:DataType="vm:NewAccountViewModel">
-                    <StackPanel Grid.Column="0" Width="380" Margin="28" Spacing="16">
+            <Border Background="{StaticResource Surface}" CornerRadius="16" BoxShadow="0 20 60 0 #40000000" HorizontalAlignment="Center" VerticalAlignment="Center" DataContext="{Binding NewAccount}" ClipToBounds="True" x:DataType="vm:NewAccountViewModel" Width="{Binding GeneratorPanelWidth}">
+                <Border.Transitions>
+                    <Transitions>
+                        <DoubleTransition Property="Width" Duration="0:0:0.25"/>
+                    </Transitions>
+                </Border.Transitions>
+                <Grid ColumnDefinitions="Auto,Auto,Auto">
+                    <StackPanel Grid.Column="0" Width="440" Margin="32" Spacing="20">
                         <StackPanel Spacing="4">
                             <TextBlock Text="Novi račun" FontFamily="{StaticResource PlexSans}" FontWeight="Bold" FontSize="20" Foreground="{StaticResource TextPrimary}"/>
                             <TextBlock Text="Podaci se spremaju enkriptirano u lokalnu bazu." FontFamily="{StaticResource PlexSans}" Foreground="{StaticResource TextSecondary}"/>
@@ -122,54 +127,56 @@
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
                         </StackPanel>
-                        <Grid ColumnDefinitions="*,*" Margin="0,8,0,0">
-                            <Button Grid.Column="0" Classes="secondary" Content="Odustani" Command="{Binding CancelCommand}" Margin="0,0,8,0"/>
-                            <Button Grid.Column="1" Classes="primary" Content="Spremi račun" Command="{Binding SaveCommand}"/>
+                        <Grid ColumnDefinitions="*,*" Margin="0,16,0,0">
+                            <Button Grid.Column="0" Classes="secondary" Content="Odustani" Command="{Binding CancelCommand}" Margin="0,0,8,0" HorizontalAlignment="Stretch"/>
+                            <Button Grid.Column="1" Classes="primary" Content="Spremi račun" Command="{Binding SaveCommand}" HorizontalAlignment="Stretch"/>
                         </Grid>
                     </StackPanel>
-                    <Border Grid.Column="1" Background="{StaticResource Border}" IsVisible="{Binding IsGeneratorOpen}"/>
-                    <StackPanel Grid.Column="2" Width="300" Margin="24,28,28,28" Spacing="16" IsVisible="{Binding IsGeneratorOpen}">
-                        <TextBlock Text="Generator" FontFamily="{StaticResource PlexSans}" FontWeight="Bold" FontSize="15" Foreground="{StaticResource TextPrimary}"/>
-                        <Border Background="{StaticResource Canvas}" BorderBrush="{StaticResource Border}" BorderThickness="1" CornerRadius="8" Padding="12">
-                            <TextBlock Text="{Binding Password}" FontFamily="{StaticResource PlexMono}" FontSize="14" FontWeight="Bold" Foreground="{StaticResource TextPrimary}" TextWrapping="Wrap"/>
-                        </Border>
-                        <Button Classes="outline-accent" Command="{Binding CopyPasswordCommand}" HorizontalAlignment="Stretch">
-                            <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Center">
-                                <Border Width="14" Height="14" Background="{Binding $parent[Button].Foreground}">
-                                    <Border.OpacityMask>
-                                        <ImageBrush Source="avares://PassNest/Assets/copy.png" Stretch="Uniform"/>
-                                    </Border.OpacityMask>
-                                </Border>
-                                <TextBlock Text="Kopiraj" Foreground="{Binding $parent[Button].Foreground}"/>
+                    <Border Grid.Column="1" Width="1" Background="{StaticResource Border}"/>
+                    <Border Grid.Column="2" Width="352" Background="{StaticResource Canvas}">
+                        <StackPanel Margin="24,32,28,32" Spacing="16">
+                            <TextBlock Text="Generator" FontFamily="{StaticResource PlexSans}" FontWeight="Bold" FontSize="15" Foreground="{StaticResource TextPrimary}"/>
+                            <Border Background="{StaticResource Surface}" BorderBrush="{StaticResource Border}" BorderThickness="1" CornerRadius="8" Padding="12">
+                                <TextBlock Text="{Binding Password}" FontFamily="{StaticResource PlexMono}" FontSize="14" FontWeight="Bold" Foreground="{StaticResource TextPrimary}" TextWrapping="Wrap"/>
+                            </Border>
+                            <Button Classes="outline-accent" Command="{Binding CopyPasswordCommand}" HorizontalAlignment="Stretch">
+                                <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Center">
+                                    <Border Width="14" Height="14" Background="{Binding $parent[Button].Foreground}">
+                                        <Border.OpacityMask>
+                                            <ImageBrush Source="avares://PassNest/Assets/copy.png" Stretch="Uniform"/>
+                                        </Border.OpacityMask>
+                                    </Border>
+                                    <TextBlock Text="Kopiraj" Foreground="{Binding $parent[Button].Foreground}"/>
+                                </StackPanel>
+                            </Button>
+                            <StackPanel Spacing="6">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <TextBlock Grid.Column="0" Text="Dužina" FontFamily="{StaticResource PlexSans}" FontSize="13" FontWeight="SemiBold" Foreground="{StaticResource TextPrimary}"/>
+                                    <TextBlock Grid.Column="1" Text="{Binding Length}" FontFamily="{StaticResource PlexSans}" FontSize="13" FontWeight="Bold" Foreground="{StaticResource TextPrimary}"/>
+                                </Grid>
+                                <Slider Minimum="6" Maximum="32" Value="{Binding Length}"/>
                             </StackPanel>
-                        </Button>
-                        <StackPanel Spacing="6">
-                            <Grid ColumnDefinitions="*,Auto">
-                                <TextBlock Grid.Column="0" Text="Dužina" FontFamily="{StaticResource PlexSans}" FontSize="13" FontWeight="SemiBold" Foreground="{StaticResource TextPrimary}"/>
-                                <TextBlock Grid.Column="1" Text="{Binding Length}" FontFamily="{StaticResource PlexSans}" FontSize="13" FontWeight="Bold" Foreground="{StaticResource TextPrimary}"/>
-                            </Grid>
-                            <Slider Minimum="6" Maximum="32" Value="{Binding Length}"/>
+                            <StackPanel Spacing="10">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <TextBlock Text="Velika slova" FontFamily="{StaticResource PlexSans}" FontSize="13" Foreground="{StaticResource TextPrimary}" VerticalAlignment="Center"/>
+                                    <ToggleButton Grid.Column="1" Classes="switch" IsChecked="{Binding UseUpperCase}"/>
+                                </Grid>
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <TextBlock Text="Mala slova" FontFamily="{StaticResource PlexSans}" FontSize="13" Foreground="{StaticResource TextPrimary}" VerticalAlignment="Center"/>
+                                    <ToggleButton Grid.Column="1" Classes="switch" IsChecked="{Binding UseLowerCase}"/>
+                                </Grid>
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <TextBlock Text="Brojevi" FontFamily="{StaticResource PlexSans}" FontSize="13" Foreground="{StaticResource TextPrimary}" VerticalAlignment="Center"/>
+                                    <ToggleButton Grid.Column="1" Classes="switch" IsChecked="{Binding UseNumbers}"/>
+                                </Grid>
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <TextBlock Text="Posebni znakovi" FontFamily="{StaticResource PlexSans}" FontSize="13" Foreground="{StaticResource TextPrimary}" VerticalAlignment="Center"/>
+                                    <ToggleButton Grid.Column="1" Classes="switch" IsChecked="{Binding UseSpecialChars}"/>
+                                </Grid>
+                            </StackPanel>
+                            <Button Classes="secondary" Content="Generiraj ponovno" Command="{Binding GenerateCommand}" HorizontalAlignment="Stretch"/>
                         </StackPanel>
-                        <StackPanel Spacing="10">
-                            <Grid ColumnDefinitions="*,Auto">
-                                <TextBlock Text="Velika slova" FontFamily="{StaticResource PlexSans}" FontSize="13" Foreground="{StaticResource TextPrimary}" VerticalAlignment="Center"/>
-                                <ToggleButton Grid.Column="1" Classes="switch" IsChecked="{Binding UseUpperCase}"/>
-                            </Grid>
-                            <Grid ColumnDefinitions="*,Auto">
-                                <TextBlock Text="Mala slova" FontFamily="{StaticResource PlexSans}" FontSize="13" Foreground="{StaticResource TextPrimary}" VerticalAlignment="Center"/>
-                                <ToggleButton Grid.Column="1" Classes="switch" IsChecked="{Binding UseLowerCase}"/>
-                            </Grid>
-                            <Grid ColumnDefinitions="*,Auto">
-                                <TextBlock Text="Brojevi" FontFamily="{StaticResource PlexSans}" FontSize="13" Foreground="{StaticResource TextPrimary}" VerticalAlignment="Center"/>
-                                <ToggleButton Grid.Column="1" Classes="switch" IsChecked="{Binding UseNumbers}"/>
-                            </Grid>
-                            <Grid ColumnDefinitions="*,Auto">
-                                <TextBlock Text="Posebni znakovi" FontFamily="{StaticResource PlexSans}" FontSize="13" Foreground="{StaticResource TextPrimary}" VerticalAlignment="Center"/>
-                                <ToggleButton Grid.Column="1" Classes="switch" IsChecked="{Binding UseSpecialChars}"/>
-                            </Grid>
-                        </StackPanel>
-                        <Button Classes="secondary" Content="Generiraj ponovno" Command="{Binding GenerateCommand}" HorizontalAlignment="Stretch"/>
-                    </StackPanel>
+                    </Border>
                 </Grid>
             </Border>
         </Border>

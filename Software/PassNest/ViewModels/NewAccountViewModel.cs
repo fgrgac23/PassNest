@@ -20,6 +20,13 @@ namespace PassNest.ViewModels
         [ObservableProperty]
         private bool isGeneratorOpen;
 
+        public double GeneratorPanelWidth => IsGeneratorOpen ? 857 : 504;
+
+        partial void OnIsGeneratorOpenChanged(bool value)
+        {
+            OnPropertyChanged(nameof(GeneratorPanelWidth));
+        }
+
         public ObservableCollection<CategoryOption> Categories { get; } = new()
         {
             new CategoryOption("Financije", "#E0952E"),
