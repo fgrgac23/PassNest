@@ -4,6 +4,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
+using BusinessLogicLayer;
 using PassNest.ViewModels;
 using PassNest.Views;
 
@@ -18,6 +19,7 @@ namespace PassNest
 
         public override void OnFrameworkInitializationCompleted()
         {
+            DatabaseInitializer.InitializeDatabase();
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
                 desktop.MainWindow = new MainWindow
