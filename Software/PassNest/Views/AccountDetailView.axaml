@@ -81,14 +81,16 @@
                         </StackPanel>
                         <Button Grid.Column="1" Classes="icon-action" Command="{Binding TogglePasswordRevealCommand}" VerticalAlignment="Center" Margin="0,0,8,0">
                             <Panel Width="16" Height="16">
-                                <Panel IsVisible="{Binding IsPasswordRevealed}">
-                                    <Ellipse Width="16" Height="9" Fill="Transparent" Stroke="{StaticResource TextMuted}" StrokeThickness="1.6"/>
-                                    <Ellipse Width="5" Height="5" Fill="{StaticResource TextMuted}"/>
-                                </Panel>
-                                <Panel IsVisible="{Binding !IsPasswordRevealed}">
-                                    <Ellipse Width="16" Height="9" Fill="Transparent" Stroke="{StaticResource TextMuted}" StrokeThickness="1.6"/>
-                                    <Line StartPoint="1,1" EndPoint="17,17" Stroke="{StaticResource TextMuted}" StrokeThickness="1.6"/>
-                                </Panel>
+                                <Border IsVisible="{Binding IsPasswordRevealed}" Background="{StaticResource TextMuted}">
+                                    <Border.OpacityMask>
+                                        <ImageBrush Source="avares://PassNest/Assets/eye.png" Stretch="Uniform"/>
+                                    </Border.OpacityMask>
+                                </Border>
+                                <Border IsVisible="{Binding !IsPasswordRevealed}" Background="{StaticResource TextMuted}">
+                                    <Border.OpacityMask>
+                                        <ImageBrush Source="avares://PassNest/Assets/eye-off.png" Stretch="Uniform"/>
+                                    </Border.OpacityMask>
+                                </Border>
                             </Panel>
                         </Button>
                         <Button Grid.Column="2" Classes="outline-accent" Command="{Binding CopyPasswordCommand}" VerticalAlignment="Center">

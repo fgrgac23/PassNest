@@ -133,7 +133,7 @@
                         </Grid>
                     </StackPanel>
                     <Border Grid.Column="1" Width="1" Background="{StaticResource Border}"/>
-                    <Border Grid.Column="2" Width="352" Background="{StaticResource Canvas}">
+                    <Border Grid.Column="2" Width="352" Background="{StaticResource Canvas}" IsVisible="{Binding IsGeneratorOpen}">
                         <StackPanel Margin="24,32,28,32" Spacing="16">
                             <TextBlock Text="Generator" FontFamily="{StaticResource PlexSans}" FontWeight="Bold" FontSize="15" Foreground="{StaticResource TextPrimary}"/>
                             <Border Background="{StaticResource Surface}" BorderBrush="{StaticResource Border}" BorderThickness="1" CornerRadius="8" Padding="12">
