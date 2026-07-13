@@ -5,6 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="using:PassNest.Views"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:models="using:PassNest.Models"
         mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="670"
         x:Class="PassNest.Views.SecurityView"
         x:Name="Root"
@@ -59,7 +60,7 @@
                 <TextBlock Classes="section-label-light" Text="ZAHTiJEVAJU PAŽNJU"/>
                 <ItemsControl ItemsSource="{Binding Issues}">
                     <ItemsControl.ItemTemplate>
-                        <DataTemplate x:DataType="vm:SecurityModels">
+                        <DataTemplate x:DataType="models:SecurityModels">
                             <Grid ColumnDefinitions="4,*" Margin="0,0,0,12">
                                 <Border Grid.Column="0" Background="{Binding SeverityColor}" CornerRadius="4,0,0,4"/>
                                 <Border Grid.Column="1" Background="{StaticResource Surface}" BorderBrush="{StaticResource Border}" BorderThickness="0,1,1,1" CornerRadius="0,10,10,0" Padding="16,14">

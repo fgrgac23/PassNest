@@ -1,7 +1,7 @@
 ﻿using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace PassNest.ViewModels
+namespace PassNest.Models
 {
     public class AccountCardViewModel
     {

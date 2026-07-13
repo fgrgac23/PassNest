@@ -1,8 +1,8 @@
 ﻿using Avalonia.Media;
 using System;
+using PassNest.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using PassNest.ViewModels;
 
 namespace PassNest.ViewModels
 {

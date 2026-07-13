@@ -7,11 +7,8 @@
         mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="670"
         x:Class="PassNest.Views.TwoFactorView"
         x:Name="Root"
-        x:DataType="vm:TwoFactorViewModel">
-
-    <Design.DataContext>
-        <vm:TwoFactorViewModel/>
-    </Design.DataContext>
+        x:DataType="vm:TwoFactorViewModel"
+        d:DataContext="{d:DesignInstance vm:TwoFactorViewModel}">
 
     <Grid Width="600" Height="600" RowDefinitions="Auto,*" Background="{StaticResource Canvas}">
         <Border Grid.Row="0" Background="{StaticResource GraphiteDark}" Padding="24,16">

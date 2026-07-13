@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="using:PassNest.Views"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:models="using:PassNest.Models"
         mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="670"
         x:Class="PassNest.Views.ShellView"
         x:Name="Root"
@@ -68,7 +69,7 @@
                                    <TextBlock Classes="sidebar-label" Text="KATEGORIJE"/>
                                    <ItemsControl ItemsSource="{Binding Categories}">
                                       <ItemsControl.ItemTemplate>
-                                          <DataTemplate x:DataType="vm:CategoryNavItem">
+                                          <DataTemplate x:DataType="models:CategoryNavItem">
                                               <Button Classes="category-item" Classes.active="{Binding IsSelected}" Command="{Binding #Root.((vm:ShellViewModel)DataContext).CurrentVault.SelectCategoryCommand}" CommandParameter="{Binding}">
                                                   <Grid ColumnDefinitions="Auto,*,Auto">
                                                       <Ellipse Grid.Column="0" Width="8" Height="8" Fill="{Binding DotColor}" VerticalAlignment="Center"/>

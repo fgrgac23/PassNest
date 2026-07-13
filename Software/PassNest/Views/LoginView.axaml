@@ -5,11 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="670"
         x:Class="PassNest.Views.LoginView"
-        x:DataType="vm:LoginViewModel">
-    
-    <Design.DataContext>
-        <vm:LoginViewModel/>
-    </Design.DataContext>
+        x:DataType="vm:LoginViewModel"
+        d:DataContext="{d:DesignInstance vm:LoginViewModel}">
 
     <Grid RowDefinitions="Auto,*" Width="600" Height="600" Background="{StaticResource Canvas}">
         <Border Grid.Row="0" Background="{StaticResource GraphiteDark}" Padding="24,16">

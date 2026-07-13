@@ -1,6 +1,6 @@
 ﻿using Avalonia.Media;
 
-namespace PassNest.ViewModels
+namespace PassNest.Models
 {
     public class SecurityModels
     {

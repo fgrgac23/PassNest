@@ -5,11 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="670"
         x:Class="PassNest.Views.RegisterView"
-        x:DataType="vm:RegisterViewModel">
-
-    <Design.DataContext>
-        <vm:RegisterViewModel/>
-    </Design.DataContext>
+        x:DataType="vm:RegisterViewModel"
+        d:DataContext="{d:DesignInstance vm:RegisterViewModel}">
 
     <UserControl.Styles>
         <Style Selector="Border.progress-segment">

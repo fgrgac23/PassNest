@@ -7,15 +7,12 @@
         mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="670"
         x:Class="PassNest.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
+        d:DataContext="{d:DesignInstance vm:MainWindowViewModel}"
         Icon="/Assets/PassNest-icon.ico"
         Title="PassNest"
         SizeToContent="WidthAndHeight"
         CanResize="False"
         WindowStartupLocation="CenterScreen">
-
-    <Design.DataContext>
-       <vm:MainWindowViewModel/>
-    </Design.DataContext>
 
     <views:ShellView>
         <views:ShellView.DataContext>

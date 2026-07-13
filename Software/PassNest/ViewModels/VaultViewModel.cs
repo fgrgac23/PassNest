@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
+using PassNest.Models;
 using System.Collections.ObjectModel;
 
 namespace PassNest.ViewModels

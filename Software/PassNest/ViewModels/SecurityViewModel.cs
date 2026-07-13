@@ -5,6 +5,7 @@ using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Avalonia.Collections;
+using PassNest.Models;
 
 namespace PassNest.ViewModels
 {

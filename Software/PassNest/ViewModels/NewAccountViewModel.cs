@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using Avalonia.Media;
+using PassNest.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -61,18 +61,6 @@ namespace PassNest.ViewModels
         private void Cancel()
         {
             Closed?.Invoke();
-        }
-    }
-
-    public class CategoryOption
-    {
-        public string Name { get; }
-        public IBrush DotColor { get; }
-
-        public CategoryOption(string name, string colorHex)
-        {
-            Name = name;
-            DotColor = new SolidColorBrush(Color.Parse(colorHex));
         }
     }
 }
