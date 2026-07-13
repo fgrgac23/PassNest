@@ -1,5 +1,6 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:converters="using:Avalonia.Markup.Xaml.Converters"
              x:Class="PassNest.App"
              xmlns:local="using:PassNest"
              RequestedThemeVariant="Default">
@@ -8,8 +9,20 @@
     <Application.DataTemplates>
         <local:ViewLocator/>
     </Application.DataTemplates>
-  
-    <Application.Styles>
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="avares://PassNest/Styles/Colors.axaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <FontFamily x:Key="PlexSans">avares://PassNest/Assets/Fonts/IBM_Plex_Sans#IBM Plex Sans</FontFamily>
+            <FontFamily x:Key="PlexMono">avares://PassNest/Assets/Fonts/IBM_Plex_Mono#IBM Plex Mono</FontFamily>
+        </ResourceDictionary>
+    </Application.Resources>
+
+     <Application.Styles>
         <FluentTheme />
+        <StyleInclude Source="avares://PassNest/Styles/Controls.axaml"/>
     </Application.Styles>
 </Application>

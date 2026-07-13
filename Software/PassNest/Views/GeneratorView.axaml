@@ -1,0 +1,52 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:PassNest.ViewModels"
+        xmlns:local="using:PassNest.Views"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="760"
+        x:Class="PassNest.Views.GeneratorView"
+        x:DataType="vm:GeneratorViewModel">
+
+    <Design.DataContext>
+        <vm:GeneratorViewModel/>
+    </Design.DataContext>
+
+    <ScrollViewer Background="{StaticResource Canvas}">
+        <StackPanel Margin="40" HorizontalAlignment="Center" Width="480" Spacing="24">
+            <StackPanel Spacing="6" HorizontalAlignment="Center">
+                <TextBlock Text="Generator lozinki" FontFamily="{StaticResource PlexSans}" FontWeight="Bold" FontSize="24" Foreground="{StaticResource TextPrimary}" HorizontalAlignment="Center"/>
+                <TextBlock Text="Generirajte snažnu, nasumičnu lozinku po vlastitim uvjetima." FontFamily="{StaticResource PlexSans}" FontSize="13" Foreground="{StaticResource TextSecondary}" HorizontalAlignment="Center"/>
+            </StackPanel>
+            <Border Classes="settings-card">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="{Binding Generator.Password}" FontFamily="{StaticResource PlexMono}" FontWeight="Bold" FontSize="22" Foreground="{StaticResource TextPrimary}" HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center"/>
+                    <Grid ColumnDefinitions="Auto,*,Auto">
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="6">
+                            <Ellipse Width="8" Height="8" Fill="{Binding Generator.StrengthColor}"/>
+                            <TextBlock Text="{Binding Generator.StrengthLabel}" FontFamily="{StaticResource PlexSans}" FontSize="12" Foreground="{StaticResource TextSecondary}"/>
+                        </StackPanel>
+                    </Grid>
+                    <Grid ColumnDefinitions="*">
+                        <Button Grid.Column="0" Classes="primary" Command="{Binding Generator.CopyPasswordCommand}" HorizontalAlignment="Stretch">
+                            <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
+                                <Border Width="16" Height="16" Background="{Binding $parent[Button].Foreground}">
+                                    <Border.OpacityMask>
+                                        <ImageBrush Source="avares://PassNest/Assets/copy.png" Stretch="Uniform"/>
+                                    </Border.OpacityMask>
+                                </Border>
+                                <TextBlock Text="Kopiraj lozinku"/>
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+                </StackPanel>
+            </Border>
+            <Border Classes="settings-card">
+                <StackPanel Spacing="16">
+                    <local:PasswordGeneratorOptions DataContext="{Binding Generator}"/>
+                    <Button Classes="primary" Content="Generiraj novu lozinku" Command="{Binding Generator.GenerateCommand}" HorizontalAlignment="Stretch"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

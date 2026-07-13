@@ -1,0 +1,160 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:PassNest.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="using:PassNest.Views"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="670"
+        x:Class="PassNest.Views.VaultView"
+        x:Name="Root"
+        x:DataType="vm:VaultViewModel">
+
+    <Design.DataContext>
+        <vm:VaultViewModel/>
+    </Design.DataContext>
+    <Panel>
+        <Grid RowDefinitions="Auto,Auto,*" Background="{StaticResource Canvas}">
+            <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="32,24,32,16">
+                    <Border Grid.Column="0" Width="320" Height="42" CornerRadius="21" Background="{StaticResource Surface}" BorderBrush="{StaticResource Border}" BorderThickness="1" HorizontalAlignment="Left" BoxShadow="0 1 3 0 #14000000">
+                        <Grid ColumnDefinitions="Auto,*" Margin="14,0">
+                            <Panel Grid.Column="0" Width="16" Height="16" VerticalAlignment="Center">
+                                <Ellipse Width="10" Height="10" Fill="Transparent" Stroke="{StaticResource TextMuted}" StrokeThickness="1.4" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                <Line StartPoint="9,9" EndPoint="14,14" Stroke="{StaticResource TextMuted}" StrokeThickness="1.4"/>
+                            </Panel>
+                            <TextBox Classes="form" Grid.Column="1" Text="{Binding SearchText}" PlaceholderText="Pretraži servis..." BorderThickness="0" Background="Transparent" Padding="0" VerticalAlignment="Center" VerticalContentAlignment="Center" Margin="8,0,0,0">
+                                <TextBox.Resources>
+                                    <SolidColorBrush x:Key="TextControlBorderBrushFocused">Transparent</SolidColorBrush>
+                                    <SolidColorBrush x:Key="TextControlBorderBrushPointOver">Transparent</SolidColorBrush>
+                                </TextBox.Resources>
+                            </TextBox>
+                        </Grid>
+                    </Border>
+                <Button Grid.Column="1" Classes="primary" Content="+ Novi račun" Command="{Binding AddAccountCommand}" Padding="20,10"/>
+            </Grid>
+            <Border Grid.Row="1" Height="1" Background="{StaticResource BorderStrong}" Margin="32,0,32,0"/>
+            <ScrollViewer Grid.Row="2">
+                <ItemsControl ItemsSource="{Binding Accounts}" Margin="32,20,32,32" HorizontalAlignment="Center">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal" ItemWidth="282" ItemHeight="152"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="vm:AccountCardViewModel">
+                            <Button Classes="account-card" Margin="0,0,16,16" Command="{Binding #Root.((vm:VaultViewModel)DataContext).OpenAccountDetailsCommand}" CommandParameter="{Binding}">
+                                <Grid RowDefinitions="Auto,*,Auto">
+                                    <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto">
+                                        <Border Grid.Column="0" Width="40" Height="40" CornerRadius="10" Background="{Binding AvatarColor}">
+                                            <TextBlock Text="{Binding Initial}" FontFamily="{StaticResource PlexSans}" FontWeight="Bold" FontSize="16" Foreground="{StaticResource TextOnDarkPrimary}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                        <StackPanel Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding ServiceName}" FontFamily="{StaticResource PlexSans}" FontWeight="Bold" FontSize="14" Foreground="{StaticResource TextPrimary}"/>
+                                            <TextBlock Text="{Binding Username}" FontFamily="{StaticResource PlexMono}" FontSize="12" Foreground="{StaticResource TextSecondary}"/>
+                                        </StackPanel>
+                                        <Ellipse Grid.Column="2" Width="8" Height="8" Fill="{Binding StatusColor}" VerticalAlignment="Top" Margin="0,2,2,0"/>
+                                    </Grid>
+                                    <Grid Grid.Row="2" ColumnDefinitions="*,Auto" Margin="0,14,0,0">
+                                        <Border Grid.Column="0" Background="{Binding CategoryTint}" CornerRadius="6" Padding="8,3" HorizontalAlignment="Left" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding CategoryName}" FontFamily="{StaticResource PlexSans}" FontSize="11" FontWeight="SemiBold" Foreground="{Binding CategoryColor}" HorizontalAlignment="Center"/>
+                                        </Border>
+                                        <Button Grid.Column="1" Classes="copy-action" Command="{Binding #Root.((vm:VaultViewModel)DataContext).CopyPasswordCommand}" CommandParameter="{Binding}">
+                                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                                <Border Width="14" Height="14" Background="{Binding $parent[Button].Foreground}">
+                                                    <Border.OpacityMask>
+                                                        <ImageBrush Source="avares://PassNest/Assets/copy.png" Stretch="Uniform"/>
+                                                    </Border.OpacityMask>
+                                                </Border>
+                                                <TextBlock Text="Kopiraj" Foreground="{Binding $parent[Button].Foreground}"/>
+                                            </StackPanel>
+                                        </Button>
+                                    </Grid>
+                                </Grid>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+        <Border Background="#99101620" IsVisible="{Binding IsAddAccountDialogOpen}">
+            <Border Background="{StaticResource Surface}" CornerRadius="16" BoxShadow="0 20 60 0 #40000000" HorizontalAlignment="Center" VerticalAlignment="Center" DataContext="{Binding NewAccount}" ClipToBounds="True" x:DataType="vm:NewAccountViewModel" Width="{Binding GeneratorPanelWidth}">
+                <Border.Transitions>
+                    <Transitions>
+                        <DoubleTransition Property="Width" Duration="0:0:0.25"/>
+                    </Transitions>
+                </Border.Transitions>
+                <Grid ColumnDefinitions="Auto,Auto,Auto">
+                    <StackPanel Grid.Column="0" Width="440" Margin="32" Spacing="20">
+                        <StackPanel Spacing="4">
+                            <TextBlock Text="Novi račun" FontFamily="{StaticResource PlexSans}" FontWeight="Bold" FontSize="20" Foreground="{StaticResource TextPrimary}"/>
+                            <TextBlock Text="Podaci se spremaju enkriptirano u lokalnu bazu." FontFamily="{StaticResource PlexSans}" Foreground="{StaticResource TextSecondary}"/>
+                        </StackPanel>
+                        <StackPanel Spacing="6">
+                            <TextBlock Classes="field-label" Text="Naziv servisa"/>
+                            <TextBox Classes="form" Text="{Binding ServiceName}"/>
+                        </StackPanel>
+                        <StackPanel Spacing="6">
+                            <TextBlock Classes="field-label" Text="Korisničko ime"/>
+                            <TextBox Classes="form" Text="{Binding Username}"/>
+                        </StackPanel>
+                        <StackPanel Spacing="6">
+                            <TextBlock Classes="field-label" Text="Lozinka"/>
+                            <TextBox Classes="form" Text="{Binding Generator.Password}">
+                                <TextBox.InnerRightContent>
+                                    <Button Classes="icon-toggle" Command="{Binding ToggleGeneratorCommand}">
+                                        <Border Width="16" Height="16" Background="{StaticResource Accent}">
+                                            <Border.OpacityMask>
+                                                <ImageBrush Source="avares://PassNest/Assets/generator.png" Stretch="Uniform"/>
+                                            </Border.OpacityMask>
+                                        </Border>
+                                    </Button>
+                                </TextBox.InnerRightContent>
+                            </TextBox>
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <Ellipse Width="8" Height="8" Fill="{Binding Generator.StrengthColor}"/>
+                                <TextBlock Text="{Binding Generator.StrengthLabel}" FontFamily="{StaticResource PlexSans}" FontSize="12" Foreground="{StaticResource TextSecondary}"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <StackPanel Spacing="6">
+                            <TextBlock Classes="field-label" Text="Kategorija"/>
+                            <ComboBox Classes="settings-dropdown" HorizontalAlignment="Stretch" ItemsSource="{Binding Categories}" SelectedItem="{Binding SelectedCategory}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate x:DataType="vm:CategoryOption">
+                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                            <Ellipse  Width="8" Height="8" Fill="{Binding DotColor}"/>
+                                            <TextBlock Text="{Binding Name}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </StackPanel>
+                        <Grid ColumnDefinitions="*,*" Margin="0,16,0,0">
+                            <Button Grid.Column="0" Classes="secondary" Content="Odustani" Command="{Binding CancelCommand}" Margin="0,0,8,0" HorizontalAlignment="Stretch"/>
+                            <Button Grid.Column="1" Classes="primary" Content="Spremi račun" Command="{Binding SaveCommand}" HorizontalAlignment="Stretch"/>
+                        </Grid>
+                    </StackPanel>
+                    <Border Grid.Column="1" Width="1" Background="{StaticResource Border}"/>
+                    <Border Grid.Column="2" Width="352" Background="{StaticResource Canvas}" IsVisible="{Binding IsGeneratorOpen}">
+                        <StackPanel Margin="24,32,28,32" Spacing="16">
+                            <TextBlock Text="Generator" FontFamily="{StaticResource PlexSans}" FontWeight="Bold" FontSize="15" Foreground="{StaticResource TextPrimary}"/>
+                            <Border Background="{StaticResource Surface}" BorderBrush="{StaticResource Border}" BorderThickness="1" CornerRadius="8" Padding="12">
+                                <TextBlock Text="{Binding Generator.Password}" FontFamily="{StaticResource PlexMono}" FontSize="14" FontWeight="Bold" Foreground="{StaticResource TextPrimary}" TextWrapping="Wrap"/>
+                            </Border>
+                            <Button Classes="outline-accent" Command="{Binding Generator.CopyPasswordCommand}" HorizontalAlignment="Stretch">
+                                <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Center">
+                                    <Border Width="14" Height="14" Background="{Binding $parent[Button].Foreground}">
+                                        <Border.OpacityMask>
+                                            <ImageBrush Source="avares://PassNest/Assets/copy.png" Stretch="Uniform"/>
+                                        </Border.OpacityMask>
+                                    </Border>
+                                    <TextBlock Text="Kopiraj" Foreground="{Binding $parent[Button].Foreground}"/>
+                                </StackPanel>
+                            </Button>
+                            <local:PasswordGeneratorOptions DataContext="{Binding Generator}"/>
+                            <Button Classes="secondary" Content="Generiraj ponovno" Command="{Binding Generator.GenerateCommand}" HorizontalAlignment="Stretch"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Border>
+        </Border>
+    </Panel>
+</UserControl>

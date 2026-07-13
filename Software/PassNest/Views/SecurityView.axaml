@@ -1,0 +1,84 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:cryptography="using:System.Security.Cryptography"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:PassNest.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="using:PassNest.Views"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="670"
+        x:Class="PassNest.Views.SecurityView"
+        x:Name="Root"
+        x:DataType="vm:SecurityViewModel">
+
+    <Design.DataContext>
+        <vm:SecurityViewModel/>
+    </Design.DataContext>
+    
+    <ScrollViewer Background="{StaticResource Canvas}">
+        <StackPanel Margin="32,28,32,32" Spacing="28">
+            <Grid ColumnDefinitions="Auto,*">
+                <Grid Grid.Column="0" Width="140" Height="140">
+                    <Ellipse Width="140" Height="140" StrokeThickness="12" Stroke="{StaticResource Border}"/>
+                    <Panel Width="140" Height="140" RenderTransformOrigin="50%,50%">
+                        <Panel.RenderTransform>
+                            <RotateTransform Angle="-90"/>
+                        </Panel.RenderTransform>
+                        <Ellipse Width="140" Height="140" StrokeThickness="12" Stroke="{Binding ScoreColor}" StrokeDashArray="{Binding ScoreDashArray}" StrokeLineCap="Round"/>
+                    </Panel>
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding Score}" FontFamily="{StaticResource PlexSans}" FontWeight="Bold" FontSize="32" Foreground="{Binding ScoreColor}" HorizontalAlignment="Center"/>
+                        <TextBlock Text="/ 100" FontFamily="{StaticResource PlexSans}" FontSize="12" Foreground="{Binding ScoreColor}" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Grid>
+                <StackPanel Grid.Column="1" Margin="24,0,0,0" VerticalAlignment="Center" Spacing="12">
+                    <TextBlock Text="{Binding ScoreHeading}" FontFamily="{StaticResource PlexSans}" FontWeight="Bold" FontSize="20" Foreground="{StaticResource TextPrimary}"/>
+                    <TextBlock TextWrapping="Wrap" Text="Pronađeno je nekoliko slabih i ponovljenih lozinki. Rješite ih za bolju zaštitu." FontFamily="{StaticResource PlexSans}" FontSize="13" Foreground="{StaticResource TextSecondary}"/>
+                    <Grid ColumnDefinitions="*,*,*" Margin="0,4,0,0">
+                        <Border Grid.Column="0" Classes="stat-pill" Margin="0,0,8,0">
+                            <StackPanel Spacing="2" HorizontalAlignment="Center">
+                                <TextBlock Text="{Binding WeakCount}" FontFamily="{StaticResource PlexSans}" FontWeight="Bold" FontSize="22" Foreground="{StaticResource Weak}" HorizontalAlignment="Center"/>
+                                <TextBlock Text="Slabe" FontFamily="{StaticResource PlexSans}" FontSize="12" Foreground="{StaticResource TextSecondary}"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Column="1" Classes="stat-pill" Margin="0,0,8,0">
+                            <StackPanel Spacing="2" HorizontalAlignment="Center">
+                                <TextBlock Text="{Binding MediumCount}" FontFamily="{StaticResource PlexSans}" FontWeight="Bold" FontSize="22" Foreground="{StaticResource Medium}" HorizontalAlignment="Center"/>
+                                <TextBlock Text="Srednje" FontFamily="{StaticResource PlexSans}" FontSize="12" Foreground="{StaticResource TextSecondary}"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Column="2" Classes="stat-pill" Margin="0,0,8,0">
+                            <StackPanel Spacing="2" HorizontalAlignment="Center">
+                                <TextBlock Text="{Binding StrongCount}" FontFamily="{StaticResource PlexSans}" FontWeight="Bold" FontSize="22" Foreground="{StaticResource Strong}" HorizontalAlignment="Center"/>
+                                <TextBlock Text="Sigurne" FontFamily="{StaticResource PlexSans}" FontSize="12" Foreground="{StaticResource TextSecondary}"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </StackPanel>
+            </Grid>
+            <StackPanel Spacing="10">
+                <TextBlock Classes="section-label-light" Text="ZAHTiJEVAJU PAŽNJU"/>
+                <ItemsControl ItemsSource="{Binding Issues}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="vm:SecurityModels">
+                            <Grid ColumnDefinitions="4,*" Margin="0,0,0,12">
+                                <Border Grid.Column="0" Background="{Binding SeverityColor}" CornerRadius="4,0,0,4"/>
+                                <Border Grid.Column="1" Background="{StaticResource Surface}" BorderBrush="{StaticResource Border}" BorderThickness="0,1,1,1" CornerRadius="0,10,10,0" Padding="16,14">
+                                    <Grid ColumnDefinitions="Auto,*,Auto">
+                                        <Border Grid.Column="0" Width="36" Height="36" CornerRadius="9" Background="{Binding AvatarColor}">
+                                            <TextBlock Text="{Binding Initial}" FontFamily="{StaticResource PlexSans}" FontWeight="Bold" FontSize="14" Foreground="{StaticResource TextOnDarkPrimary}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                        <StackPanel Grid.Column="1" Margin="12,0,12,0" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding ServiceName}" FontFamily="{StaticResource PlexSans}" FontWeight="Bold" FontSize="14" Foreground="{StaticResource TextPrimary}"/>
+                                            <TextBlock Text="{Binding IssueDescription}" FontFamily="{StaticResource PlexSans}" FontSize="12" Foreground="{Binding SeverityColor}"/>
+                                        </StackPanel>
+                                        <Button Grid.Column="2" Classes="outline-accent" Content="Popravi" VerticalAlignment="Center" Command="{Binding #Root.((vm:SecurityViewModel)DataContext).FixIssueCommand}" CommandParameter="{Binding}"/>
+                                    </Grid>
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,113 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:PassNest.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="using:PassNest.Views"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="670"
+        x:Class="PassNest.Views.ShellView"
+        x:Name="Root"
+        x:DataType="vm:ShellViewModel">
+
+    <Design.DataContext>
+        <vm:ShellViewModel/>
+    </Design.DataContext>
+
+    <Grid Width="1160" Height="760" ColumnDefinitions="240,*">
+        <Grid Grid.Column="0" RowDefinitions="Auto,*,Auto" Background="{StaticResource GraphiteDark}">
+            <Image Grid.Row="0" Source="avares://PassNest/Assets/PassNest-Logo-Transparent.png" Height="70" Stretch="Uniform" HorizontalAlignment="Left" Margin="10,20,20,20"/>
+            <ScrollViewer Grid.Row="1">
+               <StackPanel Margin="23,8,12,12" Spacing="20">
+                  <StackPanel Spacing="2">
+                      <TextBlock Classes="sidebar-label" Text="NAVIGACIJA"/>
+                      <Button Classes="nav-item" Classes.active="{Binding IsTrezorActive}" Command="{Binding SelectNavCommand}" CommandParameter="Trezor">
+                          <StackPanel Orientation="Horizontal" Spacing="10">
+                             <Border Width="18" Height="18" Background="{Binding $parent[Button].Foreground}">
+                                 <Border.OpacityMask>
+                                    <ImageBrush Source="avares://PassNest/Assets/vault.png" Stretch="Uniform"/>
+                                 </Border.OpacityMask>
+                             </Border>
+                              <TextBlock Text="Trezor" Foreground="{Binding $parent[Button].Foreground}"/>
+                          </StackPanel>
+                      </Button>
+                      <Button Classes="nav-item" Classes.active="{Binding IsGeneratorActive}" Command="{Binding SelectNavCommand}" CommandParameter="Generator">
+                          <StackPanel Orientation="Horizontal" Spacing="10">
+                             <Border Width="18" Height="18" Background="{Binding $parent[Button].Foreground}">
+                                 <Border.OpacityMask>
+                                    <ImageBrush Source="avares://PassNest/Assets/generator.png" Stretch="Uniform"/>
+                                 </Border.OpacityMask>
+                             </Border>
+                              <TextBlock Text="Generator" Foreground="{Binding $parent[Button].Foreground}"/>
+                          </StackPanel>
+                      </Button>
+                      <Button Classes="nav-item" Classes.active="{Binding IsSafetyActive}" Command="{Binding SelectNavCommand}" CommandParameter="Sigurnost">
+                          <StackPanel Orientation="Horizontal" Spacing="10">
+                              <Border Width="18" Height="18" Background="{Binding $parent[Button].Foreground}">
+                                  <Border.OpacityMask>
+                                      <ImageBrush Source="avares://PassNest/Assets/security.png" Stretch="Uniform"/>
+                                  </Border.OpacityMask>
+                              </Border>
+                              <TextBlock Text="Sigurnost" Foreground="{Binding $parent[Button].Foreground}"/>
+                          </StackPanel>
+                      </Button>
+                      <Button Classes="nav-item" Classes.active="{Binding IsSettingsActive}" Command="{Binding SelectNavCommand}" CommandParameter="Postavke">
+                          <StackPanel Orientation="Horizontal" Spacing="10">
+                              <Border Width="18" Height="18" Background="{Binding $parent[Button].Foreground}">
+                                  <Border.OpacityMask>
+                                      <ImageBrush Source="avares://PassNest/Assets/settings.png" Stretch="Uniform"/>
+                                  </Border.OpacityMask>
+                              </Border>
+                              <TextBlock Text="Postavke" Foreground="{Binding $parent[Button].Foreground}"/>
+                          </StackPanel>
+                      </Button>
+                  </StackPanel>
+                   <ContentControl Content="{Binding CurrentPage}">
+                       <ContentControl.DataTemplates>
+                           <DataTemplate DataType="vm:VaultViewModel">
+                               <StackPanel Spacing="2">
+                                   <TextBlock Classes="sidebar-label" Text="KATEGORIJE"/>
+                                   <ItemsControl ItemsSource="{Binding Categories}">
+                                      <ItemsControl.ItemTemplate>
+                                          <DataTemplate x:DataType="vm:CategoryNavItem">
+                                              <Button Classes="category-item" Classes.active="{Binding IsSelected}" Command="{Binding #Root.((vm:ShellViewModel)DataContext).CurrentVault.SelectCategoryCommand}" CommandParameter="{Binding}">
+                                                  <Grid ColumnDefinitions="Auto,*,Auto">
+                                                      <Ellipse Grid.Column="0" Width="8" Height="8" Fill="{Binding DotColor}" VerticalAlignment="Center"/>
+                                                      <TextBlock Grid.Column="1" Text="{Binding Name}" FontFamily="{StaticResource PlexSans}" FontSize="14" Margin="10,0,0,0" VerticalAlignment="Center" Foreground="{Binding $parent[Button].Foreground}"/>
+                                                      <TextBlock Grid.Column="2" Text="{Binding Count}" FontFamily="{StaticResource PlexSans}" FontSize="13" VerticalAlignment="Center" Foreground="{Binding $parent[Button].Foreground}"/>
+                                                  </Grid>
+                                              </Button>
+                                          </DataTemplate> 
+                                      </ItemsControl.ItemTemplate> 
+                                   </ItemsControl>
+                               </StackPanel>
+                           </DataTemplate>
+                           <DataTemplate DataType="vm:SecurityViewModel">
+                               <Panel/>
+                           </DataTemplate>
+                           <DataTemplate DataType="vm:SettingsViewModel">
+                               <Panel/>
+                           </DataTemplate>
+                           <DataTemplate DataType="vm:AccountDetailViewModel">
+                               <Panel/>
+                           </DataTemplate>
+                           <DataTemplate DataType="vm:GeneratorViewModel">
+                               <Panel/>
+                           </DataTemplate>
+                       </ContentControl.DataTemplates>
+                   </ContentControl>
+                </StackPanel>
+            </ScrollViewer>
+            <Button Grid.Row="2" Classes="secondary-dark" Command="{Binding LockVaultCommand}" Margin="16" HorizontalAlignment="Stretch">
+                <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
+                    <Border Width="16" Height="16" Background="{StaticResource Weak}">
+                        <Border.OpacityMask>
+                            <ImageBrush Source="avares://PassNest/Assets/lock.png" Stretch="Uniform"/>
+                        </Border.OpacityMask>
+                    </Border>
+                    <TextBlock Text="Zaključaj trezor" Foreground="{StaticResource Weak}"/>
+                </StackPanel>
+            </Button>
+        </Grid>
+        <ContentControl Grid.Column="1" Content="{Binding CurrentPage}"/>
+    </Grid>
+</UserControl>

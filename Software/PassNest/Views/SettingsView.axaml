@@ -1,0 +1,97 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:PassNest.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="using:PassNest.Views"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="670"
+        x:Class="PassNest.Views.SettingsView"
+        x:Name="Root"
+        x:DataType="vm:SettingsViewModel">
+
+    <Design.DataContext>
+        <vm:SettingsViewModel/>
+    </Design.DataContext>
+
+    <ScrollViewer Background="{StaticResource Canvas}">
+        <StackPanel Margin="32,28,32,32" Spacing="28">
+            <StackPanel Spacing="10">
+                <TextBlock Classes="section-label-light" Text="SIGURNOST"/>
+                <Border Classes="settings-card">
+                    <StackPanel>
+                        <Grid ColumnDefinitions="*,Auto">
+                            <StackPanel Grid.Column="0" Spacing="2">
+                                <TextBlock Text="Dvofaktorska autentikacija (e-mail)" FontFamily="{StaticResource PlexSans}" FontWeight="Bold" FontSize="14" Foreground="{StaticResource TextPrimary}"/>
+                                <TextBlock FontFamily="{StaticResource PlexSans}" FontSize="12" Foreground="{StaticResource TextSecondary}">
+                                    <Run Text="Jednokratni kod na "/>
+                                    <Run Text="{Binding TwoFactorEmail}"/>
+                                </TextBlock>
+                            </StackPanel>
+                            <ToggleButton Grid.Column="1" Classes="switch" IsChecked="{Binding TwoFactorEnabled}" VerticalAlignment="Center"/>
+                        </Grid>
+                        <Border Height="1" Background="{StaticResource Border}" Margin="0,16"/>
+                        <Grid ColumnDefinitions="*,Auto">
+                            <StackPanel Grid.Column="0" Spacing="2">
+                                <TextBlock Text="Automatsko zaključavanje" FontFamily="{StaticResource PlexSans}" FontWeight="Bold" FontSize="14" Foreground="{StaticResource TextPrimary}"/>
+                                <TextBlock Text="Nakon neaktivnosti, zaključaj trezor" FontFamily="{StaticResource PlexSans}" FontSize="12" Foreground="{StaticResource TextSecondary}"/>
+                            </StackPanel>
+                            <ComboBox Grid.Column="1" Classes="settings-dropdown" ItemsSource="{Binding AutoLockOptions}" SelectedItem="{Binding SelectedAutoLockOptions}" VerticalAlignment="Center"/>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+            <StackPanel Spacing="10">
+                <TextBlock Classes="section-label-light" Text="SIGURNOSNA KOPIJA"/>
+                <Border Classes="settings-card">
+                    <StackPanel Spacing="14">
+                        <TextBlock TextWrapping="Wrap" Text="Izradite enkriptiranu kopiju cijele baze ili ju vratite na novom uređaju." FontFamily="{StaticResource PlexSans}" FontSize="13" Foreground="{StaticResource TextSecondary}"/>
+                        <StackPanel Orientation="Horizontal" Spacing ="12">
+                            <Button Classes="primary backup-export" Command="{Binding ExportBackupCommand}" Padding="20,14">
+                                <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
+                                    <Border Width="14" Height="14" Background="{Binding $parent[Button].Foreground}">
+                                        <Border.OpacityMask>
+                                            <ImageBrush Source="avares://PassNest/Assets/export.png" Stretch="Uniform"/>
+                                        </Border.OpacityMask>
+                                    </Border>
+                                    <TextBlock Text="Izvezi kopiju"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Classes="outline-accent" Command="{Binding RestoreBackupCommand}" Padding="20,14">
+                                <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
+                                    <Border Width="14" Height="14" Background="{Binding $parent[Button].Foreground}">
+                                        <Border.OpacityMask>
+                                            <ImageBrush Source="avares://PassNest/Assets/import.png" Stretch="Uniform"/>
+                                        </Border.OpacityMask>
+                                    </Border>
+                                    <TextBlock Text="Vrati kopiju"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+            <StackPanel Spacing="10">
+                <TextBlock Classes="section-label-light" Text="GLOBALNI PREČAC"/>
+                <Border Classes="settings-card">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <StackPanel Grid.Column="0" Spacing="2">
+                            <TextBlock Text="Brzi pristup prozoru" FontFamily="{StaticResource PlexSans}" FontWeight="Bold" FontSize="14" Foreground="{StaticResource TextPrimary}"/>
+                            <TextBlock Text="Prikaži PassNestiz bilo koje aplikacije" FontFamily="{StaticResource PlexSans}" FontSize="12" Foreground="{StaticResource TextSecondary}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                            <Border Classes="keycap">
+                                <TextBlock Text="Ctrl" FontFamily="{StaticResource PlexMono}" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource TextPrimary}"/>
+                            </Border>
+                            <Border Classes="keycap">
+                                <TextBlock Text="Shift" FontFamily="{StaticResource PlexMono}" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource TextPrimary}"/>
+                            </Border>
+                            <Border Classes="keycap">
+                                <TextBlock Text="P" FontFamily="{StaticResource PlexMono}" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource TextPrimary}"/>
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

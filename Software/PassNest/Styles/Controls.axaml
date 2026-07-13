@@ -1,0 +1,427 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Style Selector="TextBlock.field-label">
+        <Setter Property="FontFamily" Value="{StaticResource PlexSans}"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+        <Setter Property="Margin" Value="0,0,0,6"/>
+    </Style>
+
+    <Style Selector="TextBox.form">
+        <Setter Property="FontFamily" Value="{StaticResource PlexSans}"/>
+        <Setter Property="Padding" Value="12,10"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderStrong}"/>
+        <Setter Property="Background" Value="{StaticResource Surface}"/>
+        <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+    </Style>
+
+    <Style Selector="TextBox.form:focus">
+        <Setter Property="BorderBrush" Value="{StaticResource Accent}"/>
+    </Style>
+
+    <Style Selector="Button.primary">
+        <Setter Property="FontFamily" Value="{StaticResource PlexSans}"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="Padding" Value="0,14"/>
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Background" Value="{StaticResource Accent}"/>
+        <Setter Property="Foreground" Value="{StaticResource TextOnDarkPrimary}"/>
+        <Setter Property="Template">
+           <ControlTemplate>
+              <Border Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}" Padding="{TemplateBinding Padding}">
+                 <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/> 
+              </Border>
+           </ControlTemplate> 
+        </Setter>
+    </Style>
+
+    <Style Selector="Button.primary:pointerover">
+        <Setter Property="Background" Value="{StaticResource AccentHover}"/>
+    </Style>
+
+     <Style Selector="Button.secondary">
+        <Setter Property="FontFamily" Value="{StaticResource PlexSans}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderStrong}"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Padding" Value="0,14"/>
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Background" Value="{StaticResource Surface}"/>
+        <Setter Property="Foreground" Value="{StaticResource TextSecondary}"/>
+         <Setter Property="Template">
+           <ControlTemplate>
+              <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"  BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="{TemplateBinding CornerRadius}" Padding="{TemplateBinding Padding}">
+                 <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/> 
+              </Border>
+           </ControlTemplate> 
+        </Setter>
+    </Style>
+    
+    <Style Selector="Button.secondary:pointerover">
+        <Setter Property="Background" Value="{StaticResource AccentTint}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Accent}"/>
+    </Style>
+
+    <Style Selector="Button.icon-toggle">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding" Value="4"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Template">
+           <ControlTemplate>
+              <ContentPresenter Content="{TemplateBinding Content}" Padding="{TemplateBinding Padding}" HorizontalAlignment="Center" VerticalAlignment="Center"/> 
+           </ControlTemplate> 
+        </Setter>
+    </Style>
+
+    <Style Selector="TextBlock.sidebar-label">
+        <Setter Property="FontFamily" Value="{StaticResource PlexSans}"/>
+        <Setter Property="FontSize" Value="11"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="{StaticResource TextOnDarkMuted}"/>
+        <Setter Property="LetterSpacing" Value="1"/>
+        <Setter Property="Margin" Value="12,0,0,4"/>
+    </Style>
+
+    <Style Selector="Button.nav-item">
+        <Setter Property="FontFamily" Value="{StaticResource PlexSans}"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Padding" Value="12,10"/>
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{StaticResource TextOnDarkMuted}"/>
+        <Setter Property="Template">
+           <ControlTemplate>
+              <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"  BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="{TemplateBinding CornerRadius}" Padding="{TemplateBinding Padding}">
+                 <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalAlignment}"/> 
+              </Border>
+           </ControlTemplate> 
+        </Setter>
+    </Style>
+
+    <Style Selector="Button.nav-item:pointerover">
+        <Setter Property="Background" Value="{StaticResource Graphite}"/>
+        <Setter Property="Foreground" Value="{StaticResource TextOnDarkPrimary}"/>
+    </Style>
+
+    <Style Selector="Button.nav-item.active">
+        <Setter Property="Background" Value="{StaticResource Graphite}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Accent}"/>
+        <Setter Property="Foreground" Value="{StaticResource TextOnDarkPrimary}"/> 
+    </Style>
+
+    <Style Selector="Button.category-item">
+        <Setter Property="FontFamily" Value="{StaticResource PlexSans}"/>
+        <Setter Property="Padding" Value="12,8"/>
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{StaticResource TextOnDarkMuted}"/>
+        <Setter Property="Template">
+           <ControlTemplate>
+              <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"  BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="{TemplateBinding CornerRadius}" Padding="{TemplateBinding Padding}">
+                 <ContentPresenter Content="{TemplateBinding Content}"/> 
+              </Border>
+           </ControlTemplate> 
+        </Setter>
+    </Style>
+
+    <Style Selector="Button.category-item:pointerover">
+        <Setter Property="Background" Value="{StaticResource Graphite}"/> 
+        <Setter Property="Foreground" Value="{StaticResource TextOnDarkPrimary}"/>
+    </Style>
+
+    <Style Selector="Button.category-item.active">
+        <Setter Property="Background" Value="{StaticResource Graphite}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Accent}"/>
+        <Setter Property="Foreground" Value="{StaticResource TextOnDarkPrimary}"/> 
+    </Style>
+
+    <Style Selector="Button.icon-action">
+        <Setter Property="Width" Value="34"/>
+        <Setter Property="Height" Value="34"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Border}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+
+    <Style Selector="Button.icon-action:pointerover">
+        <Setter Property="Background" Value="{StaticResource Canvas}"/>
+    </Style>
+
+    <Style Selector="Button.icon-action-accent">
+        <Setter Property="Width" Value="34"/>
+        <Setter Property="Height" Value="34"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Accent}"/>
+        <Setter Property="Background" Value="{StaticResource AccentTint}"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+
+    <Style Selector="Button.icon-action-accent:pointerover">
+        <Setter Property="Background" Value="{StaticResource Accent}"/>
+    </Style>
+
+    <Style Selector="Button.copy-action">
+        <Setter Property="FontFamily" Value="{StaticResource PlexSans}"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Padding" Value="10,6"/>
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Accent}"/>
+        <Setter Property="Background" Value="{StaticResource AccentTint}"/>
+        <Setter Property="Foreground" Value="{StaticResource Accent}"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+
+    <Style Selector="Button.copy-action:pointerover">
+        <Setter Property="Background" Value="{StaticResource Accent}"/>
+        <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+    </Style>
+
+    <Style Selector="Button.secondary-dark">
+        <Setter Property="FontFamily" Value="{StaticResource PlexSans}"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Padding" Value="0,12"/>
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Graphite}"/>
+        <Setter Property="Foreground" Value="{StaticResource TextOnDarkMuted}"/> 
+    </Style>
+
+    <Style Selector="Button.secondary-dark:pointerover">
+        <Setter Property="Background" Value="{StaticResource Graphite}"/>
+    </Style>
+
+    <Style Selector="Button.account-card">
+        <Setter Property="Background" Value="{StaticResource Surface}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Border}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="12"/>
+        <Setter Property="Padding" Value="16"/>
+        <Setter Property="Width" Value="270"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+        <Setter Property="RenderTransform" Value="none"/>
+        <Setter Property="Transitions">
+           <Transitions>
+              <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.15"/> 
+           </Transitions> 
+        </Setter>
+        <Setter Property="Template">
+           <ControlTemplate>
+              <Border Name="CardBorder" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="{TemplateBinding CornerRadius}" Padding="{TemplateBinding Padding}" BoxShadow="0 2 8 0 #1A000000">
+                 <ContentPresenter Content="{TemplateBinding Content}"/> 
+              </Border>
+           </ControlTemplate> 
+        </Setter>
+    </Style>
+
+    <Style Selector="Button.account-card:pointerover">
+        <Setter Property="BorderBrush" Value="{StaticResource BorderStrong}"/>
+        <Setter Property="RenderTransform" Value="translateY(-3px)"/>
+    </Style>
+
+    <Style Selector="Button.account-card:pointerover /template/ Border#CardBorder">
+       <Setter Property="BoxShadow" Value="0 10 28 0 #26000000"/>
+    </Style>
+
+    <Style Selector="TextBlock.section-label-light">
+        <Setter Property="FontFamily" Value="{StaticResource PlexSans}"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="{StaticResource TextSecondary}"/>
+        <Setter Property="LetterSpacing" Value="1"/>
+    </Style>
+
+    <Style Selector="Border.stat-pill">
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Border}"/>
+        <Setter Property="Background" Value="{StaticResource Surface}"/>
+        <Setter Property="CornerRadius" Value="10"/>
+        <Setter Property="Padding" Value="20,14"/>
+    </Style>
+
+    <Style Selector="Button.outline-accent">
+        <Setter Property="FontFamily" Value="{StaticResource PlexSans}"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Padding" Value="16,8"/>
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Accent}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{StaticResource Accent}"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+    </Style>
+
+    <Style Selector="Button.outline-accent:pointerover">
+        <Setter Property="Background" Value="{StaticResource AccentTint}"/>
+    </Style>
+
+    <Style Selector="Border.settings-card">
+        <Setter Property="Padding" Value="20,16"/>
+        <Setter Property="CornerRadius" Value="10"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Border}"/>
+        <Setter Property="Background" Value="{StaticResource Surface}"/>
+    </Style>
+
+    <Style Selector="ToggleButton.switch">
+        <Setter Property="Width" Value="44"/>
+        <Setter Property="Height" Value="24"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="CornerRadius" Value="12"/>
+        <Setter Property="Background" Value="{StaticResource Border}"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Transitions">
+           <Transitions>
+              <BrushTransition Property="Background" Duration="0:0:0.15"/> 
+           </Transitions> 
+        </Setter>
+        <Setter Property="Template">
+           <ControlTemplate>
+              <Border Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}">
+                 <Border Name="Thumb" Width="18" Height="18" CornerRadius="9" Background="{StaticResource Surface}" HorizontalAlignment="Left" Margin="3,0,0,0">
+                    <Border.Transitions>
+                       <Transitions>
+                          <ThicknessTransition Property="Margin" Duration="0:0:0.15"/>
+                       </Transitions> 
+                    </Border.Transitions> 
+                 </Border>
+              </Border> 
+           </ControlTemplate> 
+        </Setter>
+    </Style>
+
+    <Style Selector="ToggleButton.switch:checked">
+       <Setter Property="Background" Value="{StaticResource Accent}"/> 
+    </Style>
+
+    <Style Selector="ToggleButton.switch:checked /template/ Border#Thumb">
+        <Setter Property="Margin" Value="23,0,0,0"/>
+    </Style>
+
+    <Style Selector="ComboBox.settings-dropdown">
+        <Setter Property="FontFamily" Value="{StaticResource PlexSans}"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="Padding" Value="12,8"/>
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Border}"/>
+        <Setter Property="Background" Value="{StaticResource Surface}"/>
+        <Setter Property="MinWidth" Value="110"/>
+    </Style>
+
+    <Style Selector="Border.keycap">
+        <Setter Property="Padding" Value="10,6"/>
+        <Setter Property="CornerRadius" Value="6"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderStrong}"/>
+        <Setter Property="Background" Value="{StaticResource Canvas}"/>
+    </Style>
+
+    <Style Selector="Button.primary.backup-export:pointerover">
+       <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/> 
+    </Style>
+
+    <Style Selector="Button.outline-weak">
+        <Setter Property="FontFamily" Value="{StaticResource PlexSans}"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Padding" Value="16,8"/>
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Weak}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{StaticResource Weak}"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+    </Style>
+
+    <Style Selector="Button.outline-weak:pointerover">
+        <Setter Property="Background" Value="#1FD6503C"/>
+    </Style>
+
+    <Style Selector="Button.back-link">
+        <Setter Property="FontFamily" Value="{StaticResource PlexSans}"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Foreground" Value="{StaticResource TextSecondary}"/>
+        <Setter Property="Template">
+           <ControlTemplate>  
+               <ContentPresenter Content="{TemplateBinding Content}"/> 
+           </ControlTemplate> 
+        </Setter>
+    </Style>
+
+    <Style Selector="Button.back-link:pointerover">
+       <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/> 
+    </Style>
+
+    <Style Selector="TextBox.otp-digit">
+        <Setter Property="Width" Value="52"/>
+        <Setter Property="Height" Value="60"/>
+        <Setter Property="FontFamily" Value="{StaticResource PlexMono}"/>
+        <Setter Property="FontSize" Value="24"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="TextAlignment" Value="Center"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="CornerRadius" Value="10"/>
+        <Setter Property="BorderThickness" Value="1.5"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Border}"/>
+        <Setter Property="Background" Value="{StaticResource Surface}"/>
+        <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="MaxLength" Value="1"/>
+    </Style>
+
+    <Style Selector="TextBox.otp-digit.filled">
+        <Setter Property="BorderBrush" Value="{StaticResource Accent}"/>
+    </Style>
+    
+    <Style Selector="Slider">
+       <Setter Property="Foreground" Value="{StaticResource Accent}"/> 
+    </Style>
+</Styles>
