@@ -98,7 +98,7 @@
                         </StackPanel>
                         <StackPanel Spacing="6">
                             <TextBlock Classes="field-label" Text="Lozinka"/>
-                            <TextBox Classes="form" Text="{Binding Password}">
+                            <TextBox Classes="form" Text="{Binding Generator.Password}">
                                 <TextBox.InnerRightContent>
                                     <Button Classes="icon-toggle" Command="{Binding ToggleGeneratorCommand}">
                                         <Border Width="16" Height="16" Background="{StaticResource Accent}">
@@ -110,8 +110,8 @@
                                 </TextBox.InnerRightContent>
                             </TextBox>
                             <StackPanel Orientation="Horizontal" Spacing="6">
-                                <Ellipse Width="8" Height="8" Fill="{Binding StrengthColor}"/>
-                                <TextBlock Text="{Binding StrengthLabel}" FontFamily="{StaticResource PlexSans}" FontSize="12" Foreground="{StaticResource TextSecondary}"/>
+                                <Ellipse Width="8" Height="8" Fill="{Binding Generator.StrengthColor}"/>
+                                <TextBlock Text="{Binding Generator.StrengthLabel}" FontFamily="{StaticResource PlexSans}" FontSize="12" Foreground="{StaticResource TextSecondary}"/>
                             </StackPanel>
                         </StackPanel>
                         <StackPanel Spacing="6">
@@ -137,9 +137,9 @@
                         <StackPanel Margin="24,32,28,32" Spacing="16">
                             <TextBlock Text="Generator" FontFamily="{StaticResource PlexSans}" FontWeight="Bold" FontSize="15" Foreground="{StaticResource TextPrimary}"/>
                             <Border Background="{StaticResource Surface}" BorderBrush="{StaticResource Border}" BorderThickness="1" CornerRadius="8" Padding="12">
-                                <TextBlock Text="{Binding Password}" FontFamily="{StaticResource PlexMono}" FontSize="14" FontWeight="Bold" Foreground="{StaticResource TextPrimary}" TextWrapping="Wrap"/>
+                                <TextBlock Text="{Binding Generator.Password}" FontFamily="{StaticResource PlexMono}" FontSize="14" FontWeight="Bold" Foreground="{StaticResource TextPrimary}" TextWrapping="Wrap"/>
                             </Border>
-                            <Button Classes="outline-accent" Command="{Binding CopyPasswordCommand}" HorizontalAlignment="Stretch">
+                            <Button Classes="outline-accent" Command="{Binding Generator.CopyPasswordCommand}" HorizontalAlignment="Stretch">
                                 <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Center">
                                     <Border Width="14" Height="14" Background="{Binding $parent[Button].Foreground}">
                                         <Border.OpacityMask>
@@ -149,32 +149,8 @@
                                     <TextBlock Text="Kopiraj" Foreground="{Binding $parent[Button].Foreground}"/>
                                 </StackPanel>
                             </Button>
-                            <StackPanel Spacing="6">
-                                <Grid ColumnDefinitions="*,Auto">
-                                    <TextBlock Grid.Column="0" Text="Dužina" FontFamily="{StaticResource PlexSans}" FontSize="13" FontWeight="SemiBold" Foreground="{StaticResource TextPrimary}"/>
-                                    <TextBlock Grid.Column="1" Text="{Binding Length}" FontFamily="{StaticResource PlexSans}" FontSize="13" FontWeight="Bold" Foreground="{StaticResource TextPrimary}"/>
-                                </Grid>
-                                <Slider Minimum="6" Maximum="32" Value="{Binding Length}"/>
-                            </StackPanel>
-                            <StackPanel Spacing="10">
-                                <Grid ColumnDefinitions="*,Auto">
-                                    <TextBlock Text="Velika slova" FontFamily="{StaticResource PlexSans}" FontSize="13" Foreground="{StaticResource TextPrimary}" VerticalAlignment="Center"/>
-                                    <ToggleButton Grid.Column="1" Classes="switch" IsChecked="{Binding UseUpperCase}"/>
-                                </Grid>
-                                <Grid ColumnDefinitions="*,Auto">
-                                    <TextBlock Text="Mala slova" FontFamily="{StaticResource PlexSans}" FontSize="13" Foreground="{StaticResource TextPrimary}" VerticalAlignment="Center"/>
-                                    <ToggleButton Grid.Column="1" Classes="switch" IsChecked="{Binding UseLowerCase}"/>
-                                </Grid>
-                                <Grid ColumnDefinitions="*,Auto">
-                                    <TextBlock Text="Brojevi" FontFamily="{StaticResource PlexSans}" FontSize="13" Foreground="{StaticResource TextPrimary}" VerticalAlignment="Center"/>
-                                    <ToggleButton Grid.Column="1" Classes="switch" IsChecked="{Binding UseNumbers}"/>
-                                </Grid>
-                                <Grid ColumnDefinitions="*,Auto">
-                                    <TextBlock Text="Posebni znakovi" FontFamily="{StaticResource PlexSans}" FontSize="13" Foreground="{StaticResource TextPrimary}" VerticalAlignment="Center"/>
-                                    <ToggleButton Grid.Column="1" Classes="switch" IsChecked="{Binding UseSpecialChars}"/>
-                                </Grid>
-                            </StackPanel>
-                            <Button Classes="secondary" Content="Generiraj ponovno" Command="{Binding GenerateCommand}" HorizontalAlignment="Stretch"/>
+                            <local:PasswordGeneratorOptions DataContext="{Binding Generator}"/>
+                            <Button Classes="secondary" Content="Generiraj ponovno" Command="{Binding Generator.GenerateCommand}" HorizontalAlignment="Stretch"/>
                         </StackPanel>
                     </Border>
                 </Grid>

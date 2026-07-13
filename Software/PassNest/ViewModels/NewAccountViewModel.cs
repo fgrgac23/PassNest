@@ -15,7 +15,7 @@ namespace PassNest.ViewModels
         private string username = string.Empty;
 
         [ObservableProperty]
-        private PasswordGeneratorVIewModel generator = new();
+        private PasswordGeneratorViewModel generator = new();
 
         [ObservableProperty]
         private bool isGeneratorOpen;
