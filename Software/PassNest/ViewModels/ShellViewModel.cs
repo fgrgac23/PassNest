@@ -53,6 +53,7 @@ namespace PassNest.ViewModels
             CurrentPage = value switch
             {
                 "Trezor" => CreateVaultPage(),
+                "Generator" => new GeneratorViewModel(),
                 "Sigurnost" => new SecurityViewModel(),
                 "Postavke" => new SettingsViewModel(),
                 _ => currentPage

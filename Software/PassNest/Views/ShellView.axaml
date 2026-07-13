@@ -90,6 +90,9 @@
                            <DataTemplate DataType="vm:AccountDetailViewModel">
                                <Panel/>
                            </DataTemplate>
+                           <DataTemplate DataType="vm:GeneratorViewModel">
+                               <Panel/>
+                           </DataTemplate>
                        </ContentControl.DataTemplates>
                    </ContentControl>
                 </StackPanel>
