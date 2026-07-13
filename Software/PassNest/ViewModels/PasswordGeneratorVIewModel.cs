@@ -1,11 +1,10 @@
 ﻿using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System;
 
 namespace PassNest.ViewModels
 {
-    public partial class PasswordGeneratorVIewModel : ObservableObject
+    public partial class PasswordGeneratorViewModel : ObservableObject
     {
         [ObservableProperty]
         private string password = "v8$Kp2#mLq7!Wd";
