@@ -15,7 +15,7 @@ namespace PassNest.ViewModels
         private string username = string.Empty;
 
         [ObservableProperty]
-        private string password = "v8$Kp2#mLq7!Wd";
+        private PasswordGeneratorVIewModel generator = new();
 
         [ObservableProperty]
         private bool isGeneratorOpen;
@@ -38,35 +38,6 @@ namespace PassNest.ViewModels
         [ObservableProperty]
         private CategoryOption selectedCategory;
 
-        [ObservableProperty]
-        private int length = 14;
-
-        [ObservableProperty]
-        private bool useUpperCase = true;
-
-        [ObservableProperty]
-        private bool useLowerCase = true;
-
-        [ObservableProperty]
-        private bool useNumbers = true;
-
-        [ObservableProperty]
-        private bool useSpecialChars = true;
-
-        public string StrengthLabel => Password.Length switch
-        {
-            >= 12 => "Jaka lozinka",
-            >= 8 => "Srednja lozinka",
-            _ => "Slaba lozinka"
-        };
-
-        public IBrush StrengthColor => Password.Length switch
-        {
-            >= 12 => new SolidColorBrush(Color.Parse("#2AA26A")),
-            >= 8 => new SolidColorBrush(Color.Parse("#E0952E")),
-            _ => new SolidColorBrush(Color.Parse("#D6503C"))
-        };
-
         public event Action? Closed;
 
         public NewAccountViewModel()
@@ -74,26 +45,10 @@ namespace PassNest.ViewModels
             selectedCategory = Categories[1];
         }
 
-        partial void OnPasswordChanged(string value)
-        {
-            OnPropertyChanged(nameof(StrengthLabel));
-            OnPropertyChanged(nameof(StrengthColor));
-        }
-
         [RelayCommand]
         private void ToggleGenerator()
         {
             IsGeneratorOpen = !IsGeneratorOpen;
-        }
-
-        [RelayCommand]
-        private void Generate()
-        {
-        }
-
-        [RelayCommand]
-        private void CopyPassword()
-        {
         }
 
         [RelayCommand]
