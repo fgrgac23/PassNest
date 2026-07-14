@@ -1,4 +1,5 @@
 ﻿using BusinessLogicLayer.Authentication;
+using BusinessLogicLayer.PasswordGeneration;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 
@@ -7,13 +8,15 @@ namespace PassNest.ViewModels
     public partial class MainWindowViewModel : ViewModelBase
     {
         private readonly IAuthProvider authProvider;
+        private readonly IPasswordGenerator passwordGenerator;
 
         [ObservableProperty]
         private ViewModelBase currentPage;
 
-        public MainWindowViewModel(IAuthProvider authProvider)
+        public MainWindowViewModel(IAuthProvider authProvider, IPasswordGenerator passwordGenerator)
         {
             this.authProvider = authProvider;
+            this.passwordGenerator = passwordGenerator;
             CurrentPage = CreateInitialPage();
         }
 
@@ -37,7 +40,7 @@ namespace PassNest.ViewModels
 
         private RegisterViewModel CreateRegisterPage()
         {
-            var vm = new RegisterViewModel(authProvider);
+            var vm = new RegisterViewModel(authProvider, passwordGenerator);
             vm.RegistrationSucceeded += OnAuthenticated;
             return vm;
         }

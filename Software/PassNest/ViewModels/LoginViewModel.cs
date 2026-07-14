@@ -18,6 +18,9 @@ namespace PassNest.ViewModels
         [ObservableProperty]
         private string? errorMessage;
 
+        [ObservableProperty]
+        private bool hasError;
+
         public event Action? LoginSucceded;
         public event Action? TwoFacotrRequired;
 
@@ -35,12 +38,14 @@ namespace PassNest.ViewModels
         [RelayCommand]
         private void Unlock()
         {
+            HasError = false;
             ErrorMessage = null;
             var resutl = authProvider.Login(MasterPassword);
 
             if (!resutl.Success)
             {
                 ErrorMessage = resutl.ErrorMessage;
+                HasError = true;
                 return;
             }
 
