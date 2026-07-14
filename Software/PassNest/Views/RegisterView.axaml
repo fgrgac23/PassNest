@@ -37,6 +37,7 @@
                     <StackPanel>
                         <TextBlock Classes="field-label" Text="E-mail"/>
                         <TextBox Classes="form" PlaceholderText="Upišite svoju e-mail adresu..." Text="{Binding Email}"/>
+                        <TextBlock Text="{Binding EmailErrorMessage}" IsVisible="{Binding IsEmailInvalid}" Foreground="{StaticResource Weak}" FontFamily="{StaticResource PlexSans}" FontSize="12" Margin="0,4,0,0"/>
                     </StackPanel>
                     <Button Classes="primary" Content="Sljedeće" Command="{Binding NextStepCommand}" HorizontalAlignment="Stretch" Margin="0,12,0,0"/>
                 </StackPanel>
@@ -87,18 +88,19 @@
                                 </Button>
                             </TextBox.InnerRightContent>
                         </TextBox>
+                        <TextBlock Text="{Binding ConfirmPasswordErrorMessage}" IsVisible="{Binding IsConfirmPasswordInvalid}" Foreground="{StaticResource Weak}" FontFamily="{StaticResource PlexSans}" FontSize="12" Margin="0,4,0,0"/>
                     </StackPanel>
 
                     <StackPanel Spacing="6">
                         <Grid ColumnDefinitions="*, Auto">
                             <TextBlock Grid.Column="0" Text="Jačina lozinke" FontFamily="{StaticResource PlexSans}" FontSize="13" Foreground="{StaticResource TextSecondary}"/>
-                            <TextBlock Grid.Column="1" Text="Jaka" FontFamily="{StaticResource PlexSans}" FontSize="13" FontWeight="SemiBold" Foreground="{StaticResource Strong}"/>
+                            <TextBlock Grid.Column="1" Text="{Binding StrengthLabel}" FontFamily="{StaticResource PlexSans}" FontSize="13" FontWeight="SemiBold" Foreground="{Binding StrengthColor}"/>
                         </Grid>
                         <Grid ColumnDefinitions="*,*,*,*">
-                            <Border Grid.Column="0" Height="4" CornerRadius="2" Background="{StaticResource Strong}" Margin="0,0,4,0"/>
-                            <Border Grid.Column="1" Height="4" CornerRadius="2" Background="{StaticResource Strong}" Margin="0,0,4,0"/>
-                            <Border Grid.Column="2" Height="4" CornerRadius="2" Background="{StaticResource Strong}" Margin="0,0,4,0"/>
-                            <Border Grid.Column="3" Height="4" CornerRadius="2" Background="{StaticResource Strong}"/>
+                            <Border Grid.Column="0" Height="4" CornerRadius="2" Background="{Binding Segment1Color}" Margin="0,0,4,0"/>
+                            <Border Grid.Column="1" Height="4" CornerRadius="2" Background="{Binding Segment2Color}" Margin="0,0,4,0"/>
+                            <Border Grid.Column="2" Height="4" CornerRadius="2" Background="{Binding Segment3Color}" Margin="0,0,4,0"/>
+                            <Border Grid.Column="3" Height="4" CornerRadius="2" Background="{Binding Segment4Color}"/>
                         </Grid>
                     </StackPanel>
 
