@@ -7,7 +7,7 @@ namespace PassNest.ViewModels
 {
     public partial class LoginViewModel : ViewModelBase
     {
-        private readonly IAtuhProvider authProvider;
+        private readonly IAuthProvider authProvider;
 
         [ObservableProperty]
         private string masterPassword = string.Empty;
@@ -21,7 +21,7 @@ namespace PassNest.ViewModels
         public event Action? LoginSucceded;
         public event Action? TwoFacotrRequired;
 
-        public LoginViewModel(IAtuhProvider authProvider)
+        public LoginViewModel(IAuthProvider authProvider)
         {
             this.authProvider = authProvider;
         }

@@ -2,7 +2,7 @@
 
 namespace BusinessLogicLayer.Authentication
 {
-    public interface IAtuhProvider
+    public interface IAuthProvider
     {
         bool HasRegisteredUser();
         AuthResult RegisterUser(string name, string surname, string masterPassword);

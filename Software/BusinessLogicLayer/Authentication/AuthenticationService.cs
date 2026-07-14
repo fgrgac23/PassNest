@@ -5,7 +5,7 @@ using EntityLayer;
 
 namespace BusinessLogicLayer.Authentication
 {
-    public class AuthenticationService : IAtuhProvider
+    public class AuthenticationService : IAuthProvider
     {
         private readonly IRepository<User> UserRepository;
         private readonly ICryptoService Crypto;
