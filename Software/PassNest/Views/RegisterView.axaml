@@ -7,15 +7,6 @@
         x:Class="PassNest.Views.RegisterView"
         x:DataType="vm:RegisterViewModel"
         d:DataContext="{d:DesignInstance vm:RegisterViewModel}">
-
-    <UserControl.Styles>
-        <Style Selector="Border.progress-segment">
-            <Setter Property="Background" Value="{StaticResource Border}"/>
-        </Style>
-        <Style Selector="Border.progress-segment.step-active">
-            <Setter Property="Background" Value="{StaticResource Strong}"/>
-        </Style>
-    </UserControl.Styles>
     
     <Grid RowDefinitions="Auto,Auto,*" Width="600" Height="670" Background="{StaticResource Canvas}">
         <Border Grid.Row="0" Background="{StaticResource GraphiteDark}" Padding="24,16">
@@ -37,15 +28,15 @@
                     <Image Source="avares://PassNest/Assets/PassNest-Logo.png" Height="150" Stretch="Uniform" HorizontalAlignment="Center"/>
                     <StackPanel>
                         <TextBlock Classes="field-label" Text="Ime"/>
-                        <TextBox Classes="form" Watermark="Upišite svoje ime..." Text="{Binding FirstName}"/>
+                        <TextBox Classes="form" PlaceholderText="Upišite svoje ime..." Text="{Binding FirstName}"/>
                     </StackPanel>
                     <StackPanel>
                         <TextBlock Classes="field-label" Text="Prezime"/>
-                        <TextBox Classes="form" Watermark="Upišite svoje prezime..." Text="{Binding LastName}"/>
+                        <TextBox Classes="form" PlaceholderText="Upišite svoje prezime..." Text="{Binding LastName}"/>
                     </StackPanel>
                     <StackPanel>
                         <TextBlock Classes="field-label" Text="E-mail"/>
-                        <TextBox Classes="form" Watermark="Upišite svoju e-mail adresu..." Text="{Binding Email}"/>
+                        <TextBox Classes="form" PlaceholderText="Upišite svoju e-mail adresu..." Text="{Binding Email}"/>
                     </StackPanel>
                     <Button Classes="primary" Content="Sljedeće" Command="{Binding NextStepCommand}" HorizontalAlignment="Stretch" Margin="0,12,0,0"/>
                 </StackPanel>

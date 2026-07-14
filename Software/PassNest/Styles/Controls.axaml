@@ -424,4 +424,34 @@
     <Style Selector="Slider">
        <Setter Property="Foreground" Value="{StaticResource Accent}"/> 
     </Style>
+
+    <Style Selector="Border.progress-segment">
+        <Setter Property="Background" Value="{StaticResource BorderStrong}"/>
+    </Style>
+
+    <Style Selector="Border.progress-segment.step-active">
+        <Setter Property="Background" Value="{StaticResource Strong}"/>
+    </Style>
+
+    <Style Selector="TextBox.form.invaild">
+        <Setter Property="BorderBrush" Value="{StaticResource Weak}"/>
+    </Style>
+
+    <Style Selector="Border.error-toast">
+        <Setter Property="RenderTransform" Value="translateY(-40px)"/>
+        <Setter Property="Opacity" Value="0"/>
+        <Setter Property="IsHitTestVisible" Value="False"/>
+        <Setter Property="Transitions">
+            <Transitions>
+                <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.3"/>
+                <DoubleTransition Property="Opacity" Duration="0:0:0.25"/>
+            </Transitions>
+        </Setter>
+    </Style>
+
+    <Style Selector="Border.error-toast.visible">
+        <Setter Property="RenderTransform" Value="translateY(0)"/>
+        <Setter Property="Opacity" Value="1"/>
+        <Setter Property="IsHitTestVisible" Value="True"/>
+    </Style>
 </Styles>
