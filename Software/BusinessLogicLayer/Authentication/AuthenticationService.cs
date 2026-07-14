@@ -32,7 +32,7 @@ namespace BusinessLogicLayer.Authentication
 
         public byte[]? GetEncryptionKey() => EncryptionKey;
 
-        public AuthResult RegisterUser(string name, string surname, string masterPassword)
+        public AuthResult RegisterUser(string name, string surname, string email, string masterPassword)
         {
             if(string.IsNullOrWhiteSpace(masterPassword) || masterPassword.Length < 8)
             {
@@ -51,6 +51,7 @@ namespace BusinessLogicLayer.Authentication
             {
                 Name = name,
                 Surname = surname,
+                Email = email,
                 MasterPasswordHash = hash,
                 MasterPasswordSalt = salt,
                 Is2FAEnabled = false,

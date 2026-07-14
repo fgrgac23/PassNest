@@ -5,7 +5,7 @@ namespace BusinessLogicLayer.Authentication
     public interface IAuthProvider
     {
         bool HasRegisteredUser();
-        AuthResult RegisterUser(string name, string surname, string masterPassword);
+        AuthResult RegisterUser(string name, string surname, string email, string masterPassword);
         AuthResult Login(string masterPassword);
         void EnableTwoFactor(string email);
         bool VerifyTwoFactor(string code);

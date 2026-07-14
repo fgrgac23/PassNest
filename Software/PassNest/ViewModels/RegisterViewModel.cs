@@ -195,7 +195,7 @@ namespace PassNest.ViewModels
             IsConfirmPasswordInvalid = false;
             ConfirmPasswordErrorMessage = null;
 
-            var result = authProvider.RegisterUser(FirstName, LastName, MasterPassword);
+            var result = authProvider.RegisterUser(FirstName, LastName, Email, MasterPassword);
             if (!result.Success)
             {
                 ErrorMessage = result.ErrorMessage;
