@@ -14,6 +14,7 @@ using EntityLayer;
 using Microsoft.Extensions.DependencyInjection;
 using PassNest.ViewModels;
 using PassNest.Views;
+using BusinessLogicLayer.PasswordGeneration;
 
 namespace PassNest
 {
@@ -39,6 +40,7 @@ namespace PassNest
                 senderPassword: "PassNest2FA@"));
             service.AddSingleton<IRepository<User>, Repository<User>>();
             service.AddSingleton<IAuthProvider, AuthenticationService>();
+            service.AddSingleton<IPasswordGenerator, PasswordGenerator>();
             service.AddSingleton<MainWindowViewModel>();
 
             var provider = service.BuildServiceProvider();

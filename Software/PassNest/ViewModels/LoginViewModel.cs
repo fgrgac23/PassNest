@@ -1,13 +1,16 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using BusinessLogicLayer.Authentication;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using BusinessLogicLayer.Authentication;
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PassNest.ViewModels
 {
     public partial class LoginViewModel : ViewModelBase
     {
         private readonly IAuthProvider authProvider;
+        private CancellationTokenSource? errorDismissCts;
 
         [ObservableProperty]
         private string masterPassword = string.Empty;
@@ -44,8 +47,7 @@ namespace PassNest.ViewModels
 
             if (!resutl.Success)
             {
-                ErrorMessage = resutl.ErrorMessage;
-                HasError = true;
+                ShowError(resutl.ErrorMessage);
                 return;
             }
 
@@ -56,6 +58,25 @@ namespace PassNest.ViewModels
             }
 
             LoginSucceded?.Invoke();
+        }
+
+        private async void ShowError(string message)
+        {
+            ErrorMessage = message;
+            HasError = true;
+
+            errorDismissCts?.Cancel();
+            var cts = new CancellationTokenSource();
+            errorDismissCts = cts;
+
+            try
+            {
+                await Task.Delay(TimeSpan.FromSeconds(5), cts.Token);
+                HasError = false;
+            }
+            catch (TaskCanceledException)
+            {
+            }
         }
     }
 }

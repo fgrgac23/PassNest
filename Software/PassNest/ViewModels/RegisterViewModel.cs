@@ -5,6 +5,8 @@ using System;
 using System.Text.RegularExpressions;
 using Avalonia.Media;
 using BusinessLogicLayer.PasswordGeneration;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PassNest.ViewModels
 {
@@ -14,6 +16,7 @@ namespace PassNest.ViewModels
         private static readonly IBrush InactiveSegmentColor = new SolidColorBrush(Color.Parse("#D8DCE2"));
 
         private readonly IAuthProvider authProvider;
+        private CancellationTokenSource? errorDismissCts;
         private readonly IPasswordGenerator passwordGenerator;
 
         [ObservableProperty]
@@ -72,6 +75,9 @@ namespace PassNest.ViewModels
 
         [ObservableProperty]
         private string? errorMessage;
+
+        [ObservableProperty]
+        private bool hasError;
 
         public bool IsStep1Visible => CurrentStep == 1;
         public bool IsStep2Visible => CurrentStep == 2;
@@ -140,9 +146,11 @@ namespace PassNest.ViewModels
         [RelayCommand]
         private void NextStep()
         {
-            if(string.IsNullOrWhiteSpace(FirstName) || string.IsNullOrWhiteSpace(LastName))
+            HasError = false;
+
+            if(string.IsNullOrWhiteSpace(FirstName) || string.IsNullOrWhiteSpace(LastName) || string.IsNullOrWhiteSpace(Email))
             {
-                ErrorMessage = "Ime i prezime su obavezni.";
+                ShowError("Ime, prezime i e-mail su obavezni.");
                 return;
             }
 
@@ -181,7 +189,7 @@ namespace PassNest.ViewModels
             if(MasterPassword != ConfirmMasterPassword)
             {
                 IsConfirmPasswordInvalid = true;
-                ErrorMessage = "Lozinke se ne podudaraju.";
+                ConfirmPasswordErrorMessage = "Lozinke se ne podudaraju.";
                 return;
             }
             IsConfirmPasswordInvalid = false;
@@ -195,6 +203,25 @@ namespace PassNest.ViewModels
             }
 
             RegistrationSucceeded?.Invoke();
+        }
+
+        private async void ShowError(string message)
+        {
+            ErrorMessage = message;
+            HasError = true;
+
+            errorDismissCts?.Cancel();
+            var cts = new CancellationTokenSource();
+            errorDismissCts = cts;
+
+            try
+            {
+                await Task.Delay(TimeSpan.FromSeconds(5), cts.Token);
+                HasError = false;
+            }
+            catch (TaskCanceledException)
+            {
+            }
         }
     }
 }
