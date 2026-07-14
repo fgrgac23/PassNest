@@ -1,7 +1,7 @@
 ﻿using BusinessLogicLayer.Authentication;
 using BusinessLogicLayer.PasswordGeneration;
 using CommunityToolkit.Mvvm.ComponentModel;
-using System;
+using System.Threading.Tasks;
 
 namespace PassNest.ViewModels
 {
@@ -45,8 +45,10 @@ namespace PassNest.ViewModels
             return vm;
         }
 
-        private void OnAuthenticated()
+        private async void OnAuthenticated()
         {
+            CurrentPage = new LoadingViewModel();
+            await Task.Delay(1000);
             CurrentPage = new ShellViewModel();
         }
     }

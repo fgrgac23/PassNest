@@ -1,0 +1,18 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:PassNest.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="670"
+        x:Class="PassNest.Views.LoadingView"
+        x:DataType="vm:LoadingViewModel"
+        d:DataContext="{d:DesignInstance vm:LoadingViewModel}">
+
+    <Grid Width="1160" Height="760" Background="{StaticResource Canvas}">
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="20" Width="280">
+            <Image Source="avares://PassNest/Assets/PassNest-Logo.png" Height="100" Stretch="Uniform" HorizontalAlignment="Center"/>
+            <TextBlock Text="Pripremamo Vaš trezor..." FontFamily="{StaticResource PlexSans}" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource TextSecondary}" HorizontalAlignment="Center"/>
+            <ProgressBar IsIndeterminate="True" Height="4" Width="200" HorizontalAlignment="Center" Foreground="{StaticResource Accent}"/>
+        </StackPanel>
+    </Grid>
+</UserControl>
