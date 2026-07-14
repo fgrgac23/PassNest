@@ -13,10 +13,6 @@
         SizeToContent="WidthAndHeight"
         CanResize="False"
         WindowStartupLocation="CenterScreen">
-
-    <views:ShellView>
-        <views:ShellView.DataContext>
-            <vm:ShellViewModel/>
-        </views:ShellView.DataContext>
-    </views:ShellView>
+    
+    <ContentControl Content="{Binding CurrentPage}"/>
 </Window>

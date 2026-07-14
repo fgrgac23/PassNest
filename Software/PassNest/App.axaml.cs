@@ -5,6 +5,13 @@ using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 using BusinessLogicLayer;
+using BusinessLogicLayer.Authentication;
+using BusinessLogicLayer.Security;
+using DataAccessLayer.Data;
+using DataAccessLayer.Email;
+using DataAccessLayer.Repository;
+using EntityLayer;
+using Microsoft.Extensions.DependencyInjection;
 using PassNest.ViewModels;
 using PassNest.Views;
 
@@ -20,11 +27,27 @@ namespace PassNest
         public override void OnFrameworkInitializationCompleted()
         {
             DatabaseInitializer.InitializeDatabase();
+
+            var service = new ServiceCollection();
+            service.AddSingleton<PassNestDbContext>();
+            service.AddSingleton<ICryptoService, EncryptionEngine>();
+            service.AddSingleton(new TwoFactorCodeGenerator());
+            service.AddSingleton<IEmailSender>(new EmailNotifier(
+                smtpHost: "smtp.gmail.com",
+                smtpPort: 587,
+                senderEmail: "passnest.2fa.info@gmail.com",
+                senderPassword: "PassNest2FA@"));
+            service.AddSingleton<IRepository<User>, Repository<User>>();
+            service.AddSingleton<IAuthProvider, AuthenticationService>();
+            service.AddSingleton<MainWindowViewModel>();
+
+            var provider = service.BuildServiceProvider();
+
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
                 desktop.MainWindow = new MainWindow
                 {
-                    DataContext = new MainWindowViewModel(),
+                    DataContext = provider.GetRequiredService<MainWindowViewModel>(),
                 };
             }
 
