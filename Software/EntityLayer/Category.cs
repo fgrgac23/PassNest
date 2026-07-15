@@ -11,7 +11,7 @@ namespace EntityLayer
         public int CategoryId { get; set; }
         public int UserId { get; set; }
         public string Name { get; set; } = string.Empty;
-        public bool IsSystemdefined { get; set; }
+        public bool IsSystemDefined { get; set; }
         public string Color { get; set; } = string.Empty;
 
         public User User { get; set; } = null!;
