@@ -8,6 +8,7 @@ namespace BusinessLogicLayer.Authentication
     public class AuthenticationService : IAuthProvider
     {
         private readonly IRepository<User> UserRepository;
+        private readonly IRepository<Category> CategoryRepository;
         private readonly ICryptoService Crypto;
         private readonly TwoFactorCodeGenerator TwoFactorCodeGenerator;
         private readonly IEmailSender EmailSender;
@@ -18,9 +19,10 @@ namespace BusinessLogicLayer.Authentication
         private DateTime TwoFactorExpiresAt;
         private byte[]? EncryptionKey;
 
-        public AuthenticationService(IRepository<User> userRepository, ICryptoService crypto, TwoFactorCodeGenerator twoFactorCodeGenerator, IEmailSender emailSender)
+        public AuthenticationService(IRepository<User> userRepository, IRepository<Category> categoryRepository, ICryptoService crypto, TwoFactorCodeGenerator twoFactorCodeGenerator, IEmailSender emailSender)
         {
             UserRepository = userRepository;
+            CategoryRepository = categoryRepository;
             Crypto = crypto;
             TwoFactorCodeGenerator = twoFactorCodeGenerator;
             EmailSender = emailSender;
@@ -62,6 +64,20 @@ namespace BusinessLogicLayer.Authentication
             UserRepository.Add(user);
             UserRepository.SaveChanges();
 
+            var defaultCategories = new[]
+            {
+                new Category { UserId = user.UserId, Name = "Posao", Color = "#7C5CD6", IsSystemDefined = true },
+                new Category { UserId = user.UserId, Name = "Osobno", Color = "#2AA26A", IsSystemDefined = true },
+                new Category { UserId = user.UserId, Name = "Financije", Color = "#E0952E", IsSystemDefined = true },
+                new Category { UserId = user.UserId, Name = "Zabava", Color = "#D6503C", IsSystemDefined = true },
+            };
+
+            foreach(var category in defaultCategories)
+            {
+                CategoryRepository.Add(category);
+            }
+
+            CategoryRepository.SaveChanges();
             CurrentUser = user;
             EncryptionKey = Crypto.DeriveKey(masterPassword, salt);
             IsAuthenticated = true;

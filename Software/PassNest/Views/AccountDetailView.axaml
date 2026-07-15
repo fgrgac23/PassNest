@@ -7,11 +7,8 @@
         mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="670"
         x:Class="PassNest.Views.AccountDetailView"
         x:Name="Root"
-        x:DataType="vm:AccountDetailViewModel">
-
-    <Design.DataContext>
-        <vm:AccountDetailViewModel/>
-    </Design.DataContext>
+        x:DataType="vm:AccountDetailViewModel"
+        d:DataContext="{d:DesignInstance vm:AccountDetailViewModel}">
 
     <ScrollViewer Background="{StaticResource Canvas}">
         <StackPanel Margin="32,28,32,32" Spacing="24">

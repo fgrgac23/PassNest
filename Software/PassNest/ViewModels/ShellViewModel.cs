@@ -1,11 +1,16 @@
 ﻿using PassNest.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using BusinessLogicLayer.AccountManagement;
+using BusinessLogicLayer.PasswordGeneration;
 
 namespace PassNest.ViewModels
 {
     public partial class ShellViewModel : ViewModelBase
     {
+        private readonly IAccountStore accountStore;
+        private readonly IPasswordGenerator passwordGenerator;
+
         [ObservableProperty]
         private string selectedNavItem = "Trezor";
 
@@ -19,22 +24,25 @@ namespace PassNest.ViewModels
         public bool IsSafetyActive => SelectedNavItem == "Sigurnost";
         public bool IsSettingsActive => SelectedNavItem == "Postavke";
 
-        public ShellViewModel()
+        public ShellViewModel(IAccountStore accountStore, IPasswordGenerator passwordGenerator)
         {
+            this.accountStore = accountStore;
+            this.passwordGenerator = passwordGenerator;
             currentPage = CreateVaultPage();
         }
 
         private VaultViewModel CreateVaultPage()
         {
-            var page = new VaultViewModel();
+            var page = new VaultViewModel(accountStore, passwordGenerator);
             page.AccountOpened += OnAccountOpened;
             return page;
         }
 
         private void OnAccountOpened(AccountCardViewModel account)
         {
-            var detail = new AccountDetailViewModel(account);
+            var detail = new AccountDetailViewModel(accountStore, account);
             detail.BackRequested += OnAccountDetailBackRequested;
+            detail.Deleted += OnAccountDetailBackRequested;
             CurrentPage = detail;
         }
 

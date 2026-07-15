@@ -1,4 +1,5 @@
-﻿using BusinessLogicLayer.Authentication;
+﻿using BusinessLogicLayer.AccountManagement;
+using BusinessLogicLayer.Authentication;
 using BusinessLogicLayer.PasswordGeneration;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System.Threading.Tasks;
@@ -9,14 +10,16 @@ namespace PassNest.ViewModels
     {
         private readonly IAuthProvider authProvider;
         private readonly IPasswordGenerator passwordGenerator;
+        private readonly IAccountStore accountStore;
 
         [ObservableProperty]
         private ViewModelBase currentPage;
 
-        public MainWindowViewModel(IAuthProvider authProvider, IPasswordGenerator passwordGenerator)
+        public MainWindowViewModel(IAuthProvider authProvider, IPasswordGenerator passwordGenerator, IAccountStore accountStore)
         {
             this.authProvider = authProvider;
             this.passwordGenerator = passwordGenerator;
+            this.accountStore = accountStore;
             CurrentPage = CreateInitialPage();
         }
 
@@ -49,7 +52,7 @@ namespace PassNest.ViewModels
         {
             CurrentPage = new LoadingViewModel();
             await Task.Delay(1500);
-            CurrentPage = new ShellViewModel();
+            CurrentPage = new ShellViewModel(accountStore, passwordGenerator);
         }
     }
 }

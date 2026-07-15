@@ -5,14 +5,13 @@
         xmlns:local="using:PassNest.Views"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:models="using:PassNest.Models"
+        xmlns:conv="using:Avalonia.Data.Converters"
         mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="670"
         x:Class="PassNest.Views.VaultView"
         x:Name="Root"
-        x:DataType="vm:VaultViewModel">
+        x:DataType="vm:VaultViewModel"
+        d:DataContext="{d:DesignInstance vm:VaultViewModel}">
 
-    <Design.DataContext>
-        <vm:VaultViewModel/>
-    </Design.DataContext>
     <Panel>
         <Grid RowDefinitions="Auto,Auto,*" Background="{StaticResource Canvas}">
             <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="32,24,32,16">
@@ -117,16 +116,19 @@
                         </StackPanel>
                         <StackPanel Spacing="6">
                             <TextBlock Classes="field-label" Text="Kategorija"/>
-                            <ComboBox Classes="settings-dropdown" HorizontalAlignment="Stretch" ItemsSource="{Binding Categories}" SelectedItem="{Binding SelectedCategory}">
-                                <ComboBox.ItemTemplate>
+                            <ItemsControl ItemsSource="{Binding Categories}">
+                                <ItemsControl.ItemTemplate>
                                     <DataTemplate x:DataType="models:CategoryOption">
-                                        <StackPanel Orientation="Horizontal" Spacing="8">
-                                            <Ellipse  Width="8" Height="8" Fill="{Binding DotColor}"/>
-                                            <TextBlock Text="{Binding Name}"/>
-                                        </StackPanel>
+                                        <CheckBox IsChecked="{Binding IsSelected}" Margin="0,4">
+                                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                                <Ellipse Width="8" Height="8" Fill="{Binding DotColor}"/>
+                                                <TextBlock Text="{Binding Name}"/>
+                                            </StackPanel>
+                                        </CheckBox>
                                     </DataTemplate>
-                                </ComboBox.ItemTemplate>
-                            </ComboBox>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                            <TextBlock Text="{Binding ErrorMessage}" IsVisible="{Binding ErrorMessage, Converter={x:Static ObjectConverters.IsNotNull}}" Foreground="{StaticResource Weak}" FontFamily="{StaticResource PlexSans}" FontSize="12" Margin="0,4,0,0"/>
                         </StackPanel>
                         <Grid ColumnDefinitions="*,*" Margin="0,16,0,0">
                             <Button Grid.Column="0" Classes="secondary" Content="Odustani" Command="{Binding CancelCommand}" Margin="0,0,8,0" HorizontalAlignment="Stretch"/>
