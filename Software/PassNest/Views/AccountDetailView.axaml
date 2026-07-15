@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="using:PassNest.Views"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:models="using:PassNest.Models"
         mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="670"
         x:Class="PassNest.Views.AccountDetailView"
         x:Name="Root"
@@ -29,9 +30,20 @@
                 <StackPanel Grid.Column="1" Margin="16,0,0,0" VerticalAlignment="Center" Spacing="6">
                     <TextBlock Text="{Binding ServiceName}" FontFamily="{StaticResource PlexSans}" FontWeight="Bold" FontSize="22" Foreground="{StaticResource TextPrimary}"/>
                     <StackPanel Orientation="Horizontal" Spacing="10">
-                        <Border Background="{Binding CategoryTint}" CornerRadius="6" Padding="8,3">
-                            <TextBlock Text="{Binding CategoryName}" FontFamily="{StaticResource PlexSans}" FontSize="11" FontWeight="SemiBold" Foreground="{Binding CategoryColor}"/>
-                        </Border>
+                        <ItemsControl ItemsSource="{Binding Categories}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="models:CategoryBadge">
+                                    <Border Background="{Binding Tint}" CornerRadius="6" Padding="8,3" Margin="0,0,6,0">
+                                        <TextBlock Text="{Binding Name}" FontFamily="{StaticResource PlexSans}" FontSize="11" FontWeight="SemiBold" Foreground="{Binding Foreground}"/>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
                         <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
                             <Ellipse Width="8" Height="8" Fill="{Binding StrengthColor}"/>
                             <TextBlock Text="{Binding StrengthLabel}" FontFamily="{StaticResource PlexSans}" FontSize="12" Foreground="{StaticResource TextSecondary}"/>

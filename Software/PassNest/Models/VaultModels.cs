@@ -1,9 +1,23 @@
 ﻿using Avalonia.Media;
 using BusinessLogicLayer.PasswordGeneration;
 using CommunityToolkit.Mvvm.ComponentModel;
+using System.Collections.Generic;
 
 namespace PassNest.Models
 {
+    public class CategoryBadge
+    {
+        public string Name { get; }
+        public IBrush Foreground { get; }
+        public IBrush Tint { get; }
+
+        public CategoryBadge(string name, string colorHex)
+        {
+            Name = name;
+            Foreground = new SolidColorBrush(Color.Parse(colorHex));
+            Tint = new SolidColorBrush(Color.Parse(colorHex), 0.15);
+        }
+    }
     public class AccountCardViewModel
     {
         public int AccountId { get; }
@@ -11,9 +25,7 @@ namespace PassNest.Models
         public string ServiceName { get; }
         public string Username { get; }
         public IBrush AvatarColor { get; }
-        public string CategoryName { get; }
-        public IBrush CategoryColor { get; }
-        public IBrush CategoryTint { get; }
+        public IReadOnlyList<CategoryBadge> Categories { get; }
         public IBrush StatusColor { get; }
         public string StrengthLabel { get; }
         public string Password { get; }
@@ -21,16 +33,14 @@ namespace PassNest.Models
         public string LastModified { get; }
         public string CreatedAt { get; }
 
-        public AccountCardViewModel(int accountId, string initial, string serviceName, string username, string avatarColorHex, string categoryName, string categoryColorHex, PasswordStrengthLevel strength, string password, string url, string lastModified, string createdAt)
+        public AccountCardViewModel(int accountId, string initial, string serviceName, string username, string avatarColorHex, IReadOnlyList<CategoryBadge> categories, PasswordStrengthLevel strength, string password, string url, string lastModified, string createdAt)
         {
             AccountId = accountId;
             Initial = initial;
             ServiceName = serviceName;
             Username = username;
             AvatarColor = new SolidColorBrush(Color.Parse(avatarColorHex));
-            CategoryName = categoryName;
-            CategoryColor = new SolidColorBrush(Color.Parse(categoryColorHex));
-            CategoryTint = new SolidColorBrush(Color.Parse(categoryColorHex), 0.15);
+            Categories = categories;
 
             var (label, statusHex) = strength switch
             {

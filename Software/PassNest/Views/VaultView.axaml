@@ -54,9 +54,20 @@
                                         <Ellipse Grid.Column="2" Width="8" Height="8" Fill="{Binding StatusColor}" VerticalAlignment="Top" Margin="0,2,2,0"/>
                                     </Grid>
                                     <Grid Grid.Row="2" ColumnDefinitions="*,Auto" Margin="0,14,0,0">
-                                        <Border Grid.Column="0" Background="{Binding CategoryTint}" CornerRadius="6" Padding="8,3" HorizontalAlignment="Left" VerticalAlignment="Center">
-                                            <TextBlock Text="{Binding CategoryName}" FontFamily="{StaticResource PlexSans}" FontSize="11" FontWeight="SemiBold" Foreground="{Binding CategoryColor}" HorizontalAlignment="Center"/>
-                                        </Border>
+                                        <ItemsControl Grid.Column="0" ItemsSource="{Binding Categories}" HorizontalAlignment="Left" VerticalAlignment="Center">
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <WrapPanel Orientation="Horizontal"/>
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate x:DataType="models:CategoryBadge">
+                                                    <Border Background="{Binding Tint}" CornerRadius="6" Padding="8,3" Margin="0,0,4,4">
+                                                        <TextBlock Text="{Binding Name}" FontFamily="{StaticResource PlexSans}" FontSize="11" FontWeight="SemiBold" Foreground="{Binding Foreground}"/>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
                                         <Button Grid.Column="1" Classes="copy-action" Command="{Binding #Root.((vm:VaultViewModel)DataContext).CopyPasswordCommand}" CommandParameter="{Binding}">
                                             <StackPanel Orientation="Horizontal" Spacing="6">
                                                 <Border Width="14" Height="14" Background="{Binding $parent[Button].Foreground}">

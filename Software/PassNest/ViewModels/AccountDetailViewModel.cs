@@ -4,6 +4,7 @@ using PassNest.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using BusinessLogicLayer.AccountManagement;
+using System.Collections.Generic;
 
 namespace PassNest.ViewModels
 {
@@ -21,14 +22,7 @@ namespace PassNest.ViewModels
         [ObservableProperty]
         private string serviceName;
 
-        [ObservableProperty]
-        private string categoryName;
-
-        [ObservableProperty]
-        private IBrush categoryColor;
-
-        [ObservableProperty]
-        private IBrush categoryTint;
+        public IReadOnlyList<CategoryBadge> Categories { get; }
 
         [ObservableProperty]
         private string strengthLabel;
@@ -64,9 +58,7 @@ namespace PassNest.ViewModels
             initial = account.Initial;
             avatarColor = account.AvatarColor;
             serviceName = account.ServiceName;
-            categoryName = account.CategoryName;
-            categoryColor = account.CategoryColor;
-            categoryTint = account.CategoryTint;
+            Categories = account.Categories;
             strengthLabel = account.StrengthLabel;
             strengthColor = account.StatusColor;
             username = account.Username;

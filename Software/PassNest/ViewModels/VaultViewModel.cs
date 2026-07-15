@@ -88,8 +88,8 @@ namespace PassNest.ViewModels
 
         private AccountCardViewModel BuildCard(Account account, string password)
         {
-            var firstCategory = account.Categories.FirstOrDefault();
             var strength = passwordGenerator.EvaluateStrength(password);
+            var categories = account.Categories.Select(c => new CategoryBadge(c.Name, c.Color)).ToList();
 
             return new AccountCardViewModel(
                 account.AccountId,
@@ -97,8 +97,7 @@ namespace PassNest.ViewModels
                 account.ServiceName,
                 account.UserName,
                 GetAvatarColor(account.ServiceName),
-                firstCategory?.Name ?? "Bez kategorije",
-                firstCategory?.Color ?? "#8A909C",
+                categories,
                 strength,
                 password,
                 account.Url ?? string.Empty,
