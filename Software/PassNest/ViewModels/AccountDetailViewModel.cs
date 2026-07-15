@@ -3,61 +3,64 @@ using System;
 using PassNest.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using BusinessLogicLayer.AccountManagement;
 
 namespace PassNest.ViewModels
 {
     public partial class AccountDetailViewModel : ViewModelBase
     {
-        [ObservableProperty]
-        private string initial = "G";
+        private readonly IAccountStore accountStore;
+        private readonly int accountId;
 
         [ObservableProperty]
-        private IBrush avatarColor = new SolidColorBrush(Color.Parse("#1B1F24"));
+        private string initial;
 
         [ObservableProperty]
-        private string serviceName = "Github";
+        private IBrush avatarColor;
 
         [ObservableProperty]
-        private string categoryName = "Posao";
+        private string serviceName;
 
         [ObservableProperty]
-        private IBrush categoryColor = new SolidColorBrush(Color.Parse("#7C5CD6"));
+        private string categoryName;
 
         [ObservableProperty]
-        private IBrush categoryTint = new SolidColorBrush(Color.Parse("#7C5CD6"), 0.15);
+        private IBrush categoryColor;
 
         [ObservableProperty]
-        private string strengthLabel = "Jaka lozinka";
+        private IBrush categoryTint;
 
         [ObservableProperty]
-        private IBrush strengthColor = new SolidColorBrush(Color.Parse("#2AA26A"));
+        private string strengthLabel;
 
         [ObservableProperty]
-        private string username = "iivic";
+        private IBrush strengthColor;
 
         [ObservableProperty]
-        private string password = "lozinka123";
+        private string username;
+
+        [ObservableProperty]
+        private string password;
 
         [ObservableProperty]
         private bool isPasswordRevealed;
 
         [ObservableProperty]
-        private string url = "guthub.com/login";
+        private string url;
 
         [ObservableProperty]
-        private string lastModified = "12.06.2026.";
+        private string lastModified;
 
         [ObservableProperty]
-        private string createdAt = "03.01.2025.";
+        private string createdAt;
 
         public event Action? BackRequested;
+        public event Action? Deleted;
 
-        public AccountDetailViewModel()
+        public AccountDetailViewModel(IAccountStore accountStore, AccountCardViewModel account)
         {
-        }
-
-        public AccountDetailViewModel(AccountCardViewModel account)
-        {
+            this.accountStore = accountStore;
+            accountId = account.AccountId;
             initial = account.Initial;
             avatarColor = account.AvatarColor;
             serviceName = account.ServiceName;
@@ -88,6 +91,8 @@ namespace PassNest.ViewModels
         [RelayCommand]
         private void Delete()
         {
+            accountStore.DeleteAccount(accountId);
+            Deleted?.Invoke();
         }
 
         [RelayCommand]
