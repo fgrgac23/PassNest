@@ -3,6 +3,8 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using BusinessLogicLayer.AccountManagement;
 using BusinessLogicLayer.PasswordGeneration;
+using BusinessLogicLayer.Authentication;
+using System;
 
 namespace PassNest.ViewModels
 {
@@ -10,6 +12,7 @@ namespace PassNest.ViewModels
     {
         private readonly IAccountStore accountStore;
         private readonly IPasswordGenerator passwordGenerator;
+        private readonly IAuthProvider authProvider;
 
         [ObservableProperty]
         private string selectedNavItem = "Trezor";
@@ -24,10 +27,13 @@ namespace PassNest.ViewModels
         public bool IsSafetyActive => SelectedNavItem == "Sigurnost";
         public bool IsSettingsActive => SelectedNavItem == "Postavke";
 
-        public ShellViewModel(IAccountStore accountStore, IPasswordGenerator passwordGenerator)
+        public event Action? VaultLocked;
+
+        public ShellViewModel(IAccountStore accountStore, IPasswordGenerator passwordGenerator, IAuthProvider authProvider)
         {
             this.accountStore = accountStore;
             this.passwordGenerator = passwordGenerator;
+            this.authProvider = authProvider;
             currentPage = CreateVaultPage();
         }
 
@@ -79,6 +85,8 @@ namespace PassNest.ViewModels
         [RelayCommand]
         private void LockVault()
         {
+            authProvider.Logout();
+            VaultLocked?.Invoke();
         }
     }
 }
