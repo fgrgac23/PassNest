@@ -1,0 +1,156 @@
+﻿using BusinessLogicLayer.Authentication;
+using BusinessLogicLayer.Security;
+using DataAccessLayer.Repository;
+using EntityLayer;
+
+namespace BusinessLogicLayer.AccountManagement
+{
+    public class AccountManager : IAccountStore
+    {
+        private readonly IRepository<Account> accountRepository;
+        private readonly IRepository<Category> categoryRepository;
+        private readonly ICryptoService crypto;
+        private readonly IAuthProvider authProvider;
+
+        public AccountManager(IRepository<Account> accountRepository, IRepository<Category> categoryRepository, ICryptoService crypto, IAuthProvider authProvider)
+        {
+            this.accountRepository = accountRepository;
+            this.categoryRepository = categoryRepository;
+            this.crypto = crypto;
+            this.authProvider = authProvider;
+        }
+
+        public void AddAccount(string serviceName, string userName, string password, IEnumerable<int> categoryIds)
+        {
+            var currentUser = authProvider.GetCurrentUser() ?? throw new InvalidOperationException("Korisnik mora biti prijavljen!");
+            var key = authProvider.GetEncryptionKey() ?? throw new InvalidOperationException("Nedostaje enkripcijski ključ!");
+
+            var account = new Account
+            {
+                UserId = currentUser.UserId,
+                ServiceName = serviceName,
+                UserName = userName,
+                EncryptedPassword = crypto.Encrypt(password, key),
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            };
+
+            foreach(var categoryId in categoryIds)
+            {
+                var category = categoryRepository.GetById(categoryId);
+                if(category != null)
+                {
+                    account.Categories.Add(category);
+                }
+            }
+
+            accountRepository.Add(account);
+            accountRepository.SaveChanges();
+        }
+
+        public void UpdateAccount(int accountId, string serviceName, string userName, string password, IEnumerable<int> categoryIds)
+        {
+            var account = accountRepository.GetById(accountId);
+            if(account == null)
+            {
+                return;
+            }
+
+            var key = authProvider.GetEncryptionKey() ?? throw new InvalidOperationException("Nedostaje enkripcijski ključ!");
+
+            account.ServiceName = serviceName;
+            account.UserName = userName;
+            account.EncryptedPassword = crypto.Encrypt(password, key);
+            account.UpdatedAt = DateTime.UtcNow;
+
+            account.Categories.Clear();
+            foreach(var categoryId in categoryIds)
+            {
+                var category = categoryRepository.GetById(categoryId);
+                if(category != null)
+                {
+                    account.Categories.Add(category);
+                }
+            }
+
+            accountRepository.Update(account);
+            accountRepository.SaveChanges();
+        }
+
+        public Category AddCategory(string name, string color)
+        {
+            var currentUser = authProvider.GetCurrentUser() ?? throw new InvalidOperationException("Korisnik mora biti prijavljen!");
+
+            var category = new Category
+            {
+                UserId = currentUser.UserId,
+                Name = name,
+                IsSystemDefined = false,
+                Color = color
+            };
+
+            categoryRepository.Add(category);
+            categoryRepository.SaveChanges();
+
+            return category;
+        }
+
+        public void DeleteAccount(int accountId)
+        {
+            var account = accountRepository.GetById(accountId);
+            if(account == null)
+            {
+                return;
+            }
+
+            accountRepository.Delete(account);
+            accountRepository.SaveChanges();
+        }
+
+        public IEnumerable<Account> FilterByCategory(int categoryId) => accountRepository.GetAll().Where(a => a.Categories.Any(c => c.CategoryId == categoryId));
+
+        public IEnumerable<Account> GetAllAccounts() => accountRepository.GetAll();
+
+        public IEnumerable<AccountCredentials> GetAllCredentials()
+        {
+            var key = authProvider.GetEncryptionKey();
+            if(key == null)
+            {
+                yield break;
+            }
+
+            foreach(var account in accountRepository.GetAll())
+            {
+                yield return new AccountCredentials
+                {
+                    AccountId = account.AccountId,
+                    ServiceName = account.ServiceName,
+                    UserName = account.UserName,
+                    Password = crypto.Decrypt(account.EncryptedPassword, key)
+                };
+            }
+        }
+
+        public IEnumerable<Category> GetCategories() => categoryRepository.GetAll();
+
+        public AccountCredentials? GetCredentials(int accountId)
+        {
+            var account = accountRepository.GetById(accountId);
+            var key = authProvider.GetEncryptionKey();
+            if(account == null || key == null)
+            {
+                return null;
+            }
+
+            return new AccountCredentials
+            {
+                AccountId = account.AccountId,
+                ServiceName = account.ServiceName,
+                UserName = account.UserName,
+                Password = crypto.Decrypt(account.EncryptedPassword, key)
+            };
+        }
+
+        public IEnumerable<Account> SearchAccounts(string query) => accountRepository.GetAll().Where(a => a.ServiceName.Contains(query, StringComparison.OrdinalIgnoreCase));
+    }
+}
