@@ -3,11 +3,15 @@ using System.Collections.ObjectModel;
 using PassNest.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using BusinessLogicLayer.AccountManagement;
+using System.Linq;
 
 namespace PassNest.ViewModels
 {
     public partial class NewAccountViewModel : ObservableObject
     {
+        private readonly IAccountStore accountStore;
+
         [ObservableProperty]
         private string serviceName = string.Empty;
 
@@ -20,6 +24,9 @@ namespace PassNest.ViewModels
         [ObservableProperty]
         private bool isGeneratorOpen;
 
+        [ObservableProperty]
+        private string?  errorMessage;
+
         public double GeneratorPanelWidth => IsGeneratorOpen ? 857 : 504;
 
         partial void OnIsGeneratorOpenChanged(bool value)
@@ -27,22 +34,16 @@ namespace PassNest.ViewModels
             OnPropertyChanged(nameof(GeneratorPanelWidth));
         }
 
-        public ObservableCollection<CategoryOption> Categories { get; } = new()
-        {
-            new CategoryOption("Financije", "#E0952E"),
-            new CategoryOption("Posao", "#7C5CD6"),
-            new CategoryOption("Zabava", "#D6503C"),
-            new CategoryOption("Osobno", "#2AA26A"),
-        };
-
-        [ObservableProperty]
-        private CategoryOption selectedCategory;
+        public ObservableCollection<CategoryOption> Categories { get; }
 
         public event Action? Closed;
+        public event Action? Saved;
 
-        public NewAccountViewModel()
+        public NewAccountViewModel(IAccountStore accountStore)
         {
-            selectedCategory = Categories[1];
+            this.accountStore = accountStore;
+
+            Categories = new ObservableCollection<CategoryOption>(accountStore.GetCategories().Select(c => new CategoryOption(c.CategoryId, c.Name, c.Color)));
         }
 
         [RelayCommand]
@@ -54,6 +55,17 @@ namespace PassNest.ViewModels
         [RelayCommand]
         private void Save()
         {
+            if(string.IsNullOrWhiteSpace(ServiceName) || string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Generator.Password))
+            {
+                ErrorMessage = "Naziv servisa, korisničko ime i lozinka su obavezni!";
+                return;
+            }
+
+            var categoryIds = Categories.Where(c => c.IsSelected).Select(c => c.CategoryId);
+
+            accountStore.AddAccount(ServiceName, Username, Generator.Password, categoryIds);
+
+            Saved?.Invoke();
             Closed?.Invoke();
         }
 
