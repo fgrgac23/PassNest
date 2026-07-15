@@ -109,6 +109,11 @@
                 </StackPanel>
             </Button>
         </Grid>
-        <ContentControl Grid.Column="1" Content="{Binding CurrentPage}"/>
+        <Panel Grid.Column="1">
+            <ContentControl Content="{Binding CurrentPage}"/>
+            <Border Classes="error-toast" Classes.visible="{Binding CurrentVault.NewAccount.HasError}" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="16,16,16,0" Background="#F5D6503C" BorderBrush="{StaticResource Weak}" BorderThickness="1" CornerRadius="10" Padding="24,14">
+                <TextBlock Text="{Binding CurrentVault.NewAccount.ErrorMessage}" Foreground="{StaticResource TextOnDarkPrimary}" FontFamily="{StaticResource PlexSans}" FontSize="15" FontWeight="Bold" TextWrapping="Wrap" HorizontalAlignment="Center"/>
+            </Border>
+        </Panel>
     </Grid>
 </UserControl>

@@ -139,7 +139,6 @@
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
-                            <TextBlock Text="{Binding ErrorMessage}" IsVisible="{Binding ErrorMessage, Converter={x:Static ObjectConverters.IsNotNull}}" Foreground="{StaticResource Weak}" FontFamily="{StaticResource PlexSans}" FontSize="12" Margin="0,4,0,0"/>
                         </StackPanel>
                         <Grid ColumnDefinitions="*,*" Margin="0,16,0,0">
                             <Button Grid.Column="0" Classes="secondary" Content="Odustani" Command="{Binding CancelCommand}" Margin="0,0,8,0" HorizontalAlignment="Stretch"/>

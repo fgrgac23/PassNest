@@ -5,12 +5,15 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using BusinessLogicLayer.AccountManagement;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PassNest.ViewModels
 {
     public partial class NewAccountViewModel : ObservableObject
     {
         private readonly IAccountStore accountStore;
+        private CancellationTokenSource? errorDismissCts;
 
         [ObservableProperty]
         private string serviceName = string.Empty;
@@ -26,6 +29,9 @@ namespace PassNest.ViewModels
 
         [ObservableProperty]
         private string?  errorMessage;
+
+        [ObservableProperty]
+        private bool hasError;
 
         public double GeneratorPanelWidth => IsGeneratorOpen ? 857 : 504;
 
@@ -57,7 +63,7 @@ namespace PassNest.ViewModels
         {
             if(string.IsNullOrWhiteSpace(ServiceName) || string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Generator.Password))
             {
-                ErrorMessage = "Naziv servisa, korisničko ime i lozinka su obavezni!";
+                ShowError("Naziv servisa, korisničko ime i lozinka su obavezni!");
                 return;
             }
 
@@ -73,6 +79,25 @@ namespace PassNest.ViewModels
         private void Cancel()
         {
             Closed?.Invoke();
+        }
+
+        private async void ShowError(string message)
+        {
+            ErrorMessage = message;
+            HasError = true;
+
+            errorDismissCts?.Cancel();
+            var cts = new CancellationTokenSource();
+            errorDismissCts = cts;
+
+            try
+            {
+                await Task.Delay(TimeSpan.FromSeconds(5), cts.Token);
+                HasError = false;
+            }
+            catch (TaskCanceledException)
+            {
+            }
         }
     }
 }
