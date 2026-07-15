@@ -50,7 +50,7 @@ namespace BusinessLogicLayer.AccountManagement
 
         public void UpdateAccount(int accountId, string serviceName, string userName, string password, IEnumerable<int> categoryIds)
         {
-            var account = accountRepository.GetById(accountId);
+            var account = accountRepository.GetAll(a => a.Categories).FirstOrDefault(a => a.AccountId == accountId);
             if(account == null)
             {
                 return;
@@ -107,9 +107,9 @@ namespace BusinessLogicLayer.AccountManagement
             accountRepository.SaveChanges();
         }
 
-        public IEnumerable<Account> FilterByCategory(int categoryId) => accountRepository.GetAll().Where(a => a.Categories.Any(c => c.CategoryId == categoryId));
+        public IEnumerable<Account> FilterByCategory(int categoryId) => accountRepository.GetAll(a => a.Categories).Where(a => a.Categories.Any(c => c.CategoryId == categoryId));
 
-        public IEnumerable<Account> GetAllAccounts() => accountRepository.GetAll();
+        public IEnumerable<Account> GetAllAccounts() => accountRepository.GetAll(a => a.Categories);
 
         public IEnumerable<AccountCredentials> GetAllCredentials()
         {
@@ -151,6 +151,6 @@ namespace BusinessLogicLayer.AccountManagement
             };
         }
 
-        public IEnumerable<Account> SearchAccounts(string query) => accountRepository.GetAll().Where(a => a.ServiceName.Contains(query, StringComparison.OrdinalIgnoreCase));
+        public IEnumerable<Account> SearchAccounts(string query) => accountRepository.GetAll(a => a.Categories).Where(a => a.ServiceName.Contains(query, StringComparison.OrdinalIgnoreCase));
     }
 }

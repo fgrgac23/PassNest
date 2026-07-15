@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,7 +21,16 @@ namespace DataAccessLayer.Repository
         }
 
         public T? GetById(int id) => dbSet.Find(id);
-        public IEnumerable<T> GetAll() => dbSet.ToList();
+        public IEnumerable<T> GetAll(params Expression<Func<T, object>>[] includeProperties)
+        {
+            IQueryable<T> query = dbSet;
+            foreach(var property in includeProperties)
+            {
+                query = query.Include(property);
+            }
+
+            return query.ToList();
+        }
         public void Add(T entity) => dbSet.Add(entity);
         public void Update(T entity) => dbSet.Update(entity);
         public void Delete(T entity) => dbSet.Remove(entity);
