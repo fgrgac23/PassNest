@@ -48,7 +48,7 @@ namespace PassNest.ViewModels
         private async void OnAuthenticated()
         {
             CurrentPage = new LoadingViewModel();
-            await Task.Delay(1000);
+            await Task.Delay(1500);
             CurrentPage = new ShellViewModel();
         }
     }

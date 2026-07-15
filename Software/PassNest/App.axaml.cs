@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using PassNest.ViewModels;
 using PassNest.Views;
 using BusinessLogicLayer.PasswordGeneration;
+using BusinessLogicLayer.AccountManagement;
 
 namespace PassNest
 {
@@ -39,8 +40,11 @@ namespace PassNest
                 senderEmail: "passnest.2fa.info@gmail.com",
                 senderPassword: "PassNest2FA@"));
             service.AddSingleton<IRepository<User>, Repository<User>>();
+            service.AddSingleton<IRepository<Account>, Repository<Account>>();
+            service.AddSingleton<IRepository<Category>, Repository<Category>>();
             service.AddSingleton<IAuthProvider, AuthenticationService>();
             service.AddSingleton<IPasswordGenerator, PasswordGenerator>();
+            service.AddSingleton<IAccountStore, AccountManager>();
             service.AddSingleton<MainWindowViewModel>();
 
             var provider = service.BuildServiceProvider();
