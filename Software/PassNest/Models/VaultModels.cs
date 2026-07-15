@@ -1,10 +1,12 @@
 ﻿using Avalonia.Media;
+using BusinessLogicLayer.PasswordGeneration;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace PassNest.Models
 {
     public class AccountCardViewModel
     {
+        public int AccountId { get; }
         public string Initial { get; }
         public string ServiceName { get; }
         public string Username { get; }
@@ -19,8 +21,9 @@ namespace PassNest.Models
         public string LastModified { get; }
         public string CreatedAt { get; }
 
-        public AccountCardViewModel(string initial, string serviceName, string username, string avatarColorHex, string categoryName, string categoryColorHex, string strength, string password, string url, string lastModified, string createdAt)
+        public AccountCardViewModel(int accountId, string initial, string serviceName, string username, string avatarColorHex, string categoryName, string categoryColorHex, PasswordStrengthLevel strength, string password, string url, string lastModified, string createdAt)
         {
+            AccountId = accountId;
             Initial = initial;
             ServiceName = serviceName;
             Username = username;
@@ -28,18 +31,16 @@ namespace PassNest.Models
             CategoryName = categoryName;
             CategoryColor = new SolidColorBrush(Color.Parse(categoryColorHex));
             CategoryTint = new SolidColorBrush(Color.Parse(categoryColorHex), 0.15);
-            StatusColor = new SolidColorBrush(Color.Parse(strength switch
+
+            var (label, statusHex) = strength switch
             {
-                "Strong" => "#2AA26A",
-                "Medium" => "#E0952E",
-                _ => "#D6503C"
-            }));
-            StrengthLabel = strength switch
-            {
-                "Strong" => "Jaka lozinka",
-                "Medium" => "Srednja lozinka",
-                _ => "Slaba lozinka"
+                PasswordStrengthLevel.Jaka => ("Jaka lozinka", "#2AA26A"),
+                PasswordStrengthLevel.Srednja => ("Srednja lozinka", "#D4A62E"),
+                PasswordStrengthLevel.Slaba => ("Slaba lozinka", "#E0952E"),
+                _ => ("Vrlo slaba lozinka", "#D6503C")
             };
+            StatusColor = new SolidColorBrush(Color.Parse(statusHex));
+            StrengthLabel = label;
             Password = password;
             Url = url;
             LastModified = lastModified;
@@ -49,14 +50,16 @@ namespace PassNest.Models
 
     public partial class CategoryNavItem : ObservableObject
     {
+        public int? CategoryId { get; }
         public string Name { get; }
         public int Count { get; }
         public IBrush DotColor { get; }
 
         [ObservableProperty]
         private bool isSelected;
-        public CategoryNavItem(string name, int count, string dotColorHex, bool isSelected = false)
+        public CategoryNavItem(int? categoryId, string name, int count, string dotColorHex, bool isSelected = false)
         {
+            CategoryId = categoryId;
             Name = name;
             Count = count;
             DotColor = new SolidColorBrush(Color.Parse(dotColorHex));
