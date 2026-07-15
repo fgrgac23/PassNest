@@ -3,11 +3,25 @@ using CommunityToolkit.Mvvm.Input;
 using System;
 using PassNest.Models;
 using System.Collections.ObjectModel;
+using BusinessLogicLayer.AccountManagement;
+using BusinessLogicLayer.PasswordGeneration;
+using System.Linq;
+using EntityLayer;
 
 namespace PassNest.ViewModels
 {
     public partial class VaultViewModel : ViewModelBase
     {
+        private readonly IAccountStore accountStore;
+        private readonly IPasswordGenerator passwordGenerator;
+        private int? selectedCategoryId;
+
+        private static readonly string[] AvatarPallete =
+        {
+            "#E15B4D", "#1B1F24", "#2563EB", "#1DB954", "#D97706",
+            "#7C5CD6", "#0F7B8A", "#D6503C", "#2AA26A", "#1E3A5F"
+        };
+
         [ObservableProperty]
         private string selectedCategoryFilter = "Sve";
 
@@ -22,27 +36,83 @@ namespace PassNest.ViewModels
 
         public event Action<AccountCardViewModel>? AccountOpened;
 
-        public ObservableCollection<CategoryNavItem> Categories { get; } = new()
-        {
-            new CategoryNavItem("Sve", 24, "#1E8A91", isSelected:true),
-            new CategoryNavItem("Financije", 5, "#E0952E"),
-            new CategoryNavItem("Posao", 7, "#7C5CD6"),
-            new CategoryNavItem("Zabava", 8, "#D6503C"),
-            new CategoryNavItem("Osobno", 4, "#2AA26A")
-        };
+        public ObservableCollection<CategoryNavItem> Categories { get; } = new();
 
-        public ObservableCollection<AccountCardViewModel> Accounts { get; } = new()
+        public ObservableCollection<AccountCardViewModel> Accounts { get; } = new();
+
+        public VaultViewModel(IAccountStore accountStore, IPasswordGenerator passwordGenerator)
         {
-            new AccountCardViewModel("G", "Gmail", "ivan.ivic@gmail.com", "#E15B4D", "Osobno", "#2AA26A", "Strong", "gmail#Pass2025!", "mail.google.com", "10.06.2026.", "12.02.2024."),
-            new("G", "GitHub", "iivic", "#1B1F24", "Posao", "#7C5CD6", "Strong", "GitHub$ecure99", "github.com/login", "01.06.2026.", "03.01.2025."),
-            new("N", "Netflix", "ivan.ivic@gmail.com", "#D6503C", "Zabava", "#D6503C", "Medium", "netflix2024", "netflix.com/login", "20.05.2026.", "15.03.2023."),
-            new("P", "PayPal", "ivan.ivic@gmail.com", "#2563EB", "Financije", "#E0952E", "Strong", "PayP@l!Secure77", "paypal.com/signin", "28.06.2026.", "07.11.2022."),
-            new("S", "Spotify", "ivan.ivic", "#1DB954", "Zabava", "#D6503C", "Weak", "spotify1", "spotify.com/login", "14.04.2026.", "22.09.2023."),
-            new("A", "Amazon", "ivan.ivic@gmail.com", "#D97706", "Financije", "#E0952E", "Strong", "Amaz0n#Buy2025", "amazon.com/signin", "25.06.2026.", "18.06.2022."),
-            new("S", "Steam", "ivan.ivic_hr", "#1E3A5F", "Zabava", "#D6503C", "Strong", "SteamG@mer24", "steamcommunity.com/login", "12.06.2026.", "05.08.2021."),
-            new("M", "Microsoft 365", "ivan.ivic@firma.hr", "#2F6FED", "Posao", "#7C5CD6", "Strong", "MS365#Work2026", "login.microsoftonline.com", "30.06.2026.", "10.01.2024."),
-            new("L", "LinkedIn", "ivan.ivic@gmail.com", "#0F7B8A", "Posao", "#7C5CD6", "Medium", "linkedin2025", "linkedin.com/login", "05.06.2026.", "14.07.2023."),
-        };
+            this.accountStore = accountStore;
+            this.passwordGenerator = passwordGenerator;
+
+            LoadCategories();
+            LoadAccounts();
+        }
+
+        private void LoadCategories()
+        {
+            Categories.Clear();
+
+            var allCount = accountStore.GetAllAccounts().Count();
+            Categories.Add(new CategoryNavItem(null, "Sve", allCount, "#1E8A91", isSelected: true));
+
+            foreach(var category in accountStore.GetCategories())
+            {
+                var count = accountStore.FilterByCategory(category.CategoryId).Count();
+                Categories.Add(new CategoryNavItem(category.CategoryId, category.Name, count, category.Color));
+            }
+        }
+
+        private void LoadAccounts()
+        {
+            var accounts = selectedCategoryId is null ? accountStore.GetAllAccounts() : accountStore.FilterByCategory(selectedCategoryId.Value);
+
+            if (!string.IsNullOrWhiteSpace(SearchText))
+            {
+                accounts = accounts.Where(a => a.ServiceName.Contains(SearchText, StringComparison.OrdinalIgnoreCase));
+            }
+
+            var credentialsById = accountStore.GetAllCredentials().ToDictionary(c => c.AccountId);
+
+            Accounts.Clear();
+            foreach(var account in accounts)
+            {
+                if(!credentialsById.TryGetValue(account.AccountId, out var credentials))
+                {
+                    continue;
+                }
+
+                Accounts.Add(BuildCard(account, credentials.Password));
+            }
+        }
+
+        private AccountCardViewModel BuildCard(Account account, string password)
+        {
+            var firstCategory = account.Categories.FirstOrDefault();
+            var strength = passwordGenerator.EvaluateStrength(password);
+
+            return new AccountCardViewModel(
+                account.AccountId,
+                account.ServiceName.Length > 0 ? account.ServiceName[..1].ToUpper() : "?",
+                account.ServiceName,
+                account.UserName,
+                GetAvatarColor(account.ServiceName),
+                firstCategory?.Name ?? "Bez kategorije",
+                firstCategory?.Color ?? "#8A909C",
+                strength,
+                password,
+                account.Url ?? string.Empty,
+                account.UpdatedAt.ToString("dd.MM.yyyy"),
+                account.CreatedAt.ToString("dd.MM.yyyy"));
+        }
+
+        private static string GetAvatarColor(string serviceName)
+        {
+            var index = Math.Abs(serviceName.GetHashCode()) % AvatarPallete.Length;
+            return AvatarPallete[index];
+        }
+
+        partial void OnSearchTextChanged(string value) => LoadAccounts();
 
         [RelayCommand]
         private void SelectCategory(CategoryNavItem category)
@@ -51,12 +121,20 @@ namespace PassNest.ViewModels
                 item.IsSelected = item == category;
 
             SelectedCategoryFilter = category.Name;
+            selectedCategoryId = category.CategoryId;
+            LoadAccounts();
         }
 
         [RelayCommand]
         private void AddAccount()
         {
-            var dialog = new NewAccountViewModel();
+            var dialog = new NewAccountViewModel(accountStore);
+            dialog.Saved += () =>
+            {
+                LoadCategories();
+                LoadAccounts();
+            };
+
             dialog.Closed += () => IsAddAccountDialogOpen = false;
             NewAccount = dialog;
             IsAddAccountDialogOpen = true;
