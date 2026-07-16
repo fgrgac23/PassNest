@@ -10,7 +10,7 @@ namespace BusinessLogicLayer.AccountManagement
     public interface IAccountStore
     {
         void AddAccount(string serviceName, string userName, string password, IEnumerable<int> categoryIds);
-        void UpdateAccount(int accountId, string serviceName, string userName, string password, IEnumerable<int> categoryIds);
+        void UpdateAccount(int accountId, string serviceName, string userName, string password, string? url, IEnumerable<int> categoryIds);
         void DeleteAccount(int accountId);
         IEnumerable<Account> GetAllAccounts();
         IEnumerable<Account> SearchAccounts(string query);

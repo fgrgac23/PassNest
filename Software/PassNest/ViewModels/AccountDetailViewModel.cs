@@ -1,10 +1,14 @@
 ﻿using Avalonia.Media;
-using System;
-using PassNest.Models;
+using BusinessLogicLayer.AccountManagement;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using BusinessLogicLayer.AccountManagement;
+using PassNest.Models;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PassNest.ViewModels
 {
@@ -12,6 +16,7 @@ namespace PassNest.ViewModels
     {
         private readonly IAccountStore accountStore;
         private readonly int accountId;
+        private CancellationTokenSource? errorDismissCts;
 
         [ObservableProperty]
         private string initial;
@@ -22,7 +27,8 @@ namespace PassNest.ViewModels
         [ObservableProperty]
         private string serviceName;
 
-        public IReadOnlyList<CategoryBadge> Categories { get; }
+        [ObservableProperty]
+        public IReadOnlyList<CategoryBadge> categories;
 
         [ObservableProperty]
         private string strengthLabel;
@@ -47,6 +53,29 @@ namespace PassNest.ViewModels
 
         [ObservableProperty]
         private string createdAt;
+
+        [ObservableProperty]
+        private bool isEditing;
+
+        [ObservableProperty]
+        private string editServiceName = string.Empty;
+
+        [ObservableProperty]
+        private string editUsername = string.Empty;
+
+        [ObservableProperty]
+        private string editPassword = string.Empty;
+
+        [ObservableProperty]
+        private string editUrl = string.Empty;
+
+        [ObservableProperty]
+        private string? errorMessage;
+
+        [ObservableProperty]
+        private bool hasError;
+
+        public ObservableCollection<CategoryOption> EditCategories { get; } = new();
 
         public event Action? BackRequested;
         public event Action? Deleted;
@@ -78,6 +107,50 @@ namespace PassNest.ViewModels
         [RelayCommand]
         private void Edit()
         {
+            EditServiceName = ServiceName;
+            EditUsername = Username;
+            EditPassword = Password;
+            EditUrl = Url;
+
+            var selectedNames = Categories.Select(c => c.Name).ToHashSet();
+
+            EditCategories.Clear();
+            foreach (var category in accountStore.GetCategories())
+            {
+                EditCategories.Add(new CategoryOption(category.CategoryId, category.Name, category.Color, selectedNames.Contains(category.Name)));
+            }
+
+            HasError = false;
+            IsEditing = true;
+        }
+
+        [RelayCommand]
+        private void SaveEdit()
+        {
+            if(string.IsNullOrWhiteSpace(EditServiceName) || string.IsNullOrWhiteSpace(EditUsername) || string.IsNullOrWhiteSpace(EditPassword))
+            {
+                ShowError("Naziv servisa, korisničko ime i lozinka su obavezni!");
+                return;
+            }
+
+            var categoryIds = EditCategories.Where(c => c.IsSelected).Select(c => c.CategoryId);
+            var newUrl = string.IsNullOrWhiteSpace(EditUrl) ? null : EditUrl;
+
+            accountStore.UpdateAccount(accountId, EditServiceName, EditUsername, EditPassword, newUrl, categoryIds);
+
+            ServiceName = EditServiceName;
+            Username = EditUsername;
+            Password = EditPassword;
+            Url = EditUrl;
+            Categories = EditCategories.Where(c => c.IsSelected).Select(c => new CategoryBadge(c.Name, c.ColorHex)).ToList();
+
+            IsEditing = false;
+        }
+
+        [RelayCommand]
+        private void CancelEdit()
+        {
+            IsEditing = false;
         }
 
         [RelayCommand]
@@ -112,6 +185,25 @@ namespace PassNest.ViewModels
         private void GoBack()
         {
             BackRequested?.Invoke();
+        }
+
+        private async void ShowError(string message)
+        {
+            ErrorMessage = message;
+            HasError = true;
+
+            errorDismissCts?.Cancel();
+            var cts = new CancellationTokenSource();
+            errorDismissCts = cts;
+
+            try
+            {
+                await Task.Delay(TimeSpan.FromSeconds(5), cts.Token);
+                HasError = false;
+            }
+            catch (TaskCanceledException)
+            {
+            }
         }
     }
 }

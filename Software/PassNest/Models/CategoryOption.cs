@@ -12,6 +12,7 @@ namespace PassNest.Models
     {
         public int CategoryId { get; }
         public string Name { get; }
+        public string ColorHex { get; }
         public IBrush DotColor { get; }
 
         [ObservableProperty]
@@ -21,6 +22,7 @@ namespace PassNest.Models
         {
             CategoryId = categoryId;
             Name = name;
+            ColorHex = colorHex;
             DotColor = new SolidColorBrush(Color.Parse(colorHex));
             this.isSelected = isSelected;
         }

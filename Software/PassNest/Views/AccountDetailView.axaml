@@ -13,7 +13,7 @@
 
     <ScrollViewer Background="{StaticResource Canvas}">
         <StackPanel Margin="32,28,32,32" Spacing="24">
-            <Button Classes="back-link" Command="{Binding GoBackCommand}" HorizontalAlignment="Left">
+            <Button Classes="back-link" Command="{Binding GoBackCommand}" HorizontalAlignment="Left" IsVisible="{Binding !IsEditing}">
                 <StackPanel Orientation="Horizontal" Spacing="6">
                     <Border Width="14" Height="14" Background="{Binding $parent[Button].Foreground}">
                         <Border.OpacityMask>
@@ -29,7 +29,7 @@
                 </Border>
                 <StackPanel Grid.Column="1" Margin="16,0,0,0" VerticalAlignment="Center" Spacing="6">
                     <TextBlock Text="{Binding ServiceName}" FontFamily="{StaticResource PlexSans}" FontWeight="Bold" FontSize="22" Foreground="{StaticResource TextPrimary}"/>
-                    <StackPanel Orientation="Horizontal" Spacing="10">
+                    <StackPanel Orientation="Horizontal" Spacing="10" IsVisible="{Binding !IsEditing}">
                         <ItemsControl ItemsSource="{Binding Categories}">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
@@ -50,7 +50,7 @@
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
-                <Button Grid.Column="2" Classes="outline-accent" Command="{Binding EditCommand}" VerticalAlignment="Top">
+                <Button Grid.Column="2" Classes="outline-accent" Command="{Binding EditCommand}" VerticalAlignment="Top" IsVisible="{Binding !IsEditing}">
                     <StackPanel Orientation="Horizontal" Spacing="6">
                         <Border Width="16" Height="16" Background="{Binding $parent[Button].Foreground}">
                             <Border.OpacityMask>
@@ -61,7 +61,46 @@
                     </StackPanel>
                 </Button>
             </Grid>
-            <StackPanel Spacing="10">
+            <StackPanel Spacing="16" IsVisible="{Binding IsEditing}">
+                <TextBlock Classes="section-label-light" Text="UREDI RAČUN"/>
+                <StackPanel Spacing="6">
+                    <TextBlock Classes="field-label" Text="Naziv servisa"/>
+                    <TextBox Classes="form" Text="{Binding EditServiceName}"/>
+                </StackPanel>
+                <StackPanel Spacing="6">
+                    <TextBlock Classes="field-label" Text="Korisničko ime"/>
+                    <TextBox Classes="form" Text="{Binding EditUsername}"/>
+                </StackPanel>
+                <StackPanel Spacing="6">
+                    <TextBlock Classes="field-label" Text="Lozinka"/>
+                    <TextBox Classes="form" Text="{Binding EditPassword}"/>
+                </StackPanel>
+                <StackPanel Spacing="6">
+                    <TextBlock Classes="field-label" Text="URL (opcionalno)"/>
+                    <TextBox Classes="form" PlaceholderText="npr. servis.com/login" Text="{Binding EditUrl}"/>
+                </StackPanel>
+                <StackPanel Spacing="6">
+                    <TextBlock Classes="field-label" Text="Kateogrije"/>
+                    <ItemsControl ItemsSource="{Binding EditCategories}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="models:CategoryOption">
+                                <CheckBox IsChecked="{Binding IsSelected}" Margin="0,4">
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <Ellipse Width="8" Height="8" Fill="{Binding DotColor}"/>
+                                        <TextBlock Text="{Binding Name}"/>
+                                    </StackPanel>
+                                </CheckBox>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <TextBlock Text="{Binding ErrorMessage}" IsVisible="{Binding HasError}" Foreground="{StaticResource Weak}" FontFamily="{StaticResource PlexSans}" FontSize="12" FontWeight="Bold" Margin="0,4,0,0"/>
+                </StackPanel>
+                <Grid ColumnDefinitions="*,*">
+                    <Button Grid.Column="0" Classes="secondary" Content="Odustani" Command="{Binding CancelEditCommand}" Margin="0,0,8,0" HorizontalAlignment="Stretch"/>
+                    <Button Grid.Column="1" Classes="primary" Content="Spremi izmjene" Command="{Binding SaveEditCommand}" HorizontalAlignment="Stretch"/>
+                </Grid>
+            </StackPanel>
+            <StackPanel Spacing="10" IsVisible="{Binding !IsEditing}">
                 <TextBlock Classes="section-label-light" Text="PRISTUPNI PODACI"/>
                 <Border Classes="settings-card">
                     <Grid ColumnDefinitions="*,Auto">
@@ -121,7 +160,7 @@
                     </StackPanel>
                 </Border>
             </StackPanel>
-            <Grid ColumnDefinitions="*,Auto">
+            <Grid ColumnDefinitions="*,Auto" IsVisible="{Binding !IsEditing}">
                 <Button Grid.Column="0" Classes="primary" Command="{Binding AutoFillCommand}" Padding="0,14" Margin="0,0,12,0" HorizontalAlignment="Stretch">
                     <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
                         <Border Width="16" Height="16" Background="{Binding $parent[Button].Foreground}">
@@ -143,7 +182,7 @@
                     </StackPanel>
                 </Button>
             </Grid>
-            <TextBlock FontFamily="{StaticResource PlexSans}" FontSize="12" Foreground="{StaticResource TextMuted}">
+            <TextBlock FontFamily="{StaticResource PlexSans}" FontSize="12" Foreground="{StaticResource TextMuted}" IsVisible="{Binding !IsEditing}">
                 <Run Text="Zadnja izmjena: "/>
                 <Run Text="{Binding LastModified}"/>
                 <Run Text=" ·  Stvoreno: "/>

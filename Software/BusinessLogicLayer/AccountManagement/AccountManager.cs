@@ -48,7 +48,7 @@ namespace BusinessLogicLayer.AccountManagement
             accountRepository.SaveChanges();
         }
 
-        public void UpdateAccount(int accountId, string serviceName, string userName, string password, IEnumerable<int> categoryIds)
+        public void UpdateAccount(int accountId, string serviceName, string userName, string password, string? url, IEnumerable<int> categoryIds)
         {
             var account = accountRepository.GetAll(a => a.Categories).FirstOrDefault(a => a.AccountId == accountId);
             if(account == null)
@@ -61,6 +61,7 @@ namespace BusinessLogicLayer.AccountManagement
             account.ServiceName = serviceName;
             account.UserName = userName;
             account.EncryptedPassword = crypto.Encrypt(password, key);
+            account.Url = url;
             account.UpdatedAt = DateTime.UtcNow;
 
             account.Categories.Clear();
