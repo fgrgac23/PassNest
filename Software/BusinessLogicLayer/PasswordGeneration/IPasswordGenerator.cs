@@ -8,6 +8,7 @@ namespace BusinessLogicLayer.PasswordGeneration
 {
     public interface IPasswordGenerator
     {
+        string GeneratePassword(PasswordOptions options);
         PasswordStrengthLevel EvaluateStrength(string password);
     }
 }
