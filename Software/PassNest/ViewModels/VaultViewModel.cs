@@ -1,13 +1,14 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using System;
-using PassNest.Models;
-using System.Collections.ObjectModel;
-using BusinessLogicLayer.AccountManagement;
+﻿using BusinessLogicLayer.AccountManagement;
 using BusinessLogicLayer.PasswordGeneration;
-using System.Linq;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using EntityLayer;
+using PassNest.Models;
 using PassNest.Services;
+using System;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PassNest.ViewModels
@@ -18,6 +19,7 @@ namespace PassNest.ViewModels
         private readonly IPasswordGenerator passwordGenerator;
         private readonly IClipboardService clipboardService;
         private int? selectedCategoryId;
+        private CancellationTokenSource? successDismissCts;
 
         [ObservableProperty]
         private string selectedCategoryFilter = "Sve";
@@ -30,6 +32,12 @@ namespace PassNest.ViewModels
 
         [ObservableProperty]
         private NewAccountViewModel? newAccount;
+
+        [ObservableProperty]
+        private string? successMessage;
+
+        [ObservableProperty]
+        private bool hasSuccess;
 
         public event Action<AccountCardViewModel>? AccountOpened;
 
@@ -146,6 +154,26 @@ namespace PassNest.ViewModels
         private async Task CopyPassword(AccountCardViewModel account)
         {
             await clipboardService.SetTextAsync(account.Password);
+            ShowSuccess("Lozinka je supješno kopirana.");
+        }
+
+        private async void ShowSuccess(string message)
+        {
+            SuccessMessage = message;
+            HasSuccess = true;
+
+            successDismissCts?.Cancel();
+            var cts = new CancellationTokenSource();
+            successDismissCts = cts;
+
+            try
+            {
+                await Task.Delay(TimeSpan.FromSeconds(5), cts.Token);
+                HasSuccess = false;
+            }
+            catch (TaskCanceledException)
+            {
+            }
         }
     }
 }

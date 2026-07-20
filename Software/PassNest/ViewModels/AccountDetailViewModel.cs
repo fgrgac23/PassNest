@@ -19,6 +19,7 @@ namespace PassNest.ViewModels
         private readonly IClipboardService clipboardService;
         private readonly int accountId;
         private CancellationTokenSource? errorDismissCts;
+        private CancellationTokenSource? successDismissCts;
 
         [ObservableProperty]
         private string initial;
@@ -75,7 +76,13 @@ namespace PassNest.ViewModels
         private string? errorMessage;
 
         [ObservableProperty]
+        private string? successMessage;
+
+        [ObservableProperty]
         private bool hasError;
+
+        [ObservableProperty]
+        private bool hasSuccess;
 
         public ObservableCollection<CategoryOption> EditCategories { get; } = new();
 
@@ -139,7 +146,7 @@ namespace PassNest.ViewModels
         [RelayCommand]
         private void SaveEdit()
         {
-            if(string.IsNullOrWhiteSpace(EditServiceName) || string.IsNullOrWhiteSpace(EditUsername) || string.IsNullOrWhiteSpace(EditPassword))
+            if (string.IsNullOrWhiteSpace(EditServiceName) || string.IsNullOrWhiteSpace(EditUsername) || string.IsNullOrWhiteSpace(EditPassword))
             {
                 ShowError("Naziv servisa, korisničko ime i lozinka su obavezni!");
                 return;
@@ -183,12 +190,14 @@ namespace PassNest.ViewModels
         private async Task CopyUsername()
         {
             await clipboardService.SetTextAsync(Username);
+            ShowSuccess("Korisničko ime je supješno kopirano.");
         }
 
         [RelayCommand]
         private async Task CopyPassword()
         {
             await clipboardService.SetTextAsync(Password);
+            ShowSuccess("Lozinka je supješno kopirana.");
         }
 
         [RelayCommand]
@@ -216,6 +225,25 @@ namespace PassNest.ViewModels
             {
                 await Task.Delay(TimeSpan.FromSeconds(5), cts.Token);
                 HasError = false;
+            }
+            catch (TaskCanceledException)
+            {
+            }
+        }
+
+        private async void ShowSuccess(string message)
+        {
+            SuccessMessage = message;
+            HasSuccess = true;
+
+            successDismissCts?.Cancel();
+            var cts = new CancellationTokenSource();
+            successDismissCts = cts;
+
+            try
+            {
+                await Task.Delay(TimeSpan.FromSeconds(5), cts.Token);
+                HasSuccess = false;
             }
             catch (TaskCanceledException)
             {
