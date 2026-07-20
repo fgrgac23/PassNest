@@ -33,6 +33,9 @@ namespace PassNest.ViewModels
         [ObservableProperty]
         private bool hasError;
 
+        [ObservableProperty]
+        private string newCategoryName = string.Empty;
+
         public double GeneratorPanelWidth => IsGeneratorOpen ? 857 : 504;
 
         partial void OnIsGeneratorOpenChanged(bool value)
@@ -56,6 +59,31 @@ namespace PassNest.ViewModels
         private void ToggleGenerator()
         {
             IsGeneratorOpen = !IsGeneratorOpen;
+        }
+
+        [RelayCommand]
+        private void AddCategory()
+        {
+            var name = NewCategoryName.Trim();
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return;
+            }
+
+            var existing = Categories.FirstOrDefault(c => string.Equals(c.Name, name, StringComparison.OrdinalIgnoreCase));
+            if (existing != null)
+            {
+                existing.IsSelected = true;
+                NewCategoryName = string.Empty;
+                return;
+            }
+
+            var colorHex = AvatarColorPicker.GetColor(name);
+            var category = accountStore.AddCategory(name, colorHex);
+
+            Categories.Add(new CategoryOption(category.CategoryId, category.Name, category.Color, isSelected: true));
+
+            NewCategoryName = string.Empty;
         }
 
         [RelayCommand]
