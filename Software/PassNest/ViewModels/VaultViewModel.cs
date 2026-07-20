@@ -127,7 +127,7 @@ namespace PassNest.ViewModels
         [RelayCommand]
         private void AddAccount()
         {
-            var dialog = new NewAccountViewModel(accountStore);
+            var dialog = new NewAccountViewModel(accountStore, passwordGenerator, clipboardService);
             dialog.Saved += () =>
             {
                 LoadCategories();

@@ -8,6 +8,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using EntityLayer;
+using BusinessLogicLayer.PasswordGeneration;
+using PassNest.Services;
 
 namespace PassNest.ViewModels
 {
@@ -23,7 +25,7 @@ namespace PassNest.ViewModels
         private string username = string.Empty;
 
         [ObservableProperty]
-        private PasswordGeneratorViewModel generator = new();
+        private PasswordGeneratorViewModel generator;
 
         [ObservableProperty]
         private bool isGeneratorOpen;
@@ -49,9 +51,10 @@ namespace PassNest.ViewModels
         public event Action? Closed;
         public event Action? Saved;
 
-        public NewAccountViewModel(IAccountStore accountStore)
+        public NewAccountViewModel(IAccountStore accountStore, IPasswordGenerator passwordGenerator, IClipboardService clipboardService)
         {
             this.accountStore = accountStore;
+            generator = new PasswordGeneratorViewModel(passwordGenerator, clipboardService);
 
             Categories = new ObservableCollection<CategoryOption>(accountStore.GetCategories().Select(c => new CategoryOption(c.CategoryId, c.Name, c.Color, c.IsSystemDefined)));
         }

@@ -6,11 +6,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="760"
         x:Class="PassNest.Views.GeneratorView"
-        x:DataType="vm:GeneratorViewModel">
-
-    <Design.DataContext>
-        <vm:GeneratorViewModel/>
-    </Design.DataContext>
+        x:DataType="vm:GeneratorViewModel"
+        d:DataContext="{d:DesignInstance vm:GeneratorViewModel}">
 
     <ScrollViewer Background="{StaticResource Canvas}">
         <StackPanel Margin="40" HorizontalAlignment="Center" Width="480" Spacing="24">

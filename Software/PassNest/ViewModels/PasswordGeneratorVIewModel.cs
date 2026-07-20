@@ -30,9 +30,11 @@ namespace PassNest.ViewModels
         [ObservableProperty]
         private bool useSpecialChars = true;
 
-        public string StrengthLabel = string.Empty;
+        [ObservableProperty]
+        public string strengthLabel = string.Empty;
 
-        public IBrush StrengthColor = new SolidColorBrush(Color.Parse("#D6503C"));
+        [ObservableProperty]
+        public IBrush strengthColor = new SolidColorBrush(Color.Parse("#D6503C"));
 
         public PasswordGeneratorViewModel(IPasswordGenerator passwordGenerator, IClipboardService clipboardService)
         {
@@ -50,9 +52,6 @@ namespace PassNest.ViewModels
                 PasswordStrengthLevel.Slaba => ("Slaba lozinka", "#E0952E"),
                 _ => ("Vrlo slaba lozinka", "#D6503C")
             };
-
-            StrengthLabel = label;
-            StrengthColor = new SolidColorBrush(Color.Parse(colorHex));
         }
         
         partial void OnUseUpperCaseChanged(bool value) => EnsureAtLeastOneCategorySelected();

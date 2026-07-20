@@ -1,14 +1,17 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using BusinessLogicLayer.PasswordGeneration;
+using CommunityToolkit.Mvvm.ComponentModel;
+using PassNest.Services;
 
 namespace PassNest.ViewModels
 {
     public partial class GeneratorViewModel : ViewModelBase
     {
         [ObservableProperty]
-        private PasswordGeneratorViewModel generator = new()
+        private PasswordGeneratorViewModel generator;
+
+        public GeneratorViewModel(IPasswordGenerator passwordGenerator, IClipboardService clipboardService)
         {
-            Password = "v8$Kp2#mLq7!Wd&9r",
-            Length = 18
-        };
+            generator = new PasswordGeneratorViewModel(passwordGenerator, clipboardService);
+        }
     }
 }
