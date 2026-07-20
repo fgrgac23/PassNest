@@ -5,6 +5,7 @@
         xmlns:local="using:PassNest.Views"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:models="using:PassNest.Models"
+        xmlns:conv="using:Avalonia.Data.Converters"
         mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="670"
         x:Class="PassNest.Views.ShellView"
         x:Name="Root"
@@ -111,6 +112,24 @@
         </Grid>
         <Panel Grid.Column="1">
             <ContentControl Content="{Binding CurrentPage}"/>
+            <Border IsVisible="{Binding !IsDialogOpen}" Padding="24,8" VerticalAlignment="Top" HorizontalAlignment="Left" Background="{StaticResource Canvas}">
+                <ItemsControl ItemsSource="{Binding Breadcrumbs}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" Spacing="4"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="models:BreadcrumbItem">
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <TextBlock Text=">" IsVisible="{Binding ShowSeparator}" Foreground="{StaticResource TextMuted}" FontFamily="{StaticResource PlexSans}" FontSize="13" VerticalAlignment="Center"/>
+                                <Button Classes="back-link" Command="{Binding NavigateCommand}" IsVisible="{Binding NavigateCommand, Converter={x:Static conv:ObjectConverters.IsNotNull}}" Content="{Binding Label}" Padding="0" FontSize="13"/>
+                                <TextBlock Text="{Binding Label}" IsVisible="{Binding NavigateCommand, Converter={x:Static conv:ObjectConverters.IsNull}}" FontFamily="{StaticResource PlexSans}" FontWeight="SemiBold" FontSize="13" Foreground="{StaticResource TextPrimary}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Border>
             <Border Classes="error-toast" Classes.visible="{Binding CurrentVault.NewAccount.HasError}" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="16,16,16,0" Background="#F5D6503C" BorderBrush="{StaticResource Weak}" BorderThickness="1" CornerRadius="10" Padding="24,14">
                 <TextBlock Text="{Binding CurrentVault.NewAccount.ErrorMessage}" Foreground="{StaticResource TextOnDarkPrimary}" FontFamily="{StaticResource PlexSans}" FontSize="15" FontWeight="Bold" TextWrapping="Wrap" HorizontalAlignment="Center"/>
             </Border>

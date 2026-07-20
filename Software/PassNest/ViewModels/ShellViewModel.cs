@@ -5,6 +5,8 @@ using BusinessLogicLayer.AccountManagement;
 using BusinessLogicLayer.PasswordGeneration;
 using BusinessLogicLayer.Authentication;
 using System;
+using System.Collections.ObjectModel;
+using System.Collections.Generic;
 
 namespace PassNest.ViewModels
 {
@@ -19,6 +21,12 @@ namespace PassNest.ViewModels
 
         [ObservableProperty]
         private ViewModelBase currentPage;
+
+        [ObservableProperty]
+        private ObservableCollection<BreadcrumbItem> breadcrumbs = new();
+
+        [ObservableProperty]
+        private bool isDialogOpen;
 
         public VaultViewModel? CurrentVault => CurrentPage as VaultViewModel;
 
@@ -35,12 +43,19 @@ namespace PassNest.ViewModels
             this.passwordGenerator = passwordGenerator;
             this.authProvider = authProvider;
             currentPage = CreateVaultPage();
+            UpdateBreadcrumbs();
         }
 
         private VaultViewModel CreateVaultPage()
         {
             var page = new VaultViewModel(accountStore, passwordGenerator);
             page.AccountOpened += OnAccountOpened;
+            page.PropertyChanged += (_, e) =>
+            {
+                if (e.PropertyName == nameof(VaultViewModel.IsAddAccountDialogOpen)) IsDialogOpen = page.IsAddAccountDialogOpen;
+            };
+
+            IsDialogOpen = false;
             return page;
         }
 
@@ -49,6 +64,12 @@ namespace PassNest.ViewModels
             var detail = new AccountDetailViewModel(accountStore, account);
             detail.BackRequested += OnAccountDetailBackRequested;
             detail.Deleted += OnAccountDetailBackRequested;
+
+            detail.PropertyChanged += (_, e) =>
+            {
+                if (e.PropertyName == nameof(AccountDetailViewModel.IsEditing)) UpdateBreadcrumbs();
+            };
+
             CurrentPage = detail;
         }
 
@@ -77,6 +98,7 @@ namespace PassNest.ViewModels
         partial void OnCurrentPageChanged(ViewModelBase value)
         {
             OnPropertyChanged(nameof(CurrentVault));
+            UpdateBreadcrumbs();
         }
 
         [RelayCommand]
@@ -87,6 +109,50 @@ namespace PassNest.ViewModels
         {
             authProvider.Logout();
             VaultLocked?.Invoke();
+        }
+
+        private void UpdateBreadcrumbs()
+        {
+            var items = new List<BreadcrumbItem>();
+
+            switch (CurrentPage)
+            {
+                case AccountDetailViewModel detail:
+                    items.Add(new BreadcrumbItem("Trezor", () => CurrentPage = CreateVaultPage()));
+                    if (detail.IsEditing)
+                    {
+                        items.Add(new BreadcrumbItem("Detalji", () => detail.IsEditing = false));
+                        items.Add(new BreadcrumbItem("Uredi"));
+                    }
+                    else
+                    {
+                        items.Add(new BreadcrumbItem("Detalji"));
+                    }
+                    break;
+
+                case VaultViewModel:
+                    items.Add(new BreadcrumbItem("Trezor"));
+                    break;
+
+                case GeneratorViewModel:
+                    items.Add(new BreadcrumbItem("Generator"));
+                    break;
+
+                case SecurityViewModel:
+                    items.Add(new BreadcrumbItem("Sigurnost"));
+                    break;
+
+                case SettingsViewModel:
+                    items.Add(new BreadcrumbItem("Postavke"));
+                    break;
+            }
+
+            for(var i = 1; i < items.Count; i++)
+            {
+                items[i].ShowSeparator = true;
+            }
+
+            Breadcrumbs = new ObservableCollection<BreadcrumbItem>(items);
         }
     }
 }

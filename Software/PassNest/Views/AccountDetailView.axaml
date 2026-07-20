@@ -12,7 +12,7 @@
         d:DataContext="{d:DesignInstance vm:AccountDetailViewModel}">
 
     <ScrollViewer Background="{StaticResource Canvas}">
-        <StackPanel Margin="32,28,32,32" Spacing="24">
+        <StackPanel Margin="32,46,32,32" Spacing="24">
             <Button Classes="back-link" Command="{Binding GoBackCommand}" HorizontalAlignment="Left" IsVisible="{Binding !IsEditing}">
                 <StackPanel Orientation="Horizontal" Spacing="6">
                     <Border Width="14" Height="14" Background="{Binding $parent[Button].Foreground}">
@@ -61,8 +61,7 @@
                     </StackPanel>
                 </Button>
             </Grid>
-            <StackPanel Spacing="16" IsVisible="{Binding IsEditing}">
-                <TextBlock Classes="section-label-light" Text="UREDI RAČUN"/>
+            <StackPanel Spacing="10" IsVisible="{Binding IsEditing}">
                 <StackPanel Spacing="6">
                     <TextBlock Classes="field-label" Text="Naziv servisa"/>
                     <TextBox Classes="form" Text="{Binding EditServiceName}"/>
