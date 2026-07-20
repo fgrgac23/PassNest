@@ -96,6 +96,15 @@ namespace BusinessLogicLayer.AccountManagement
             return category;
         }
 
+        public void DeleteCategory(int categoryId)
+        {
+            var category = categoryRepository.GetById(categoryId);
+            if (category == null || category.IsSystemDefined) return;
+
+            categoryRepository.Delete(category);
+            categoryRepository.SaveChanges();
+        }
+
         public void DeleteAccount(int accountId)
         {
             var account = accountRepository.GetById(accountId);

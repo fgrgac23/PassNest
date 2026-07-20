@@ -7,6 +7,7 @@ using BusinessLogicLayer.AccountManagement;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using EntityLayer;
 
 namespace PassNest.ViewModels
 {
@@ -52,7 +53,7 @@ namespace PassNest.ViewModels
         {
             this.accountStore = accountStore;
 
-            Categories = new ObservableCollection<CategoryOption>(accountStore.GetCategories().Select(c => new CategoryOption(c.CategoryId, c.Name, c.Color)));
+            Categories = new ObservableCollection<CategoryOption>(accountStore.GetCategories().Select(c => new CategoryOption(c.CategoryId, c.Name, c.Color, c.IsSystemDefined)));
         }
 
         [RelayCommand]
@@ -81,7 +82,7 @@ namespace PassNest.ViewModels
             var colorHex = AvatarColorPicker.GetColor(name);
             var category = accountStore.AddCategory(name, colorHex);
 
-            Categories.Add(new CategoryOption(category.CategoryId, category.Name, category.Color, isSelected: true));
+            Categories.Add(new CategoryOption(category.CategoryId, category.Name, category.Color, isSystemDefined: false, isSelected: true));
 
             NewCategoryName = string.Empty;
         }
@@ -101,6 +102,15 @@ namespace PassNest.ViewModels
 
             Saved?.Invoke();
             Closed?.Invoke();
+        }
+
+        [RelayCommand]
+        private void DeleteCategory(CategoryOption category)
+        {
+            if (category.IsSystemDefined) return;
+
+            accountStore.DeleteCategory(category.CategoryId);
+            Categories.Remove(category);
         }
 
         [RelayCommand]

@@ -14,16 +14,18 @@ namespace PassNest.Models
         public string Name { get; }
         public string ColorHex { get; }
         public IBrush DotColor { get; }
+        public bool IsSystemDefined { get; }
 
         [ObservableProperty]
         private bool isSelected;
 
-        public CategoryOption(int categoryId, string name, string colorHex, bool isSelected = false)
+        public CategoryOption(int categoryId, string name, string colorHex, bool isSystemDefined, bool isSelected = false)
         {
             CategoryId = categoryId;
             Name = name;
             ColorHex = colorHex;
             DotColor = new SolidColorBrush(Color.Parse(colorHex));
+            IsSystemDefined = isSystemDefined;
             this.isSelected = isSelected;
         }
     }

@@ -117,11 +117,20 @@ namespace PassNest.ViewModels
             EditCategories.Clear();
             foreach (var category in accountStore.GetCategories())
             {
-                EditCategories.Add(new CategoryOption(category.CategoryId, category.Name, category.Color, selectedNames.Contains(category.Name)));
+                EditCategories.Add(new CategoryOption(category.CategoryId, category.Name, category.Color, category.IsSystemDefined, selectedNames.Contains(category.Name)));
             }
 
             HasError = false;
             IsEditing = true;
+        }
+
+        [RelayCommand]
+        private void DeleteCategory(CategoryOption category)
+        {
+            if (category.IsSystemDefined) return;
+
+            accountStore.DeleteCategory(category.CategoryId);
+            EditCategories.Remove(category);
         }
 
         [RelayCommand]

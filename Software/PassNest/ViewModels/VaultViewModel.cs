@@ -122,7 +122,12 @@ namespace PassNest.ViewModels
                 LoadAccounts();
             };
 
-            dialog.Closed += () => IsAddAccountDialogOpen = false;
+            dialog.Closed += () =>
+            {
+                IsAddAccountDialogOpen = false;
+                LoadCategories();
+            };
+
             NewAccount = dialog;
             IsAddAccountDialogOpen = true;
         }

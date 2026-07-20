@@ -89,12 +89,21 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate x:DataType="models:CategoryOption">
-                                <CheckBox IsChecked="{Binding IsSelected}" Margin="0,4">
-                                    <StackPanel Orientation="Horizontal" Spacing="8">
-                                        <Ellipse Width="8" Height="8" Fill="{Binding DotColor}"/>
-                                        <TextBlock Text="{Binding Name}"/>
-                                    </StackPanel>
-                                </CheckBox>
+                                <StackPanel Orientation="Horizontal" Spacing="4" Margin="0,4">
+                                    <CheckBox IsChecked="{Binding IsSelected}">
+                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                            <Ellipse Width="8" Height="8" Fill="{Binding DotColor}"/>
+                                            <TextBlock Text="{Binding Name}"/>
+                                        </StackPanel>
+                                    </CheckBox>
+                                    <Button Classes="icon-toggle" IsVisible="{Binding !IsSystemDefined}" Command="{Binding #Root.((vm:AccountDetailViewModel)DataContext).DeleteCategoryCommand}" CommandParameter="{Binding}">
+                                        <Border Width="12" Height="12" Background="{StaticResource Weak}">
+                                            <Border.OpacityMask>
+                                                <ImageBrush Source="avares://PassNest/Assets/trash.png" Stretch="Uniform"/>
+                                            </Border.OpacityMask>
+                                        </Border>
+                                    </Button>
+                                </StackPanel>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
