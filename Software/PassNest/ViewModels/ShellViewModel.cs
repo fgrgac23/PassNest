@@ -32,6 +32,7 @@ namespace PassNest.ViewModels
 
         public VaultViewModel? CurrentVault => CurrentPage as VaultViewModel;
         public AccountDetailViewModel? CurrentDetail => CurrentPage as AccountDetailViewModel;
+        public GeneratorViewModel? CurrentGenerator => CurrentPage as GeneratorViewModel;
 
         public bool IsTrezorActive => SelectedNavItem == "Trezor";
         public bool IsGeneratorActive => SelectedNavItem == "Generator";
@@ -103,6 +104,7 @@ namespace PassNest.ViewModels
         {
             OnPropertyChanged(nameof(CurrentVault));
             OnPropertyChanged(nameof(CurrentDetail));
+            OnPropertyChanged(nameof(CurrentGenerator));
             UpdateBreadcrumbs();
         }
 

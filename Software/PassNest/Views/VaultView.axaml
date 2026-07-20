@@ -109,7 +109,7 @@
                         </StackPanel>
                         <StackPanel Spacing="6">
                             <TextBlock Classes="field-label" Text="Lozinka"/>
-                            <TextBox Classes="form" Text="{Binding Generator.Password}">
+                            <TextBox Classes="form" Text="{Binding Password}">
                                 <TextBox.InnerRightContent>
                                     <Button Classes="icon-toggle" Command="{Binding ToggleGeneratorCommand}">
                                         <Border Width="16" Height="16" Background="{StaticResource Accent}">
@@ -121,8 +121,8 @@
                                 </TextBox.InnerRightContent>
                             </TextBox>
                             <StackPanel Orientation="Horizontal" Spacing="6">
-                                <Ellipse Width="8" Height="8" Fill="{Binding Generator.StrengthColor}"/>
-                                <TextBlock Text="{Binding Generator.StrengthLabel}" FontFamily="{StaticResource PlexSans}" FontSize="12" Foreground="{StaticResource TextSecondary}"/>
+                                <Ellipse Width="8" Height="8" Fill="{Binding StrengthColor}"/>
+                                <TextBlock Text="{Binding StrengthLabel}" FontFamily="{StaticResource PlexSans}" FontSize="12" Foreground="{StaticResource TextSecondary}"/>
                             </StackPanel>
                         </StackPanel>
                         <StackPanel Spacing="6">

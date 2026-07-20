@@ -1,21 +1,23 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using PassNest.Models;
+﻿using Avalonia.Media;
+using BusinessLogicLayer.AccountManagement;
+using BusinessLogicLayer.PasswordGeneration;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using BusinessLogicLayer.AccountManagement;
+using EntityLayer;
+using PassNest.Models;
+using PassNest.Services;
+using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using EntityLayer;
-using BusinessLogicLayer.PasswordGeneration;
-using PassNest.Services;
 
 namespace PassNest.ViewModels
 {
     public partial class NewAccountViewModel : ObservableObject
     {
         private readonly IAccountStore accountStore;
+        private readonly IPasswordGenerator passwordGenerator;
         private CancellationTokenSource? errorDismissCts;
 
         [ObservableProperty]
@@ -23,6 +25,15 @@ namespace PassNest.ViewModels
 
         [ObservableProperty]
         private string username = string.Empty;
+
+        [ObservableProperty]
+        private string password = string.Empty;
+
+        [ObservableProperty]
+        private string strengthLabel = string.Empty;
+
+        [ObservableProperty]
+        private IBrush strengthColor = new SolidColorBrush(Color.Parse("#D6503C"));
 
         [ObservableProperty]
         private PasswordGeneratorViewModel generator;
@@ -46,6 +57,27 @@ namespace PassNest.ViewModels
             OnPropertyChanged(nameof(GeneratorPanelWidth));
         }
 
+        partial void OnPasswordChanged(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                StrengthLabel = string.Empty;
+                StrengthColor = new SolidColorBrush(Color.Parse("#D6503C"));
+                return;
+            }
+
+            var (label, colorHex) = passwordGenerator.EvaluateStrength(value) switch
+            {
+                PasswordStrengthLevel.Jaka => ("Jaka lozinka", "#2AA26A"),
+                PasswordStrengthLevel.Srednja => ("Srednja lozinka", "#D4A62E"),
+                PasswordStrengthLevel.Slaba => ("Slaba lozinka", "#E0952E"),
+                _ => ("Vrlo slaba lozinka", "#D6503C")
+            };
+
+            StrengthLabel = label;
+            StrengthColor = new SolidColorBrush(Color.Parse(colorHex));
+        }
+
         public ObservableCollection<CategoryOption> Categories { get; }
 
         public event Action? Closed;
@@ -54,6 +86,7 @@ namespace PassNest.ViewModels
         public NewAccountViewModel(IAccountStore accountStore, IPasswordGenerator passwordGenerator, IClipboardService clipboardService)
         {
             this.accountStore = accountStore;
+            this.passwordGenerator = passwordGenerator;
             generator = new PasswordGeneratorViewModel(passwordGenerator, clipboardService);
 
             Categories = new ObservableCollection<CategoryOption>(accountStore.GetCategories().Select(c => new CategoryOption(c.CategoryId, c.Name, c.Color, c.IsSystemDefined)));

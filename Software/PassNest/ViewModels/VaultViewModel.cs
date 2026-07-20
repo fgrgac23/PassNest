@@ -154,7 +154,7 @@ namespace PassNest.ViewModels
         private async Task CopyPassword(AccountCardViewModel account)
         {
             await clipboardService.SetTextAsync(account.Password);
-            ShowSuccess("Lozinka je supješno kopirana.");
+            ShowSuccess("Lozinka je uspješno kopirana.");
         }
 
         private async void ShowSuccess(string message)

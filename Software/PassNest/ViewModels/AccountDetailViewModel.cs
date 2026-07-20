@@ -190,14 +190,14 @@ namespace PassNest.ViewModels
         private async Task CopyUsername()
         {
             await clipboardService.SetTextAsync(Username);
-            ShowSuccess("Korisničko ime je supješno kopirano.");
+            ShowSuccess("Korisničko ime je uspješno kopirano.");
         }
 
         [RelayCommand]
         private async Task CopyPassword()
         {
             await clipboardService.SetTextAsync(Password);
-            ShowSuccess("Lozinka je supješno kopirana.");
+            ShowSuccess("Lozinka je uspješno kopirana.");
         }
 
         [RelayCommand]
