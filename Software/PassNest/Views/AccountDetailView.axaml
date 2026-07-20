@@ -82,6 +82,11 @@
                 <StackPanel Spacing="6">
                     <TextBlock Classes="field-label" Text="Kateogrije"/>
                     <ItemsControl ItemsSource="{Binding EditCategories}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="2"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate x:DataType="models:CategoryOption">
                                 <CheckBox IsChecked="{Binding IsSelected}" Margin="0,4">
