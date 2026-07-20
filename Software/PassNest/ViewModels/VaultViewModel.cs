@@ -16,12 +16,6 @@ namespace PassNest.ViewModels
         private readonly IPasswordGenerator passwordGenerator;
         private int? selectedCategoryId;
 
-        private static readonly string[] AvatarPallete =
-        {
-            "#E15B4D", "#1B1F24", "#2563EB", "#1DB954", "#D97706",
-            "#7C5CD6", "#0F7B8A", "#D6503C", "#2AA26A", "#1E3A5F"
-        };
-
         [ObservableProperty]
         private string selectedCategoryFilter = "Sve";
 
@@ -93,22 +87,16 @@ namespace PassNest.ViewModels
 
             return new AccountCardViewModel(
                 account.AccountId,
-                account.ServiceName.Length > 0 ? account.ServiceName[..1].ToUpper() : "?",
+                AvatarColorPicker.GetInitial(account.ServiceName),
                 account.ServiceName,
                 account.UserName,
-                GetAvatarColor(account.ServiceName),
+                AvatarColorPicker.GetColor(account.ServiceName),
                 categories,
                 strength,
                 password,
                 account.Url ?? string.Empty,
                 account.UpdatedAt.ToString("dd.MM.yyyy"),
                 account.CreatedAt.ToString("dd.MM.yyyy"));
-        }
-
-        private static string GetAvatarColor(string serviceName)
-        {
-            var index = Math.Abs(serviceName.GetHashCode()) % AvatarPallete.Length;
-            return AvatarPallete[index];
         }
 
         partial void OnSearchTextChanged(string value) => LoadAccounts();

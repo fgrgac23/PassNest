@@ -138,6 +138,8 @@ namespace PassNest.ViewModels
 
             accountStore.UpdateAccount(accountId, EditServiceName, EditUsername, EditPassword, newUrl, categoryIds);
 
+            Initial = AvatarColorPicker.GetInitial(EditServiceName);
+            AvatarColor = new SolidColorBrush(Color.Parse(AvatarColorPicker.GetColor(EditServiceName)));
             ServiceName = EditServiceName;
             Username = EditUsername;
             Password = EditPassword;
