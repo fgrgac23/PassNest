@@ -1,13 +1,19 @@
 ﻿using Avalonia.Media;
+using BusinessLogicLayer.PasswordGeneration;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using PassNest.Services;
+using System.Threading.Tasks;
 
 namespace PassNest.ViewModels
 {
     public partial class PasswordGeneratorViewModel : ObservableObject
     {
+        private readonly IPasswordGenerator passwordGenerator;
+        private readonly IClipboardService clipboardService;
+
         [ObservableProperty]
-        private string password = "v8$Kp2#mLq7!Wd";
+        private string password = string.Empty;
 
         [ObservableProperty]
         private int length = 14;
@@ -24,34 +30,63 @@ namespace PassNest.ViewModels
         [ObservableProperty]
         private bool useSpecialChars = true;
 
-        public string StrengthLabel => Password.Length switch
-        {
-            >= 12 => "Jaka lozinka",
-            >= 8 => "Srednja lozinka",
-            _ => "Slaba lozinka"
-        };
+        public string StrengthLabel = string.Empty;
 
-        public IBrush StrengthColor => Password.Length switch
+        public IBrush StrengthColor = new SolidColorBrush(Color.Parse("#D6503C"));
+
+        public PasswordGeneratorViewModel(IPasswordGenerator passwordGenerator, IClipboardService clipboardService)
         {
-            >= 12 => new SolidColorBrush(Color.Parse("#2AA26A")),
-            >= 8 => new SolidColorBrush(Color.Parse("#E0952E")),
-            _ => new SolidColorBrush(Color.Parse("#D6503C"))
-        };
+            this.passwordGenerator = passwordGenerator;
+            this.clipboardService = clipboardService;
+            Generate();
+        }
 
         partial void OnPasswordChanged(string value)
         {
-            OnPropertyChanged(nameof(StrengthLabel));
-            OnPropertyChanged(nameof(StrengthColor));
+            var (label, colorHex) = passwordGenerator.EvaluateStrength(value) switch
+            {
+                PasswordStrengthLevel.Jaka => ("Jaka lozinka", "#2AA26A"),
+                PasswordStrengthLevel.Srednja => ("Srednja lozinka", "#D4A62E"),
+                PasswordStrengthLevel.Slaba => ("Slaba lozinka", "#E0952E"),
+                _ => ("Vrlo slaba lozinka", "#D6503C")
+            };
+
+            StrengthLabel = label;
+            StrengthColor = new SolidColorBrush(Color.Parse(colorHex));
+        }
+        
+        partial void OnUseUpperCaseChanged(bool value) => EnsureAtLeastOneCategorySelected();
+        partial void OnUseLowerCaseChanged(bool value) => EnsureAtLeastOneCategorySelected();
+        partial void OnUseNumbersChanged(bool value) => EnsureAtLeastOneCategorySelected();
+        partial void OnUseSpecialCharsChanged(bool value) => EnsureAtLeastOneCategorySelected();
+
+        private void EnsureAtLeastOneCategorySelected()
+        {
+            if (!UseUpperCase && !UseLowerCase && !UseNumbers && !UseSpecialChars)
+            {
+                UseSpecialChars = true;
+            }
         }
 
         [RelayCommand]
         private void Generate()
         {
+            var options = new PasswordOptions
+            {
+                Length = length,
+                UseUppercase = UseUpperCase,
+                UseLowercase = UseLowerCase,
+                UseDigits = UseNumbers,
+                UseSpecialChars = UseSpecialChars
+            };
+
+            Password = passwordGenerator.GeneratePassword(options);
         }
 
         [RelayCommand]
-        private void CopyPassword()
+        private async Task CopyPassword()
         {
+            await clipboardService.SetTextAsync(Password);
         }
 
     }
