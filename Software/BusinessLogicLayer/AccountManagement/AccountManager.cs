@@ -78,9 +78,12 @@ namespace BusinessLogicLayer.AccountManagement
             accountRepository.SaveChanges();
         }
 
-        public Category AddCategory(string name, string color)
+        public Category? AddCategory(string name, string color)
         {
             var currentUser = authProvider.GetCurrentUser() ?? throw new InvalidOperationException("Korisnik mora biti prijavljen!");
+
+            var customCategoryCount = categoryRepository.GetAll().Count(c => !c.IsSystemDefined);
+            if (customCategoryCount >= 4) return null;
 
             var category = new Category
             {

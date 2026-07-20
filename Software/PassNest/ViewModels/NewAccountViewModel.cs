@@ -82,6 +82,12 @@ namespace PassNest.ViewModels
             var colorHex = AvatarColorPicker.GetColor(name);
             var category = accountStore.AddCategory(name, colorHex);
 
+            if(category == null)
+            {
+                ShowError("Imate previše kategorija. Izbrišite jednu prije dodavanja nove.");
+                return;
+            }
+
             Categories.Add(new CategoryOption(category.CategoryId, category.Name, category.Color, isSystemDefined: false, isSelected: true));
 
             NewCategoryName = string.Empty;

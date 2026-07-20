@@ -153,9 +153,9 @@
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
-                            <Grid ColumnDefinitions="*,Auto" Margin="0,4,0,0">
-                                <TextBox Grid.Column="0" Classes="form" PlaceholderText="Nova kategorija..." Text="{Binding NewCategoryName}" Margin="0,0,8,0"/>
-                                <Button Grid.Column="1" Classes="secondary" Content="+ Dodaj" Command="{Binding AddCategoryCommand}"/>
+                            <Grid ColumnDefinitions="*,Auto" Margin="0,8,0,0">
+                                <TextBox Grid.Column="0" Classes="form" PlaceholderText="Nova kategorija..." Text="{Binding NewCategoryName}" Padding="10,6" FontSize="13" VerticalContentAlignment="Center" Margin="0,0,8,0"/>
+                                <Button Grid.Column="1" Classes="secondary" Content="+ Dodaj" Command="{Binding AddCategoryCommand}" Padding="12,6" FontSize="13"/>
                             </Grid>
                         </StackPanel>
                         <Grid ColumnDefinitions="*,*" Margin="0,16,0,0">

@@ -17,7 +17,7 @@ namespace BusinessLogicLayer.AccountManagement
         IEnumerable<Account> SearchAccounts(string query);
         IEnumerable<Account> FilterByCategory(int categoryId);
         IEnumerable<Category> GetCategories();
-        Category AddCategory(string name, string color);
+        Category? AddCategory(string name, string color);
         AccountCredentials? GetCredentials(int accountId);
         IEnumerable<AccountCredentials> GetAllCredentials();
     }
