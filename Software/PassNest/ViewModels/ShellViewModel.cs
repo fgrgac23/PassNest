@@ -7,6 +7,7 @@ using BusinessLogicLayer.Authentication;
 using System;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
+using PassNest.Services;
 
 namespace PassNest.ViewModels
 {
@@ -14,6 +15,7 @@ namespace PassNest.ViewModels
     {
         private readonly IAccountStore accountStore;
         private readonly IPasswordGenerator passwordGenerator;
+        private readonly IClipboardService clipboardService;
         private readonly IAuthProvider authProvider;
 
         [ObservableProperty]
@@ -37,10 +39,11 @@ namespace PassNest.ViewModels
 
         public event Action? VaultLocked;
 
-        public ShellViewModel(IAccountStore accountStore, IPasswordGenerator passwordGenerator, IAuthProvider authProvider)
+        public ShellViewModel(IAccountStore accountStore, IPasswordGenerator passwordGenerator, IClipboardService clipboardService, IAuthProvider authProvider)
         {
             this.accountStore = accountStore;
             this.passwordGenerator = passwordGenerator;
+            this.clipboardService = clipboardService;
             this.authProvider = authProvider;
             currentPage = CreateVaultPage();
             UpdateBreadcrumbs();
@@ -48,7 +51,7 @@ namespace PassNest.ViewModels
 
         private VaultViewModel CreateVaultPage()
         {
-            var page = new VaultViewModel(accountStore, passwordGenerator);
+            var page = new VaultViewModel(accountStore, passwordGenerator, clipboardService);
             page.AccountOpened += OnAccountOpened;
             page.PropertyChanged += (_, e) =>
             {
@@ -61,7 +64,7 @@ namespace PassNest.ViewModels
 
         private void OnAccountOpened(AccountCardViewModel account)
         {
-            var detail = new AccountDetailViewModel(accountStore, account);
+            var detail = new AccountDetailViewModel(accountStore, account, clipboardService);
             detail.BackRequested += OnAccountDetailBackRequested;
             detail.Deleted += OnAccountDetailBackRequested;
 

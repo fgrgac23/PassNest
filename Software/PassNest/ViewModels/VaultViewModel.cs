@@ -7,6 +7,8 @@ using BusinessLogicLayer.AccountManagement;
 using BusinessLogicLayer.PasswordGeneration;
 using System.Linq;
 using EntityLayer;
+using PassNest.Services;
+using System.Threading.Tasks;
 
 namespace PassNest.ViewModels
 {
@@ -14,6 +16,7 @@ namespace PassNest.ViewModels
     {
         private readonly IAccountStore accountStore;
         private readonly IPasswordGenerator passwordGenerator;
+        private readonly IClipboardService clipboardService;
         private int? selectedCategoryId;
 
         [ObservableProperty]
@@ -34,10 +37,11 @@ namespace PassNest.ViewModels
 
         public ObservableCollection<AccountCardViewModel> Accounts { get; } = new();
 
-        public VaultViewModel(IAccountStore accountStore, IPasswordGenerator passwordGenerator)
+        public VaultViewModel(IAccountStore accountStore, IPasswordGenerator passwordGenerator, IClipboardService clipboardService)
         {
             this.accountStore = accountStore;
             this.passwordGenerator = passwordGenerator;
+            this.clipboardService = clipboardService;
 
             LoadCategories();
             LoadAccounts();
@@ -139,8 +143,9 @@ namespace PassNest.ViewModels
         }
 
         [RelayCommand]
-        private void CopyPassword(AccountCardViewModel account)
+        private async Task CopyPassword(AccountCardViewModel account)
         {
+            await clipboardService.SetTextAsync(account.Password);
         }
     }
 }

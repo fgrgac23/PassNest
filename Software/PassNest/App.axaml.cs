@@ -16,6 +16,7 @@ using PassNest.ViewModels;
 using PassNest.Views;
 using BusinessLogicLayer.PasswordGeneration;
 using BusinessLogicLayer.AccountManagement;
+using PassNest.Services;
 
 namespace PassNest
 {
@@ -45,6 +46,7 @@ namespace PassNest
             service.AddSingleton<IAuthProvider, AuthenticationService>();
             service.AddSingleton<IPasswordGenerator, PasswordGenerator>();
             service.AddSingleton<IAccountStore, AccountManager>();
+            service.AddSingleton<IClipboardService, ClipboardService>();
             service.AddSingleton<MainWindowViewModel>();
 
             var provider = service.BuildServiceProvider();

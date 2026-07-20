@@ -3,6 +3,7 @@ using BusinessLogicLayer.AccountManagement;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using PassNest.Models;
+using PassNest.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,6 +16,7 @@ namespace PassNest.ViewModels
     public partial class AccountDetailViewModel : ViewModelBase
     {
         private readonly IAccountStore accountStore;
+        private readonly IClipboardService clipboardService;
         private readonly int accountId;
         private CancellationTokenSource? errorDismissCts;
 
@@ -80,9 +82,10 @@ namespace PassNest.ViewModels
         public event Action? BackRequested;
         public event Action? Deleted;
 
-        public AccountDetailViewModel(IAccountStore accountStore, AccountCardViewModel account)
+        public AccountDetailViewModel(IAccountStore accountStore, AccountCardViewModel account, IClipboardService clipboardService)
         {
             this.accountStore = accountStore;
+            this.clipboardService = clipboardService;
             accountId = account.AccountId;
             initial = account.Initial;
             avatarColor = account.AvatarColor;
@@ -177,13 +180,15 @@ namespace PassNest.ViewModels
         }
 
         [RelayCommand]
-        private void CopyUsername()
+        private async Task CopyUsername()
         {
+            await clipboardService.SetTextAsync(Username);
         }
 
         [RelayCommand]
-        private void CopyPassword()
+        private async Task CopyPassword()
         {
+            await clipboardService.SetTextAsync(Password);
         }
 
         [RelayCommand]
