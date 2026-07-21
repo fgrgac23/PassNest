@@ -73,7 +73,7 @@ namespace PassNest.ViewModels
 
         private ShellViewModel CreateShellPage()
         {
-            var vm = new ShellViewModel(accountStore, passwordGenerator, clipboardService, authProvider);
+            var vm = new ShellViewModel(accountStore, passwordGenerator, clipboardService, authProvider, autofillEngine);
             vm.VaultLocked += OnVaultLocked;
             return vm;
         }

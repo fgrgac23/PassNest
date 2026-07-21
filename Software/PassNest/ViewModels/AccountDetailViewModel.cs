@@ -1,5 +1,6 @@
 ﻿using Avalonia.Media;
 using BusinessLogicLayer.AccountManagement;
+using BusinessLogicLayer.Autofill;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using PassNest.Models;
@@ -20,6 +21,7 @@ namespace PassNest.ViewModels
         private readonly int accountId;
         private CancellationTokenSource? errorDismissCts;
         private CancellationTokenSource? successDismissCts;
+        private readonly IAutofillEngine autofillEngine;
 
         [ObservableProperty]
         private string initial;
@@ -89,10 +91,11 @@ namespace PassNest.ViewModels
         public event Action? BackRequested;
         public event Action? Deleted;
 
-        public AccountDetailViewModel(IAccountStore accountStore, AccountCardViewModel account, IClipboardService clipboardService)
+        public AccountDetailViewModel(IAccountStore accountStore, AccountCardViewModel account, IClipboardService clipboardService, IAutofillEngine autofillEngine)
         {
             this.accountStore = accountStore;
             this.clipboardService = clipboardService;
+            this.autofillEngine = autofillEngine;
             accountId = account.AccountId;
             initial = account.Initial;
             avatarColor = account.AvatarColor;
@@ -184,6 +187,16 @@ namespace PassNest.ViewModels
         [RelayCommand]
         private void AutoFill()
         {
+            var success = autofillEngine.TriggerAutofill(accountId);
+
+            if (success)
+            {
+                ShowSuccess("Podaci su uspješno popunjeni.");
+            }
+            else
+            {
+                ShowError("Traženi račun nije pronađen.");
+            }
         }
 
         [RelayCommand]

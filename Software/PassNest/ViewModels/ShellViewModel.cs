@@ -8,6 +8,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using PassNest.Services;
+using BusinessLogicLayer.Autofill;
 
 namespace PassNest.ViewModels
 {
@@ -17,6 +18,7 @@ namespace PassNest.ViewModels
         private readonly IPasswordGenerator passwordGenerator;
         private readonly IClipboardService clipboardService;
         private readonly IAuthProvider authProvider;
+        private readonly IAutofillEngine autofillEngine;
 
         [ObservableProperty]
         private string selectedNavItem = "Trezor";
@@ -41,12 +43,13 @@ namespace PassNest.ViewModels
 
         public event Action? VaultLocked;
 
-        public ShellViewModel(IAccountStore accountStore, IPasswordGenerator passwordGenerator, IClipboardService clipboardService, IAuthProvider authProvider)
+        public ShellViewModel(IAccountStore accountStore, IPasswordGenerator passwordGenerator, IClipboardService clipboardService, IAuthProvider authProvider, IAutofillEngine autofillEngine)
         {
             this.accountStore = accountStore;
             this.passwordGenerator = passwordGenerator;
             this.clipboardService = clipboardService;
             this.authProvider = authProvider;
+            this.autofillEngine = autofillEngine;
             currentPage = CreateVaultPage();
             UpdateBreadcrumbs();
         }
@@ -66,7 +69,7 @@ namespace PassNest.ViewModels
 
         private void OnAccountOpened(AccountCardViewModel account)
         {
-            var detail = new AccountDetailViewModel(accountStore, account, clipboardService);
+            var detail = new AccountDetailViewModel(accountStore, account, clipboardService, autofillEngine);
             detail.BackRequested += OnAccountDetailBackRequested;
             detail.Deleted += OnAccountDetailBackRequested;
 
