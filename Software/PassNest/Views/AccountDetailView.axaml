@@ -167,10 +167,13 @@
                     </Grid>
                 </Border>
                 <Border Classes="settings-card">
-                    <StackPanel Spacing="4">
-                        <TextBlock Text="URL" FontFamily="{StaticResource PlexSans}" FontSize="12" Foreground="{StaticResource TextSecondary}"/>
-                        <TextBlock Text="{Binding Url}" FontFamily="{StaticResource PlexMono}" FontSize="15" FontWeight="Bold" Foreground="{StaticResource Accent}"/>
-                    </StackPanel>
+                    <Grid ColumnDefinitions="*,Auto">
+                        <StackPanel Spacing="4">
+                            <TextBlock Text="URL" FontFamily="{StaticResource PlexSans}" FontSize="12" Foreground="{StaticResource TextSecondary}"/>
+                            <TextBlock Text="{Binding Url}" FontFamily="{StaticResource PlexMono}" FontSize="15" FontWeight="Bold" Foreground="{StaticResource Accent}"/>
+                        </StackPanel>
+                        <Button Grid.Column="1" Classes="outline-accent" Command="{Binding OpenUrlCommand}" IsEnabled="{Binding HasUrl}" Content="Otvori" VerticalAlignment="Center"/>
+                    </Grid>
                 </Border>
             </StackPanel>
             <Grid ColumnDefinitions="*,Auto" IsVisible="{Binding !IsEditing}">
@@ -195,6 +198,14 @@
                     </StackPanel>
                 </Button>
             </Grid>
+            <Border Background="#1FE0952E" BorderBrush="{StaticResource Medium}" BorderThickness="1" CornerRadius="8" Padding="12">
+                <TextBlock TextWrapping="Wrap" FontFamily="{StaticResource PlexSans}" FontSize="13" Foreground="{StaticResource TextPrimary}">
+                    <Run Text="Kako bi iskoristili mogućnost"/>
+                    <Run Text="automatske popune" FontWeight="Bold"/>
+                    <Run Text="morate prvo označiti polje za unos korisničkog imena pa pritisnuti gumb"/>
+                    <Run Text="Automatski popuni." FontWeight="Bold"/>
+                </TextBlock>
+            </Border>
             <TextBlock FontFamily="{StaticResource PlexSans}" FontSize="12" Foreground="{StaticResource TextMuted}" IsVisible="{Binding !IsEditing}">
                 <Run Text="Zadnja izmjena: "/>
                 <Run Text="{Binding LastModified}"/>

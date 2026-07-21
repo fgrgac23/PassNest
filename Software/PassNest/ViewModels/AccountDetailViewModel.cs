@@ -11,6 +11,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace PassNest.ViewModels
 {
@@ -117,6 +118,13 @@ namespace PassNest.ViewModels
             OnPropertyChanged(nameof(MaskedPassword));
         }
 
+        public bool HasUrl => !string.IsNullOrWhiteSpace(Url);
+
+        private void OnUrlChange(string value)
+        {
+            OnPropertyChanged(nameof(HasUrl));
+        }
+
         [RelayCommand]
         private void Edit()
         {
@@ -197,6 +205,15 @@ namespace PassNest.ViewModels
             {
                 ShowError("Traženi račun nije pronađen.");
             }
+        }
+
+        [RelayCommand]
+        private void OpenUrl()
+        {
+            if (string.IsNullOrWhiteSpace(Url)) return;
+
+            var target = Url.Contains("://") ? Url : $"https://{Url}";
+            Process.Start(new ProcessStartInfo(target) { UseShellExecute = true });
         }
 
         [RelayCommand]

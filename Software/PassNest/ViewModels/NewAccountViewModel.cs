@@ -140,7 +140,7 @@ namespace PassNest.ViewModels
 
             var categoryIds = Categories.Where(c => c.IsSelected).Select(c => c.CategoryId);
 
-            accountStore.AddAccount(ServiceName, Username, Generator.Password, categoryIds);
+            accountStore.AddAccount(ServiceName, Username, Password, categoryIds);
 
             Saved?.Invoke();
             Closed?.Invoke();
