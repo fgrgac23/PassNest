@@ -17,11 +17,15 @@ using PassNest.Views;
 using BusinessLogicLayer.PasswordGeneration;
 using BusinessLogicLayer.AccountManagement;
 using PassNest.Services;
+using BusinessLogicLayer.Autofill;
+using System;
 
 namespace PassNest
 {
     public partial class App : Application
     {
+        private ServiceProvider provider = null;
+
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
@@ -47,6 +51,7 @@ namespace PassNest
             service.AddSingleton<IPasswordGenerator, PasswordGenerator>();
             service.AddSingleton<IAccountStore, AccountManager>();
             service.AddSingleton<IClipboardService, ClipboardService>();
+            service.AddSingleton<IAutofillEngine, AutofillEngine>();
             service.AddSingleton<MainWindowViewModel>();
 
             var provider = service.BuildServiceProvider();
@@ -60,6 +65,22 @@ namespace PassNest
             }
 
             base.OnFrameworkInitializationCompleted();
+        }
+
+        private void OnTrayOpenClick(object? sender, EventArgs e)
+        {
+            if(ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop && desktop.MainWindow != null)
+            {
+                desktop.MainWindow.WindowState = Avalonia.Controls.WindowState.Normal;
+                desktop.MainWindow.Show();
+                desktop.MainWindow.Activate();
+            }
+        }
+
+        private void OnTrayExitClick(object? sender, EventArgs e)
+        {
+            provider.GetRequiredService<IAutofillEngine>().UnregisterHotkeys();
+            Environment.Exit(0);
         }
     }
 }
