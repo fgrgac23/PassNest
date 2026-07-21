@@ -1,8 +1,6 @@
 ﻿using BusinessLogicLayer.AccountManagement;
 using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Security.Principal;
 using System.Threading;
 
 namespace BusinessLogicLayer.Autofill
@@ -14,6 +12,8 @@ namespace BusinessLogicLayer.Autofill
         private const uint MOD_ALT = 0x0001;
         private const uint VK_P = 0x50;
         private const uint VK_TAB = 0x09;
+        private const uint VK_CONTROL = 0x11;
+        private const uint VK_V = 0x56;
 
         private const uint WM_HOTKEY = 0x0312;
         private const uint WM_QUIT = 0x0012;
@@ -21,8 +21,10 @@ namespace BusinessLogicLayer.Autofill
         private const int GWLP_WNDPROC = -4;
 
         private const uint INPUT_KEYBOARD = 1;
-        private const uint KEYEVENTF_UNICODE = 0x0004;
         private const uint KEYEVENTF_KEYUP = 0x0002;
+
+        private const uint CF_UNICODETEXT = 13;
+        private const uint GMEM_MOVEABLE = 0x0002;
 
         private readonly IAccountStore accountStore;
         private readonly ManualResetEventSlim windowReadySignal = new(false);
@@ -115,62 +117,77 @@ namespace BusinessLogicLayer.Autofill
             SetForegroundWindow(targetWindowHandle);
             Thread.Sleep(150);
 
-            var inputs = new List<INPUT>();
-            foreach (var c in username) inputs.AddRange(BuildUnicodeCharInputs(c));
-            inputs.AddRange(BuildKeyInputs(VK_TAB));
-            foreach (var c in password) inputs.AddRange(BuildUnicodeCharInputs(c));
+            PasteText(username);
+            SendKeyPress(VK_TAB);
+            Thread.Sleep(100);
+            PasteText(password);
 
-            var inputArray = inputs.ToArray();
-            SendInput((uint)inputArray.Length, inputArray, Marshal.SizeOf(typeof(INPUT)));
+            SetClipboardText(string.Empty);
         }
 
-        private static INPUT[] BuildUnicodeCharInputs(char c) => new[]
+        private static void PasteText(string text)
         {
-            new INPUT
+            SetClipboardText(text);
+            Thread.Sleep(50);
+            SendPasteCombo();
+            Thread.Sleep(50);
+        }
+
+        private static void SendPasteCombo()
+        {
+            var inputs = new[]
             {
-                type = INPUT_KEYBOARD, U = new InputUnion
-                {
-                    ki = new KEYBDINPUT
-                    {
-                        wVk = 0, wScan = (ushort)c, dwFlags = KEYEVENTF_UNICODE, time = 0, dwExtraInfo = IntPtr.Zero
-                    }
-                }
-            },
-            new INPUT
-            {
-                type = INPUT_KEYBOARD, U = new InputUnion
-                {
-                    ki = new KEYBDINPUT
-                    {
-                        wVk = 0, wScan = (ushort)c, dwFlags = KEYEVENTF_UNICODE | KEYEVENTF_KEYUP, time = 0, dwExtraInfo = IntPtr.Zero
-                    }
-                }
-            },
+                BuildKeyDown(VK_CONTROL),
+                BuildKeyDown(VK_V),
+                BuildKeyUp(VK_V),
+                BuildKeyUp(VK_CONTROL)
+            };
+
+            SendInput((uint)inputs.Length, inputs, Marshal.SizeOf(typeof(INPUT)));
+        }
+
+        private static void SendKeyPress(uint vk)
+        {
+            var inputs = new[] { BuildKeyDown(vk), BuildKeyUp(vk) };
+            SendInput((uint)inputs.Length, inputs, Marshal.SizeOf(typeof(INPUT)));
+        }
+
+        private static INPUT BuildKeyDown(uint vk) => new INPUT
+        {
+            type = INPUT_KEYBOARD,
+            U = new InputUnion { ki = new KEYBDINPUT { wVk = (ushort)vk, wScan = 0, dwFlags = 0, time = 0, dwExtraInfo = IntPtr.Zero } }
         };
 
-        private static INPUT[] BuildKeyInputs(uint vk) => new[]
+        private static INPUT BuildKeyUp(uint vk) => new INPUT
         {
-            new INPUT
-            {
-                type = INPUT_KEYBOARD, U = new InputUnion
-                {
-                    ki = new KEYBDINPUT
-                    {
-                        wVk = (ushort)vk, wScan = 0, dwFlags = 0, time = 0, dwExtraInfo = IntPtr.Zero
-                    }
-                }
-            },
-            new INPUT
-            {
-                type = INPUT_KEYBOARD, U = new InputUnion
-                {
-                    ki = new KEYBDINPUT
-                    {
-                        wVk = (ushort)vk, wScan = 0, dwFlags = KEYEVENTF_KEYUP, time = 0, dwExtraInfo = IntPtr.Zero
-                    }
-                }
-            },
+            type = INPUT_KEYBOARD,
+            U = new InputUnion { ki = new KEYBDINPUT { wVk = (ushort)vk, wScan = 0, dwFlags = KEYEVENTF_KEYUP, time = 0, dwExtraInfo = IntPtr.Zero } }
         };
+
+        private static void SetClipboardText(string text)
+        {
+            if (!OpenClipboard(IntPtr.Zero)) return;
+
+            EmptyClipboard();
+
+            var byteCount = (text.Length + 1) * 2;
+            var hGlobal = GlobalAlloc(GMEM_MOVEABLE, (UIntPtr)byteCount);
+            if (hGlobal != IntPtr.Zero)
+            {
+                var target = GlobalLock(hGlobal);
+                if (target != IntPtr.Zero)
+                {
+                    var chars = text.ToCharArray();
+                    Marshal.Copy(chars, 0, target, chars.Length);
+                    Marshal.WriteInt16(target, chars.Length * 2, 0);
+                    GlobalUnlock(hGlobal);
+
+                    SetClipboardData(CF_UNICODETEXT, hGlobal);
+                }
+            }
+
+            CloseClipboard();
+        }
 
         private delegate IntPtr WndProcDelegate(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
 
@@ -268,6 +285,27 @@ namespace BusinessLogicLayer.Autofill
 
         [DllImport("user32.dll", SetLastError = true)]
         private static extern uint SendInput(uint nInputs, INPUT[] pInputs, int cbSize);
+
+        [DllImport("user32.dll")]
+        private static extern bool OpenClipboard(IntPtr hWndNewOwner);
+
+        [DllImport("user32.dll")]
+        private static extern bool CloseClipboard();
+
+        [DllImport("user32.dll")]
+        private static extern bool EmptyClipboard();
+
+        [DllImport("user32.dll")]
+        private static extern IntPtr SetClipboardData(uint uFormat, IntPtr hMem);
+
+        [DllImport("kernel32.dll")]
+        private static extern IntPtr GlobalAlloc(uint uFlags, UIntPtr dwBytes);
+
+        [DllImport("kernel32.dll")]
+        private static extern IntPtr GlobalLock(IntPtr hMem);
+
+        [DllImport("kernel32.dll")]
+        private static extern bool GlobalUnlock(IntPtr hMem);
 
         private static IntPtr SetWindowLongPtr(IntPtr hWnd, int nIndex, IntPtr dwNewLong)
         {

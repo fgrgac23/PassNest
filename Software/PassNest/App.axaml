@@ -5,17 +5,6 @@
              xmlns:local="using:PassNest"
              RequestedThemeVariant="Default">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
-
-    <TrayIcon.Icons>
-        <TrayIcons>
-            <TrayIcon ToolTipText="PassNest" Icon="/Assets/PassNest-icon.ico">
-                <TrayIcon.Menu>
-                    <NativeMenuItem Header="Otvori" Click="OnTrayOpenClick"/>
-                    <NativeMenuItem Header="Zatvori" Click="OnTrayExitClick"/>
-                </TrayIcon.Menu>
-            </TrayIcon>
-        </TrayIcons>
-    </TrayIcon.Icons>
     
     <Application.DataTemplates>
         <local:ViewLocator/>

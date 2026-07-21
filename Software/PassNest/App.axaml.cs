@@ -19,6 +19,8 @@ using BusinessLogicLayer.AccountManagement;
 using PassNest.Services;
 using BusinessLogicLayer.Autofill;
 using System;
+using Avalonia.Platform;
+using Avalonia.Controls;
 
 namespace PassNest
 {
@@ -54,7 +56,7 @@ namespace PassNest
             service.AddSingleton<IAutofillEngine, AutofillEngine>();
             service.AddSingleton<MainWindowViewModel>();
 
-            var provider = service.BuildServiceProvider();
+            provider = service.BuildServiceProvider();
 
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
@@ -64,14 +66,39 @@ namespace PassNest
                 };
             }
 
+            SetupTrayIcon();
             base.OnFrameworkInitializationCompleted();
+        }
+
+        private void SetupTrayIcon()
+        {
+            using var iconStream = AssetLoader.Open(new Uri("avares://PassNest/Assets/PassNest-icon.ico"));
+
+            var menu = new NativeMenu();
+
+            var openItem = new NativeMenuItem("Otvori");
+            openItem.Click += OnTrayOpenClick;
+            menu.Items.Add(openItem);
+
+            var exitItem = new NativeMenuItem("Zatvori");
+            exitItem.Click += OnTrayExitClick;
+            menu.Items.Add(exitItem);
+
+            var trayIcon = new TrayIcon
+            {
+                Icon = new WindowIcon(iconStream),
+                ToolTipText = "PassNest",
+                Menu = menu
+            };
+
+            TrayIcon.SetIcons(this, new TrayIcons { trayIcon });
         }
 
         private void OnTrayOpenClick(object? sender, EventArgs e)
         {
             if(ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop && desktop.MainWindow != null)
             {
-                desktop.MainWindow.WindowState = Avalonia.Controls.WindowState.Normal;
+                desktop.MainWindow.WindowState = WindowState.Normal;
                 desktop.MainWindow.Show();
                 desktop.MainWindow.Activate();
             }
