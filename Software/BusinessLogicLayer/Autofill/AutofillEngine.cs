@@ -19,6 +19,8 @@ namespace BusinessLogicLayer.Autofill
         private const uint WM_QUIT = 0x0012;
         private const int HWND_MESSAGE = -3;
         private const int GWLP_WNDPROC = -4;
+        private const uint EVENT_SYSTEM_FOREGROUND = 0x0003;
+        private const uint WINEVENT_OUTOFCONTEXT = 0x0000;
 
         private const uint INPUT_KEYBOARD = 1;
         private const uint KEYEVENTF_KEYUP = 0x0002;
@@ -29,6 +31,8 @@ namespace BusinessLogicLayer.Autofill
         private readonly IAccountStore accountStore;
         private readonly ManualResetEventSlim windowReadySignal = new(false);
         private readonly WndProcDelegate wndProcDelegate;
+        private readonly WinEventDelegate winEventDelegate;
+        private IntPtr winEventHook;
 
         private bool isHotKeyRegistered;
         private IntPtr lastactiveWindowHandle;
@@ -42,6 +46,7 @@ namespace BusinessLogicLayer.Autofill
         {
             this.accountStore = accountStore;
             wndProcDelegate = WndProc;
+            winEventDelegate = WinEventCallback;
         }
         public void RegisterHotkeys()
         {
@@ -75,6 +80,7 @@ namespace BusinessLogicLayer.Autofill
             if (!isHotKeyRegistered) return;
 
             UnregisterHotKey(windowHandle, HOTKEY_ID);
+            UnhookWinEvent(winEventHook);
             DestroyWindow(windowHandle);
             PostThreadMessage(messageLoopThreadId, WM_QUIT, IntPtr.Zero, IntPtr.Zero);
             messageLoopThread?.Join(500);
@@ -95,7 +101,9 @@ namespace BusinessLogicLayer.Autofill
 
             windowReadySignal.Set();
 
-            while(GetMessageW(out var msg, IntPtr.Zero, 0, 0) > 0)
+            winEventHook = SetWinEventHook(EVENT_SYSTEM_FOREGROUND, EVENT_SYSTEM_FOREGROUND, IntPtr.Zero, winEventDelegate, 0, 0, WINEVENT_OUTOFCONTEXT);
+
+            while (GetMessageW(out var msg, IntPtr.Zero, 0, 0) > 0)
             {
                 TranslateMessage(ref msg);
                 DispatchMessageW(ref msg);
@@ -112,6 +120,17 @@ namespace BusinessLogicLayer.Autofill
             }
 
             return DefWindowProcW(hWnd, msg, wParam, lParam);
+        }
+
+        private void WinEventCallback(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint eventThread, uint eventTime)
+        {
+            if (hwnd == IntPtr.Zero) return;
+
+            GetWindowThreadProcessId(hwnd, out var processId);
+            if (processId != GetCurrentProcessId())
+            {
+                lastactiveWindowHandle = hwnd;
+            }
         }
 
         private static void SimulateInput(string username, string password, IntPtr targetWindowHandle)
@@ -192,6 +211,7 @@ namespace BusinessLogicLayer.Autofill
         }
 
         private delegate IntPtr WndProcDelegate(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
+        private delegate void WinEventDelegate(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint eventThread, uint eventTime);
 
         [StructLayout(LayoutKind.Sequential)]
         private struct MSG
@@ -311,6 +331,18 @@ namespace BusinessLogicLayer.Autofill
 
         [DllImport("kernel32.dll")]
         private static extern bool GlobalUnlock(IntPtr hMem);
+
+        [DllImport("user32.dll")]
+        private static extern IntPtr SetWinEventHook(uint eventMin, uint eventMax, IntPtr hmodWinEventProc, WinEventDelegate lpfnWinEventProc, uint idProcess, uint idThread, uint dwFlags);
+
+        [DllImport("user32.dll")]
+        private static extern bool UnhookWinEvent(IntPtr hWinEventHook);
+
+        [DllImport("user32.dll")]
+        private static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
+
+        [DllImport("kernel32.dll")]
+        private static extern uint GetCurrentProcessId();
 
         private static IntPtr SetWindowLongPtr(IntPtr hWnd, int nIndex, IntPtr dwNewLong)
         {

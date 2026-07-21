@@ -203,7 +203,7 @@ namespace PassNest.ViewModels
             }
             else
             {
-                ShowError("Nije moguće popuniti — račun nije pronađen ili prije toga nisi koristio Ctrl+Alt+P iz druge aplikacije.");
+                ShowError("Račun nije pronađen.");
             }
         }
 
