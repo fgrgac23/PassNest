@@ -60,6 +60,8 @@ namespace BusinessLogicLayer.Autofill
 
         public bool TriggerAutofill(int accountId)
         {
+            if (lastactiveWindowHandle == IntPtr.Zero || !IsWindow(lastactiveWindowHandle)) return false;
+
             var credentials = accountStore.GetCredentials(accountId);
             if (credentials == null) return false;
 
@@ -255,6 +257,9 @@ namespace BusinessLogicLayer.Autofill
 
         [DllImport("user32.dll")]
         private static extern IntPtr GetForegroundWindow();
+
+        [DllImport("user32.dll")]
+        private static extern bool IsWindow(IntPtr hWnd);
 
         [DllImport("user32.dll")]
         private static extern bool SetForegroundWindow(IntPtr hWnd);

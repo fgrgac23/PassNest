@@ -120,7 +120,7 @@ namespace PassNest.ViewModels
 
         public bool HasUrl => !string.IsNullOrWhiteSpace(Url);
 
-        private void OnUrlChange(string value)
+        partial void OnUrlChanged(string value)
         {
             OnPropertyChanged(nameof(HasUrl));
         }
@@ -203,7 +203,7 @@ namespace PassNest.ViewModels
             }
             else
             {
-                ShowError("Traženi račun nije pronađen.");
+                ShowError("Nije moguće popuniti — račun nije pronađen ili prije toga nisi koristio Ctrl+Alt+P iz druge aplikacije.");
             }
         }
 

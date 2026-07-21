@@ -145,6 +145,9 @@
             <Border Classes="error-toast" Classes.visible="{Binding CurrentVault.NewAccount.Generator.HasSuccess}" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="16,16,16,0" Background="#F52AA26A" BorderBrush="{StaticResource Strong}" BorderThickness="1" CornerRadius="10" Padding="24,14">
                 <TextBlock Text="{Binding CurrentVault.NewAccount.Generator.SuccessMessage}" Foreground="{StaticResource TextOnDarkPrimary}" FontFamily="{StaticResource PlexSans}" FontSize="15" FontWeight="Bold" TextWrapping="Wrap" HorizontalAlignment="Center"/>
             </Border>
+            <Border Classes="error-toast" Classes.visible="{Binding CurrentDetail.HasError}" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="16,16,16,0" Background="#F5D6503C" BorderBrush="{StaticResource Weak}" BorderThickness="1" CornerRadius="10" Padding="24,14">
+                <TextBlock Text="{Binding CurrentDetail.ErrorMessage}" Foreground="{StaticResource TextOnDarkPrimary}" FontFamily="{StaticResource PlexSans}" FontSize="15" FontWeight="Bold" TextWrapping="Wrap" HorizontalAlignment="Center"/>
+            </Border>
         </Panel>
     </Grid>
 </UserControl>
