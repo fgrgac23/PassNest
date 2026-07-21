@@ -1,5 +1,6 @@
 ﻿using BusinessLogicLayer.AccountManagement;
 using BusinessLogicLayer.Authentication;
+using BusinessLogicLayer.Autofill;
 using BusinessLogicLayer.PasswordGeneration;
 using CommunityToolkit.Mvvm.ComponentModel;
 using PassNest.Services;
@@ -14,17 +15,28 @@ namespace PassNest.ViewModels
         private readonly IPasswordGenerator passwordGenerator;
         private readonly IAccountStore accountStore;
         private readonly IClipboardService clipboardService;
+        private readonly IAutofillEngine autofillEngine;
 
         [ObservableProperty]
         private ViewModelBase currentPage;
 
-        public MainWindowViewModel(IAuthProvider authProvider, IPasswordGenerator passwordGenerator, IAccountStore accountStore, IClipboardService clipboardService)
+        public event Action? ShowMainWindowRequested;
+
+        public MainWindowViewModel(IAuthProvider authProvider, IPasswordGenerator passwordGenerator, IAccountStore accountStore, IClipboardService clipboardService, IAutofillEngine autofillEngine)
         {
             this.authProvider = authProvider;
             this.passwordGenerator = passwordGenerator;
             this.accountStore = accountStore;
             this.clipboardService = clipboardService;
+            this.autofillEngine = autofillEngine;
+            this.autofillEngine.HotkeyPressed += OnHotKeyPressed;
+            this.autofillEngine.RegisterHotkeys();
             CurrentPage = CreateInitialPage();
+        }
+
+        private void OnHotKeyPressed()
+        {
+            ShowMainWindowRequested?.Invoke();
         }
 
         private ViewModelBase CreateInitialPage() => authProvider.HasRegisteredUser() ? CreateLoginPage() : (ViewModelBase)CreateRegisterPage();

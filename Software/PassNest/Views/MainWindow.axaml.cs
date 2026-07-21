@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Threading;
 using System;
 
 namespace PassNest.Views
@@ -9,6 +10,31 @@ namespace PassNest.Views
         {
             InitializeComponent();
             SizeChanged += (_, _) => CenterOnScreen();
+            Closing += OnClosing;
+
+            DataContextChanged += (_, _) =>
+            {
+                if (DataContext is PassNest.ViewModels.MainWindowViewModel vm)
+                {
+                    vm.ShowMainWindowRequested += OnShowMainWindowRequested;
+                }
+            };
+        }
+
+        private void OnClosing(object? sender, WindowClosingEventArgs e)
+        {
+            e.Cancel = true;
+            Hide();
+        }
+
+        private void OnShowMainWindowRequested()
+        {
+            Dispatcher.UIThread.Post(() =>
+            {
+                WindowState = WindowState.Normal;
+                Show();
+                Activate();
+            });
         }
 
         private void CenterOnScreen()
