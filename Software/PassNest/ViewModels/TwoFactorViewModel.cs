@@ -1,13 +1,20 @@
-﻿using BusinessLogicLayer.Authentication;
+﻿using Avalonia.Media;
+using Avalonia.Threading;
+using BusinessLogicLayer.Authentication;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PassNest.ViewModels
 {
     public partial class TwoFactorViewModel : ViewModelBase
     {
         private readonly IAuthProvider authProvider;
+        private readonly DispatcherTimer countdownTimer;
+        private DateTime expiresAt;
+        private CancellationTokenSource? errorDismissCts;
 
         [ObservableProperty]
         private string maskedEmail = string.Empty;
@@ -31,10 +38,19 @@ namespace PassNest.ViewModels
         private string digit6 = string.Empty;
 
         [ObservableProperty]
-        private string resendCountdown = "0:42";
+        private string resendCountdown = "5:00";
+
+        [ObservableProperty]
+        private IBrush countdownColor = new SolidColorBrush(Color.Parse("#2AA26A"));
+
+        [ObservableProperty]
+        private bool isCodeExpired;
 
         [ObservableProperty]
         private string? errorMessage;
+
+        [ObservableProperty]
+        private bool hasError;
 
         public bool IsDigit1Filled => !string.IsNullOrEmpty(Digit1);
         public bool IsDigit2Filled => !string.IsNullOrEmpty(Digit2);
@@ -56,6 +72,44 @@ namespace PassNest.ViewModels
         public TwoFactorViewModel(IAuthProvider authProvider)
         {
             this.authProvider = authProvider;
+
+            countdownTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
+            countdownTimer.Tick += (_, _) => UpdateCountdown();
+
+            StartCountdown();
+        }
+
+        private void StartCountdown()
+        {
+            expiresAt = DateTime.UtcNow.AddMinutes(5);
+            IsCodeExpired = false;
+            UpdateCountdown();
+            countdownTimer.Start();
+        }
+
+        private void UpdateCountdown()
+        {
+            var remaining = expiresAt - DateTime.UtcNow;
+
+            if (remaining <= TimeSpan.Zero)
+            {
+                ResendCountdown = "0:00";
+                CountdownColor = new SolidColorBrush(Color.Parse("#D6503C"));
+                IsCodeExpired = true;
+                countdownTimer.Stop();
+                return;
+            }
+
+            ResendCountdown = $"{(int)remaining.TotalMinutes}:{remaining.Seconds:D2}";
+
+            var colorHex = remaining.TotalSeconds switch
+            {
+                > 150 => "#2AA26A",
+                > 60 => "#E0952E",
+                _ => "#D6503C"
+            };
+
+            CountdownColor = new SolidColorBrush(Color.Parse(colorHex));
         }
 
         private static string MaskEmail(string email)
@@ -73,7 +127,7 @@ namespace PassNest.ViewModels
 
             if (!authProvider.VerifyTwoFactor(code))
             {
-                ErrorMessage = "Neispravan ili istekao kod.";
+                ShowError("Neispravan ili istekao kod.");
                 return;
             }
 
@@ -83,6 +137,35 @@ namespace PassNest.ViewModels
         [RelayCommand]
         private void ResendCode()
         {
+            authProvider.ResendTwoFactorCode();
+
+            Digit1 = string.Empty;
+            Digit2 = string.Empty;
+            Digit3 = string.Empty;
+            Digit4 = string.Empty;
+            Digit5 = string.Empty;
+            Digit6 = string.Empty;
+
+            StartCountdown();
+        }
+
+        private async void ShowError(string message)
+        {
+            ErrorMessage = message;
+            HasError = true;
+
+            errorDismissCts?.Cancel();
+            var cts = new CancellationTokenSource();
+            errorDismissCts = cts;
+
+            try
+            {
+                await Task.Delay(TimeSpan.FromSeconds(5), cts.Token);
+                HasError = false;
+            }
+            catch (TaskCanceledException)
+            {
+            }
         }
 
     }

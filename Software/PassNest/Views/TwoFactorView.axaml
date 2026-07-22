@@ -10,65 +10,71 @@
         x:DataType="vm:TwoFactorViewModel"
         d:DataContext="{d:DesignInstance vm:TwoFactorViewModel}">
 
-    <Grid Width="600" Height="600" RowDefinitions="Auto,*" Background="{StaticResource Canvas}">
-        <Border Grid.Row="0" Background="{StaticResource GraphiteDark}" Padding="24,16">
-            <TextBlock Text="PassNest - 2FA" FontFamily="{StaticResource PlexSans}" FontSize="16" FontWeight="SemiBold" Foreground="{StaticResource TextOnDarkPrimary}"/>
-        </Border>
-        <ScrollViewer Grid.Row="1">
-            <StackPanel Margin="40,32,40,32" HorizontalAlignment="Center" Width="440" Spacing="24">
-                <Image Source="avares://PassNest/Assets/PassNest-Logo.png" Height="100" Stretch="Uniform" HorizontalAlignment="Center"/>
-                <StackPanel Spacing="6" HorizontalAlignment="Center">
-                    <TextBlock Text="Unesite kod" FontFamily="{StaticResource PlexSans}" FontWeight="Bold" FontSize="22" Foreground="{StaticResource TextPrimary}" HorizontalAlignment="Center"/>
-                    <TextBlock FontFamily="{StaticResource PlexSans}" FontSize="13" Foreground="{StaticResource TextSecondary}" HorizontalAlignment="Center" TextAlignment="Center">
-                        <Run Text="Poslali smo jednokratni kod na"/>
-                        <LineBreak/>
-                        <Run Text="{Binding MaskedEmail}" FontFamily="{StaticResource PlexMono}" Foreground="{StaticResource TextPrimary}"/>
+    <Panel>
+        <Grid Width="600" Height="600" RowDefinitions="Auto,*" Background="{StaticResource Canvas}">
+            <Border Grid.Row="0" Background="{StaticResource GraphiteDark}" Padding="24,16">
+                <TextBlock Text="PassNest - 2FA" FontFamily="{StaticResource PlexSans}" FontSize="16" FontWeight="SemiBold" Foreground="{StaticResource TextOnDarkPrimary}"/>
+            </Border>
+            <ScrollViewer Grid.Row="1">
+                <StackPanel Margin="40,32,40,32" HorizontalAlignment="Center" Width="440" Spacing="24">
+                    <Image Source="avares://PassNest/Assets/PassNest-Logo.png" Height="100" Stretch="Uniform" HorizontalAlignment="Center"/>
+                    <StackPanel Spacing="6" HorizontalAlignment="Center">
+                        <TextBlock Text="Unesite kod" FontFamily="{StaticResource PlexSans}" FontWeight="Bold" FontSize="22" Foreground="{StaticResource TextPrimary}" HorizontalAlignment="Center"/>
+                        <TextBlock FontFamily="{StaticResource PlexSans}" FontSize="13" Foreground="{StaticResource TextSecondary}" HorizontalAlignment="Center" TextAlignment="Center">
+                            <Run Text="Poslali smo jednokratni kod na"/>
+                            <LineBreak/>
+                            <Run Text="{Binding MaskedEmail}" FontFamily="{StaticResource PlexMono}" Foreground="{StaticResource TextPrimary}"/>
+                        </TextBlock>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
+                        <TextBox x:Name="Digit1Box" MaxLength="1" Classes="otp-digit" Classes.filled="{Binding IsDigit1Filled}" Text="{Binding Digit1}">
+                            <TextBox.Resources>
+                                <SolidColorBrush x:Key="TextControlBorderBrushFocused">Transparent</SolidColorBrush>
+                                <SolidColorBrush x:Key="TextControlBorderBrushPointOver">Transparent</SolidColorBrush>
+                            </TextBox.Resources>
+                        </TextBox>
+                        <TextBox x:Name="Digit2Box" MaxLength="1" Classes="otp-digit" Classes.filled="{Binding IsDigit2Filled}" Text="{Binding Digit2}">
+                            <TextBox.Resources>
+                                <SolidColorBrush x:Key="TextControlBorderBrushFocused">Transparent</SolidColorBrush>
+                                <SolidColorBrush x:Key="TextControlBorderBrushPointOver">Transparent</SolidColorBrush>
+                            </TextBox.Resources>
+                        </TextBox>
+                        <TextBox x:Name="Digit3Box" MaxLength="1" Classes="otp-digit" Classes.filled="{Binding IsDigit3Filled}" Text="{Binding Digit3}">
+                            <TextBox.Resources>
+                                <SolidColorBrush x:Key="TextControlBorderBrushFocused">Transparent</SolidColorBrush>
+                                <SolidColorBrush x:Key="TextControlBorderBrushPointOver">Transparent</SolidColorBrush>
+                            </TextBox.Resources>
+                        </TextBox>
+                        <TextBox x:Name="Digit4Box" MaxLength="1" Classes="otp-digit" Classes.filled="{Binding IsDigit4Filled}" Text="{Binding Digit4}">
+                            <TextBox.Resources>
+                                <SolidColorBrush x:Key="TextControlBorderBrushFocused">Transparent</SolidColorBrush>
+                                <SolidColorBrush x:Key="TextControlBorderBrushPointOver">Transparent</SolidColorBrush>
+                            </TextBox.Resources>
+                        </TextBox>
+                        <TextBox x:Name="Digit5Box" MaxLength="1" Classes="otp-digit" Classes.filled="{Binding IsDigit5Filled}" Text="{Binding Digit5}">
+                            <TextBox.Resources>
+                                <SolidColorBrush x:Key="TextControlBorderBrushFocused">Transparent</SolidColorBrush>
+                                <SolidColorBrush x:Key="TextControlBorderBrushPointOver">Transparent</SolidColorBrush>
+                            </TextBox.Resources>
+                        </TextBox>
+                        <TextBox x:Name="Digit6Box" MaxLength="1" Classes="otp-digit" Classes.filled="{Binding IsDigit6Filled}" Text="{Binding Digit6}">
+                            <TextBox.Resources>
+                                <SolidColorBrush x:Key="TextControlBorderBrushFocused">Transparent</SolidColorBrush>
+                                <SolidColorBrush x:Key="TextControlBorderBrushPointOver">Transparent</SolidColorBrush>
+                            </TextBox.Resources>
+                        </TextBox>
+                    </StackPanel>
+                    <Button Classes="primary" Content="Potvrdi i prijavi se" Command="{Binding ConfirmCodeCommand}" IsDefault="True" HorizontalAlignment="Stretch"/>
+                    <TextBlock HorizontalAlignment="Center" FontFamily="{StaticResource PlexSans}" FontSize="13" Foreground="{StaticResource TextSecondary}">
+                        <Run Text="Ponovno pošalji kod za "/>
+                        <Run Text="{Binding ResendCountdown}" FontWeight="Bold" Foreground="{Binding CountdownColor}"/>
                     </TextBlock>
+                    <Button IsVisible="{Binding IsCodeExpired}" Classes="link" Content="Generiraj ponovno" Command="{Binding ResendCodeCommand}" HorizontalAlignment="Center"/>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
-                    <TextBox Classes="otp-digit" Classes.filled="{Binding IsDigit1Filled}" Text="{Binding Digit1}">
-                        <TextBox.Resources>
-                            <SolidColorBrush x:Key="TextControlBorderBrushFocused">Transparent</SolidColorBrush>
-                            <SolidColorBrush x:Key="TextControlBorderBrushPointOver">Transparent</SolidColorBrush>
-                        </TextBox.Resources>
-                    </TextBox>
-                    <TextBox Classes="otp-digit" Classes.filled="{Binding IsDigit2Filled}" Text="{Binding Digit2}">
-                        <TextBox.Resources>
-                            <SolidColorBrush x:Key="TextControlBorderBrushFocused">Transparent</SolidColorBrush>
-                            <SolidColorBrush x:Key="TextControlBorderBrushPointOver">Transparent</SolidColorBrush>
-                        </TextBox.Resources>
-                    </TextBox>
-                    <TextBox Classes="otp-digit" Classes.filled="{Binding IsDigit3Filled}" Text="{Binding Digit3}">
-                        <TextBox.Resources>
-                            <SolidColorBrush x:Key="TextControlBorderBrushFocused">Transparent</SolidColorBrush>
-                            <SolidColorBrush x:Key="TextControlBorderBrushPointOver">Transparent</SolidColorBrush>
-                        </TextBox.Resources>
-                    </TextBox>
-                    <TextBox Classes="otp-digit" Classes.filled="{Binding IsDigit4Filled}" Text="{Binding Digit4}">
-                        <TextBox.Resources>
-                            <SolidColorBrush x:Key="TextControlBorderBrushFocused">Transparent</SolidColorBrush>
-                            <SolidColorBrush x:Key="TextControlBorderBrushPointOver">Transparent</SolidColorBrush>
-                        </TextBox.Resources>
-                    </TextBox>
-                    <TextBox Classes="otp-digit" Classes.filled="{Binding IsDigit5Filled}" Text="{Binding Digit5}">
-                        <TextBox.Resources>
-                            <SolidColorBrush x:Key="TextControlBorderBrushFocused">Transparent</SolidColorBrush>
-                            <SolidColorBrush x:Key="TextControlBorderBrushPointOver">Transparent</SolidColorBrush>
-                        </TextBox.Resources>
-                    </TextBox>
-                    <TextBox Classes="otp-digit" Classes.filled="{Binding IsDigit6Filled}" Text="{Binding Digit6}">
-                        <TextBox.Resources>
-                            <SolidColorBrush x:Key="TextControlBorderBrushFocused">Transparent</SolidColorBrush>
-                            <SolidColorBrush x:Key="TextControlBorderBrushPointOver">Transparent</SolidColorBrush>
-                        </TextBox.Resources>
-                    </TextBox>
-                </StackPanel>
-                <Button Classes="primary" Content="Potvrdi i prijavi se" Command="{Binding ConfirmCodeCommand}" HorizontalAlignment="Stretch"/>
-                <TextBlock HorizontalAlignment="Center" FontFamily="{StaticResource PlexSans}" FontSize="13" Foreground="{StaticResource TextSecondary}">
-                    <Run Text="Ponovno pošalji kod za "/>
-                    <Run Text="{Binding ResendCountdown}" FontWeight="Bold" Foreground="{StaticResource Medium}"/>
-                </TextBlock>
-            </StackPanel>
-        </ScrollViewer>
-    </Grid>
+            </ScrollViewer>
+        </Grid>
+        <Border Classes="error-toast" Classes.visible="{Binding HasError}" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="24,56,24,0" Background="#1FD6503C" BorderBrush="{StaticResource Weak}" BorderThickness="1" CornerRadius="10" Padding="16,12">
+            <TextBlock Text="{Binding ErrorMessage}" Foreground="{StaticResource Weak}" FontFamily="{StaticResource PlexSans}" FontSize="15" FontWeight="Bold" TextWrapping="Wrap" HorizontalAlignment="Center"/>
+        </Border>
+    </Panel>
 </UserControl>

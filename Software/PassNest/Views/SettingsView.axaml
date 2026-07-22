@@ -7,15 +7,12 @@
         mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="670"
         x:Class="PassNest.Views.SettingsView"
         x:Name="Root"
-        x:DataType="vm:SettingsViewModel">
-
-    <Design.DataContext>
-        <vm:SettingsViewModel/>
-    </Design.DataContext>
+        x:DataType="vm:SettingsViewModel"
+         d:DataContext="{d:DesignInstance vm:SettingsViewModel}">
 
     <Panel>
         <ScrollViewer Background="{StaticResource Canvas}">
-            <StackPanel Margin="32,28,32,32" Spacing="28">
+            <StackPanel Margin="32,46,32,32" Spacing="28">
                 <StackPanel Spacing="10">
                     <TextBlock Classes="section-label-light" Text="SIGURNOST"/>
                     <Border Classes="settings-card">

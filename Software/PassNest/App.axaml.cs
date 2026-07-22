@@ -47,7 +47,7 @@ namespace PassNest
                 smtpHost: "smtp.gmail.com",
                 smtpPort: 587,
                 senderEmail: "passnest.2fa.info@gmail.com",
-                senderPassword: "PassNest2FA@"));
+                senderPassword: "gjipsaysvzeixzsg"));
             service.AddSingleton<IRepository<User>, Repository<User>>();
             service.AddSingleton<IRepository<Account>, Repository<Account>>();
             service.AddSingleton<IRepository<Category>, Repository<Category>>();

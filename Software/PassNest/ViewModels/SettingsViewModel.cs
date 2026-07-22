@@ -1,4 +1,5 @@
-﻿using BusinessLogicLayer.BaseBackup;
+﻿using BusinessLogicLayer.Authentication;
+using BusinessLogicLayer.BaseBackup;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using PassNest.Services;
@@ -13,15 +14,17 @@ namespace PassNest.ViewModels
     {
         private readonly IBackupManager backupManager;
         private readonly IFIleDialogService fileDialogService;
+        private readonly IAuthProvider authProvider;
+        private bool isInitializing = true;
         private CancellationTokenSource? errorDismissCts;
         private CancellationTokenSource? successDismissCts;
         private string? pendingRestoreFilePath;
 
         [ObservableProperty]
-        private bool twoFactorEnabled = true;
+        private bool twoFactorEnabled;
 
         [ObservableProperty]
-        private string twoFactorEmail = "i********@gmail.com";
+        private string twoFactorEmail = string.Empty;
 
         public ObservableCollection<string> AutoLockOptions { get; } = new()
         {
@@ -50,10 +53,48 @@ namespace PassNest.ViewModels
         private string restoreMasterPassword = string.Empty;
 
 
-        public SettingsViewModel(IBackupManager backupManager, IFIleDialogService fileDialogService)
+        public SettingsViewModel(IBackupManager backupManager, IFIleDialogService fileDialogService, IAuthProvider authProvider)
         {
             this.backupManager = backupManager;
             this.fileDialogService = fileDialogService;
+            this.authProvider = authProvider;
+
+            var user = authProvider.GetCurrentUser();
+            if(user != null)
+            {
+                TwoFactorEnabled = user.Is2FAEnabled;
+                TwoFactorEmail = MaskEmail(user.Email);
+            }
+
+            isInitializing = false;
+        }
+
+        partial void OnTwoFactorEnabledChanged(bool value)
+        {
+            if (isInitializing) return;
+
+            var user = authProvider.GetCurrentUser();
+            if (user == null) return;
+
+            if (value)
+            {
+                authProvider.EnableTwoFactor(user.Email);
+            }
+            else
+            {
+                authProvider.DisableTwoFactor();
+            }
+        }
+
+        private static string MaskEmail(string email)
+        {
+            var atIndex = email.IndexOf('@');
+            if (atIndex <= 1) return email;
+
+            var localPart = email[..atIndex];
+            var domain = email[atIndex..];
+
+            return $"{localPart[0]}{new string('*', Math.Max(localPart.Length - 1, 3))}{domain}";
         }
 
         [RelayCommand]

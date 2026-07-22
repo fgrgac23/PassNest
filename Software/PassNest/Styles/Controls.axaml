@@ -400,6 +400,26 @@
        <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/> 
     </Style>
 
+    <Style Selector="Button.link">
+        <Setter Property="FontFamily" Value="{StaticResource PlexSans}"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Foreground" Value="{StaticResource Accent}"/>
+        <Setter Property="Template">
+           <ControlTemplate>
+               <ContentPresenter Content="{TemplateBinding Content}"/>
+           </ControlTemplate>
+        </Setter>
+    </Style>
+
+    <Style Selector="Button.link:pointerover">
+       <Setter Property="Foreground" Value="{StaticResource Strong}"/>
+    </Style>
+
     <Style Selector="TextBox.otp-digit">
         <Setter Property="Width" Value="52"/>
         <Setter Property="Height" Value="60"/>

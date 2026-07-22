@@ -104,9 +104,15 @@ namespace PassNest.ViewModels
                 "Trezor" => CreateVaultPage(),
                 "Generator" => new GeneratorViewModel(passwordGenerator, clipboardService),
                 "Sigurnost" => new SecurityViewModel(),
-                "Postavke" => new SettingsViewModel(backupManager, fileDialogService),
+                "Postavke" => CreateSettingsPage(),
                 _ => currentPage
             }; 
+        }
+
+        private SettingsViewModel CreateSettingsPage()
+        {
+            var page = new SettingsViewModel(backupManager, fileDialogService, authProvider);
+            return page;
         }
 
         partial void OnCurrentPageChanged(ViewModelBase value)

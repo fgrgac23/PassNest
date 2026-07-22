@@ -128,6 +128,31 @@ namespace BusinessLogicLayer.Authentication
             UserRepository.SaveChanges();
         }
 
+        public void DisableTwoFactor()
+        {
+            if(CurrentUser is null)
+            {
+                throw new InvalidOperationException("Korisnik mora biti prijavljen.");
+            }
+
+            CurrentUser.Is2FAEnabled = false;
+            UserRepository.Update(CurrentUser);
+            UserRepository.SaveChanges();
+        }
+
+        public void ResendTwoFactorCode()
+        {
+            if(CurrentUser is null)
+            {
+                throw new InvalidOperationException("Korisnik mora biti prijavljen.");
+            }
+
+            PendingTwoFactorCode = TwoFactorCodeGenerator.GenerateCode();
+            TwoFactorExpiresAt = DateTime.UtcNow.AddMinutes(5);
+
+            EmailSender.SendEmail(CurrentUser.Email, "PassNest - kod za prijavu", $"Vaš jednokratni kod za prijavu je: {PendingTwoFactorCode}. Kod vrijedi 5 minuta.");
+        }
+
         public bool VerifyTwoFactor(string code)
         {
             if(CurrentUser is null || PendingTwoFactorCode is null)
