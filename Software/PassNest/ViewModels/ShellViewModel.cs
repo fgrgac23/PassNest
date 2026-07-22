@@ -2,6 +2,7 @@
 using BusinessLogicLayer.Authentication;
 using BusinessLogicLayer.Autofill;
 using BusinessLogicLayer.BaseBackup;
+using BusinessLogicLayer.PasswordAudit;
 using BusinessLogicLayer.PasswordGeneration;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -10,6 +11,7 @@ using PassNest.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace PassNest.ViewModels
 {
@@ -23,6 +25,7 @@ namespace PassNest.ViewModels
         private readonly IBackupManager backupManager;
         private readonly IFIleDialogService fileDialogService;
         private readonly IIdleTimerService idleTimerService;
+        private readonly IPasswordAuditor passwordAuditor;
 
         [ObservableProperty]
         private string selectedNavItem = "Trezor";
@@ -48,7 +51,7 @@ namespace PassNest.ViewModels
 
         public event Action? VaultLocked;
 
-        public ShellViewModel(IAccountStore accountStore, IPasswordGenerator passwordGenerator, IClipboardService clipboardService, IAuthProvider authProvider, IAutofillEngine autofillEngine, IBackupManager backupManager, IFIleDialogService fileDialogService, IIdleTimerService idleTimerService)
+        public ShellViewModel(IAccountStore accountStore, IPasswordGenerator passwordGenerator, IClipboardService clipboardService, IAuthProvider authProvider, IAutofillEngine autofillEngine, IBackupManager backupManager, IFIleDialogService fileDialogService, IIdleTimerService idleTimerService, IPasswordAuditor passwordAuditor)
         {
             this.accountStore = accountStore;
             this.passwordGenerator = passwordGenerator;
@@ -58,6 +61,7 @@ namespace PassNest.ViewModels
             this.backupManager = backupManager;
             this.fileDialogService = fileDialogService;
             this.idleTimerService = idleTimerService;
+            this.passwordAuditor = passwordAuditor;
             currentPage = CreateVaultPage();
             UpdateBreadcrumbs();
 
@@ -109,7 +113,7 @@ namespace PassNest.ViewModels
             {
                 "Trezor" => CreateVaultPage(),
                 "Generator" => new GeneratorViewModel(passwordGenerator, clipboardService),
-                "Sigurnost" => new SecurityViewModel(),
+                "Sigurnost" => CreateSecurityPage(),
                 "Postavke" => CreateSettingsPage(),
                 _ => currentPage
             }; 
@@ -120,6 +124,38 @@ namespace PassNest.ViewModels
             var page = new SettingsViewModel(backupManager, fileDialogService, authProvider);
             page.AutoLockChanged += OnAutoLockChanged;
             return page;
+        }
+
+        private SecurityViewModel CreateSecurityPage()
+        {
+            var page = new SecurityViewModel(passwordAuditor, accountStore, passwordGenerator);
+            page.AccountFixRequested += OnFixIssueRequested;
+            return page;
+        }
+
+        private void OnFixIssueRequested(int accountId)
+        {
+            var account = accountStore.GetAllAccounts().FirstOrDefault(a => a.AccountId == accountId);
+            var credentials = accountStore.GetCredentials(accountId);
+            if (account == null || credentials == null) return;
+
+            var strength = passwordGenerator.EvaluateStrength(credentials.Password);
+            var categories = account.Categories.Select(c => new CategoryBadge(c.Name, c.Color)).ToList();
+
+            var card = new AccountCardViewModel(
+                account.AccountId,
+                AvatarColorPicker.GetInitial(account.ServiceName),
+                account.ServiceName,
+                account.UserName,
+                AvatarColorPicker.GetColor(account.ServiceName),
+                categories,
+                strength,
+                credentials.Password,
+                account.Url ?? string.Empty,
+                account.UpdatedAt.ToString("dd.MM.yyyy"),
+                account.CreatedAt.ToString("dd.MM.yyyy"));
+
+            OnAccountOpened(card);
         }
 
         private void OnAutoLockChanged(int minutes)

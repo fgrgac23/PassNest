@@ -9,14 +9,11 @@
         mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="670"
         x:Class="PassNest.Views.SecurityView"
         x:Name="Root"
-        x:DataType="vm:SecurityViewModel">
-
-    <Design.DataContext>
-        <vm:SecurityViewModel/>
-    </Design.DataContext>
+        x:DataType="vm:SecurityViewModel"
+        d:DataContext="{d:DesignInstance vm:SecurityViewModel}">
     
     <ScrollViewer Background="{StaticResource Canvas}">
-        <StackPanel Margin="32,28,32,32" Spacing="28">
+        <StackPanel Margin="32,46,32,32" Spacing="28">
             <Grid ColumnDefinitions="Auto,*">
                 <Grid Grid.Column="0" Width="140" Height="140">
                     <Ellipse Width="140" Height="140" StrokeThickness="12" Stroke="{StaticResource Border}"/>
@@ -32,7 +29,10 @@
                     </StackPanel>
                 </Grid>
                 <StackPanel Grid.Column="1" Margin="24,0,0,0" VerticalAlignment="Center" Spacing="12">
-                    <TextBlock Text="{Binding ScoreHeading}" FontFamily="{StaticResource PlexSans}" FontWeight="Bold" FontSize="20" Foreground="{StaticResource TextPrimary}"/>
+                    <Grid>
+                        <TextBlock Text="{Binding ScoreHeading}" FontFamily="{StaticResource PlexSans}" FontWeight="Bold" FontSize="20" Foreground="{StaticResource TextPrimary}"/>
+                        <Button Grid.Column="1" Classes="outline-accent" Content="Pokreni analizu" Command="{Binding RunAuditCommand}" VerticalAlignment="Center"/>
+                    </Grid>
                     <TextBlock TextWrapping="Wrap" Text="Pronađeno je nekoliko slabih i ponovljenih lozinki. Rješite ih za bolju zaštitu." FontFamily="{StaticResource PlexSans}" FontSize="13" Foreground="{StaticResource TextSecondary}"/>
                     <Grid ColumnDefinitions="*,*,*" Margin="0,4,0,0">
                         <Border Grid.Column="0" Classes="stat-pill" Margin="0,0,8,0">

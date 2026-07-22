@@ -2,6 +2,7 @@
 using BusinessLogicLayer.Authentication;
 using BusinessLogicLayer.Autofill;
 using BusinessLogicLayer.BaseBackup;
+using BusinessLogicLayer.PasswordAudit;
 using BusinessLogicLayer.PasswordGeneration;
 using CommunityToolkit.Mvvm.ComponentModel;
 using PassNest.Services;
@@ -20,13 +21,14 @@ namespace PassNest.ViewModels
         private readonly IBackupManager backupManager;
         private readonly IFIleDialogService fIleDialogService;
         private readonly IIdleTimerService idleTimerService;
+        private readonly IPasswordAuditor passwordAuditor;
 
         [ObservableProperty]
         private ViewModelBase currentPage;
 
         public event Action? ShowMainWindowRequested;
 
-        public MainWindowViewModel(IAuthProvider authProvider, IPasswordGenerator passwordGenerator, IAccountStore accountStore, IClipboardService clipboardService, IAutofillEngine autofillEngine, IBackupManager backupManager, IFIleDialogService fIleDialogService, IIdleTimerService idleTimerService)
+        public MainWindowViewModel(IAuthProvider authProvider, IPasswordGenerator passwordGenerator, IAccountStore accountStore, IClipboardService clipboardService, IAutofillEngine autofillEngine, IBackupManager backupManager, IFIleDialogService fIleDialogService, IIdleTimerService idleTimerService, IPasswordAuditor passwordAuditor)
         {
             this.authProvider = authProvider;
             this.passwordGenerator = passwordGenerator;
@@ -38,6 +40,7 @@ namespace PassNest.ViewModels
             this.backupManager = backupManager;
             this.fIleDialogService = fIleDialogService;
             this.idleTimerService = idleTimerService;
+            this.passwordAuditor = passwordAuditor;
             CurrentPage = CreateInitialPage();
         }
 
@@ -80,7 +83,7 @@ namespace PassNest.ViewModels
 
         private ShellViewModel CreateShellPage()
         {
-            var vm = new ShellViewModel(accountStore, passwordGenerator, clipboardService, authProvider, autofillEngine, backupManager, fIleDialogService, idleTimerService);
+            var vm = new ShellViewModel(accountStore, passwordGenerator, clipboardService, authProvider, autofillEngine, backupManager, fIleDialogService, idleTimerService, passwordAuditor);
             vm.VaultLocked += OnVaultLocked;
             return vm;
         }
