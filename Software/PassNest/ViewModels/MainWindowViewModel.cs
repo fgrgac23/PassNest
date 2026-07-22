@@ -1,6 +1,7 @@
 ﻿using BusinessLogicLayer.AccountManagement;
 using BusinessLogicLayer.Authentication;
 using BusinessLogicLayer.Autofill;
+using BusinessLogicLayer.BaseBackup;
 using BusinessLogicLayer.PasswordGeneration;
 using CommunityToolkit.Mvvm.ComponentModel;
 using PassNest.Services;
@@ -16,13 +17,15 @@ namespace PassNest.ViewModels
         private readonly IAccountStore accountStore;
         private readonly IClipboardService clipboardService;
         private readonly IAutofillEngine autofillEngine;
+        private readonly IBackupManager backupManager;
+        private readonly IFIleDialogService fIleDialogService;
 
         [ObservableProperty]
         private ViewModelBase currentPage;
 
         public event Action? ShowMainWindowRequested;
 
-        public MainWindowViewModel(IAuthProvider authProvider, IPasswordGenerator passwordGenerator, IAccountStore accountStore, IClipboardService clipboardService, IAutofillEngine autofillEngine)
+        public MainWindowViewModel(IAuthProvider authProvider, IPasswordGenerator passwordGenerator, IAccountStore accountStore, IClipboardService clipboardService, IAutofillEngine autofillEngine, IBackupManager backupManager, IFIleDialogService fIleDialogService)
         {
             this.authProvider = authProvider;
             this.passwordGenerator = passwordGenerator;
@@ -31,6 +34,8 @@ namespace PassNest.ViewModels
             this.autofillEngine = autofillEngine;
             this.autofillEngine.HotkeyPressed += OnHotKeyPressed;
             this.autofillEngine.RegisterHotkeys();
+            this.backupManager = backupManager;
+            this.fIleDialogService = fIleDialogService;
             CurrentPage = CreateInitialPage();
         }
 
@@ -73,7 +78,7 @@ namespace PassNest.ViewModels
 
         private ShellViewModel CreateShellPage()
         {
-            var vm = new ShellViewModel(accountStore, passwordGenerator, clipboardService, authProvider, autofillEngine);
+            var vm = new ShellViewModel(accountStore, passwordGenerator, clipboardService, authProvider, autofillEngine, backupManager, fIleDialogService);
             vm.VaultLocked += OnVaultLocked;
             return vm;
         }

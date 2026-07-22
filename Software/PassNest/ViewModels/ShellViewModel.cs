@@ -1,14 +1,15 @@
-﻿using PassNest.Models;
+﻿using BusinessLogicLayer.AccountManagement;
+using BusinessLogicLayer.Authentication;
+using BusinessLogicLayer.Autofill;
+using BusinessLogicLayer.BaseBackup;
+using BusinessLogicLayer.PasswordGeneration;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using BusinessLogicLayer.AccountManagement;
-using BusinessLogicLayer.PasswordGeneration;
-using BusinessLogicLayer.Authentication;
-using System;
-using System.Collections.ObjectModel;
-using System.Collections.Generic;
+using PassNest.Models;
 using PassNest.Services;
-using BusinessLogicLayer.Autofill;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace PassNest.ViewModels
 {
@@ -19,6 +20,8 @@ namespace PassNest.ViewModels
         private readonly IClipboardService clipboardService;
         private readonly IAuthProvider authProvider;
         private readonly IAutofillEngine autofillEngine;
+        private readonly IBackupManager backupManager;
+        private readonly IFIleDialogService fileDialogService;
 
         [ObservableProperty]
         private string selectedNavItem = "Trezor";
@@ -35,6 +38,7 @@ namespace PassNest.ViewModels
         public VaultViewModel? CurrentVault => CurrentPage as VaultViewModel;
         public AccountDetailViewModel? CurrentDetail => CurrentPage as AccountDetailViewModel;
         public GeneratorViewModel? CurrentGenerator => CurrentPage as GeneratorViewModel;
+        public SettingsViewModel? CurrentSettings => CurrentPage as SettingsViewModel;
 
         public bool IsTrezorActive => SelectedNavItem == "Trezor";
         public bool IsGeneratorActive => SelectedNavItem == "Generator";
@@ -43,13 +47,15 @@ namespace PassNest.ViewModels
 
         public event Action? VaultLocked;
 
-        public ShellViewModel(IAccountStore accountStore, IPasswordGenerator passwordGenerator, IClipboardService clipboardService, IAuthProvider authProvider, IAutofillEngine autofillEngine)
+        public ShellViewModel(IAccountStore accountStore, IPasswordGenerator passwordGenerator, IClipboardService clipboardService, IAuthProvider authProvider, IAutofillEngine autofillEngine, IBackupManager backupManager, IFIleDialogService fileDialogService)
         {
             this.accountStore = accountStore;
             this.passwordGenerator = passwordGenerator;
             this.clipboardService = clipboardService;
             this.authProvider = authProvider;
             this.autofillEngine = autofillEngine;
+            this.backupManager = backupManager;
+            this.fileDialogService = fileDialogService;
             currentPage = CreateVaultPage();
             UpdateBreadcrumbs();
         }
@@ -98,7 +104,7 @@ namespace PassNest.ViewModels
                 "Trezor" => CreateVaultPage(),
                 "Generator" => new GeneratorViewModel(passwordGenerator, clipboardService),
                 "Sigurnost" => new SecurityViewModel(),
-                "Postavke" => new SettingsViewModel(),
+                "Postavke" => new SettingsViewModel(backupManager, fileDialogService),
                 _ => currentPage
             }; 
         }
@@ -108,6 +114,7 @@ namespace PassNest.ViewModels
             OnPropertyChanged(nameof(CurrentVault));
             OnPropertyChanged(nameof(CurrentDetail));
             OnPropertyChanged(nameof(CurrentGenerator));
+            OnPropertyChanged(nameof(CurrentSettings));
             UpdateBreadcrumbs();
         }
 

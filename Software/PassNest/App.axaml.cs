@@ -1,26 +1,28 @@
-using System.Linq;
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
+using Avalonia.Platform;
 using BusinessLogicLayer;
+using BusinessLogicLayer.AccountManagement;
 using BusinessLogicLayer.Authentication;
+using BusinessLogicLayer.Autofill;
+using BusinessLogicLayer.BaseBackup;
+using BusinessLogicLayer.PasswordGeneration;
 using BusinessLogicLayer.Security;
+using DataAccessLayer.Backup;
 using DataAccessLayer.Data;
 using DataAccessLayer.Email;
 using DataAccessLayer.Repository;
 using EntityLayer;
 using Microsoft.Extensions.DependencyInjection;
+using PassNest.Services;
 using PassNest.ViewModels;
 using PassNest.Views;
-using BusinessLogicLayer.PasswordGeneration;
-using BusinessLogicLayer.AccountManagement;
-using PassNest.Services;
-using BusinessLogicLayer.Autofill;
 using System;
-using Avalonia.Platform;
-using Avalonia.Controls;
+using System.Linq;
 
 namespace PassNest
 {
@@ -54,6 +56,9 @@ namespace PassNest
             service.AddSingleton<IAccountStore, AccountManager>();
             service.AddSingleton<IClipboardService, ClipboardService>();
             service.AddSingleton<IAutofillEngine, AutofillEngine>();
+            service.AddSingleton<IBackupStore, FileBackupStore>();
+            service.AddSingleton<IBackupManager, BackupManager>();
+            service.AddSingleton<IFIleDialogService, FileDialogService>();
             service.AddSingleton<MainWindowViewModel>();
 
             provider = service.BuildServiceProvider();
