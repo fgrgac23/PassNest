@@ -10,6 +10,7 @@ namespace BusinessLogicLayer.Authentication
         void EnableTwoFactor(string email);
         void DisableTwoFactor();
         void ResendTwoFactorCode();
+        void SetAutoLockMinutes(int minutes);
         bool VerifyTwoFactor(string code);
         User? GetCurrentUser();
         byte[]? GetEncryptionKey();

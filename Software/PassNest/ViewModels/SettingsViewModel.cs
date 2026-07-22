@@ -32,7 +32,7 @@ namespace PassNest.ViewModels
         };
 
         [ObservableProperty]
-        private string selectedAutoLockOptions = "5 minuta";
+        private string selectedAutoLockOptions = "Nikad";
 
         [ObservableProperty]
         private string? errorMessage;
@@ -52,6 +52,7 @@ namespace PassNest.ViewModels
         [ObservableProperty]
         private string restoreMasterPassword = string.Empty;
 
+        public event Action<int>? AutoLockChanged;
 
         public SettingsViewModel(IBackupManager backupManager, IFIleDialogService fileDialogService, IAuthProvider authProvider)
         {
@@ -64,6 +65,14 @@ namespace PassNest.ViewModels
             {
                 TwoFactorEnabled = user.Is2FAEnabled;
                 TwoFactorEmail = MaskEmail(user.Email);
+                SelectedAutoLockOptions = user.AutoLockMinutes switch
+                {
+                    1 => "1 minuta",
+                    5 => "5 minuta",
+                    15 => "15 minuta",
+                    30 => "30 minuta",
+                    _ => "Nikad"
+                };
             }
 
             isInitializing = false;
@@ -84,6 +93,22 @@ namespace PassNest.ViewModels
             {
                 authProvider.DisableTwoFactor();
             }
+        }
+
+        partial void OnSelectedAutoLockOptionsChanged(string value)
+        {
+            if (isInitializing) return;
+
+            var minutes = value switch
+            {
+                "1 minuta" => 1,
+                "5 minuta" => 5,
+                "15 minuta" => 15,
+                "30 minuta" => 30,
+                _ => 0
+            };
+
+            AutoLockChanged?.Invoke(minutes);
         }
 
         private static string MaskEmail(string email)

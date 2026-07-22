@@ -59,6 +59,7 @@ namespace PassNest
             service.AddSingleton<IBackupStore, FileBackupStore>();
             service.AddSingleton<IBackupManager, BackupManager>();
             service.AddSingleton<IFIleDialogService, FileDialogService>();
+            service.AddSingleton<IIdleTimerService, IdleTimerService>();
             service.AddSingleton<MainWindowViewModel>();
 
             provider = service.BuildServiceProvider();

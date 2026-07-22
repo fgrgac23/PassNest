@@ -22,6 +22,7 @@ namespace PassNest.ViewModels
         private readonly IAutofillEngine autofillEngine;
         private readonly IBackupManager backupManager;
         private readonly IFIleDialogService fileDialogService;
+        private readonly IIdleTimerService idleTimerService;
 
         [ObservableProperty]
         private string selectedNavItem = "Trezor";
@@ -47,7 +48,7 @@ namespace PassNest.ViewModels
 
         public event Action? VaultLocked;
 
-        public ShellViewModel(IAccountStore accountStore, IPasswordGenerator passwordGenerator, IClipboardService clipboardService, IAuthProvider authProvider, IAutofillEngine autofillEngine, IBackupManager backupManager, IFIleDialogService fileDialogService)
+        public ShellViewModel(IAccountStore accountStore, IPasswordGenerator passwordGenerator, IClipboardService clipboardService, IAuthProvider authProvider, IAutofillEngine autofillEngine, IBackupManager backupManager, IFIleDialogService fileDialogService, IIdleTimerService idleTimerService)
         {
             this.accountStore = accountStore;
             this.passwordGenerator = passwordGenerator;
@@ -56,8 +57,13 @@ namespace PassNest.ViewModels
             this.autofillEngine = autofillEngine;
             this.backupManager = backupManager;
             this.fileDialogService = fileDialogService;
+            this.idleTimerService = idleTimerService;
             currentPage = CreateVaultPage();
             UpdateBreadcrumbs();
+
+            idleTimerService.TimedOut += OnIdleTimedOut;
+            var autoLockMinutes = authProvider.GetCurrentUser()?.AutoLockMinutes ?? 0;
+            idleTimerService.Start(ToTimeout(autoLockMinutes));
         }
 
         private VaultViewModel CreateVaultPage()
@@ -112,8 +118,17 @@ namespace PassNest.ViewModels
         private SettingsViewModel CreateSettingsPage()
         {
             var page = new SettingsViewModel(backupManager, fileDialogService, authProvider);
+            page.AutoLockChanged += OnAutoLockChanged;
             return page;
         }
+
+        private void OnAutoLockChanged(int minutes)
+        {
+            authProvider.SetAutoLockMinutes(minutes);
+            idleTimerService.Start(ToTimeout(minutes));
+        }
+
+        private static TimeSpan? ToTimeout(int minutes) => minutes <= 0 ? null : TimeSpan.FromMinutes(minutes);
 
         partial void OnCurrentPageChanged(ViewModelBase value)
         {
@@ -130,6 +145,17 @@ namespace PassNest.ViewModels
         [RelayCommand]
         private void LockVault()
         {
+            Lock();
+        }
+
+        private void OnIdleTimedOut()
+        {
+            Lock();
+        }
+
+        private void Lock()
+        {
+            idleTimerService.Stop();
             authProvider.Logout();
             VaultLocked?.Invoke();
         }

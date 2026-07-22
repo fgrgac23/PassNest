@@ -140,6 +140,18 @@ namespace BusinessLogicLayer.Authentication
             UserRepository.SaveChanges();
         }
 
+        public void SetAutoLockMinutes(int minutes)
+        {
+            if (CurrentUser is null)
+            {
+                throw new InvalidOperationException("Korisnik mora biti prijavljen.");
+            }
+
+            CurrentUser.AutoLockMinutes = minutes;
+            UserRepository.Update(CurrentUser);
+            UserRepository.SaveChanges();
+        }
+
         public void ResendTwoFactorCode()
         {
             if(CurrentUser is null)

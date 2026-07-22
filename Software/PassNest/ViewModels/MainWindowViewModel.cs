@@ -19,13 +19,14 @@ namespace PassNest.ViewModels
         private readonly IAutofillEngine autofillEngine;
         private readonly IBackupManager backupManager;
         private readonly IFIleDialogService fIleDialogService;
+        private readonly IIdleTimerService idleTimerService;
 
         [ObservableProperty]
         private ViewModelBase currentPage;
 
         public event Action? ShowMainWindowRequested;
 
-        public MainWindowViewModel(IAuthProvider authProvider, IPasswordGenerator passwordGenerator, IAccountStore accountStore, IClipboardService clipboardService, IAutofillEngine autofillEngine, IBackupManager backupManager, IFIleDialogService fIleDialogService)
+        public MainWindowViewModel(IAuthProvider authProvider, IPasswordGenerator passwordGenerator, IAccountStore accountStore, IClipboardService clipboardService, IAutofillEngine autofillEngine, IBackupManager backupManager, IFIleDialogService fIleDialogService, IIdleTimerService idleTimerService)
         {
             this.authProvider = authProvider;
             this.passwordGenerator = passwordGenerator;
@@ -36,6 +37,7 @@ namespace PassNest.ViewModels
             this.autofillEngine.RegisterHotkeys();
             this.backupManager = backupManager;
             this.fIleDialogService = fIleDialogService;
+            this.idleTimerService = idleTimerService;
             CurrentPage = CreateInitialPage();
         }
 
@@ -78,7 +80,7 @@ namespace PassNest.ViewModels
 
         private ShellViewModel CreateShellPage()
         {
-            var vm = new ShellViewModel(accountStore, passwordGenerator, clipboardService, authProvider, autofillEngine, backupManager, fIleDialogService);
+            var vm = new ShellViewModel(accountStore, passwordGenerator, clipboardService, authProvider, autofillEngine, backupManager, fIleDialogService, idleTimerService);
             vm.VaultLocked += OnVaultLocked;
             return vm;
         }
