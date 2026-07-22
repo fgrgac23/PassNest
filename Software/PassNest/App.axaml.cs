@@ -10,6 +10,7 @@ using BusinessLogicLayer.AccountManagement;
 using BusinessLogicLayer.Authentication;
 using BusinessLogicLayer.Autofill;
 using BusinessLogicLayer.BaseBackup;
+using BusinessLogicLayer.PasswordAudit;
 using BusinessLogicLayer.PasswordGeneration;
 using BusinessLogicLayer.Security;
 using DataAccessLayer.Backup;
@@ -60,6 +61,7 @@ namespace PassNest
             service.AddSingleton<IBackupManager, BackupManager>();
             service.AddSingleton<IFIleDialogService, FileDialogService>();
             service.AddSingleton<IIdleTimerService, IdleTimerService>();
+            service.AddSingleton<IPasswordAuditor, PasswordAuditor>();
             service.AddSingleton<MainWindowViewModel>();
 
             provider = service.BuildServiceProvider();

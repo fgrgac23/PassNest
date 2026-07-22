@@ -6,6 +6,11 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Avalonia.Collections;
 using PassNest.Models;
+using BusinessLogicLayer.PasswordAudit;
+using BusinessLogicLayer.PasswordGeneration;
+using BusinessLogicLayer.AccountManagement;
+using System.ComponentModel;
+using System.Linq;
 
 namespace PassNest.ViewModels
 {
@@ -14,17 +19,21 @@ namespace PassNest.ViewModels
         private const double RingRadius = 64;
         private const double RingStrokeThickness = 12;
 
-        [ObservableProperty]
-        private int score = 72;
+        private readonly IPasswordAuditor passwordAuditor;
+        private readonly IPasswordGenerator passwordGenerator;
+        private readonly IAccountStore accountStore;
 
         [ObservableProperty]
-        private int weakCount = 3;
+        private int score;
 
         [ObservableProperty]
-        private int mediumCount = 5;
+        private int weakCount;
 
         [ObservableProperty]
-        private int strongCount = 19;
+        private int mediumCount;
+
+        [ObservableProperty]
+        private int strongCount;
 
         public string ScoreHeading => $"Stanje trezora: {ScoreStatusLabel}";
 
@@ -53,12 +62,18 @@ namespace PassNest.ViewModels
             }
         }
 
-        public ObservableCollection<SecurityModels> Issues { get; } = new()
+        public ObservableCollection<SecurityModels> Issues { get; } = new();
+
+        public event Action<int>? AccountFixRequested;
+
+        public SecurityViewModel(IPasswordAuditor passwordAuditor, IAccountStore accountStore, IPasswordGenerator passwordGenerator)
         {
-            new SecurityModels("S", "#2AA26A", "Spotify", "Vrlo slaba — 6 znakova, bez brojeva", "#D6503C"),
-            new SecurityModels("N", "#D6503C", "Netflix", "Slaba - 5 broja", "#E0952E"),
-            new SecurityModels("L", "#0F7B8A", "LinkedIn", "Srednja — 5 znaka i 1 broj", "#E0952E")
-        };
+            this.passwordAuditor = passwordAuditor;
+            this.accountStore = accountStore;
+            this.passwordGenerator = passwordGenerator;
+
+            RunAudit();
+        }
 
         partial void OnScoreChanged(int value)
         {
@@ -69,8 +84,58 @@ namespace PassNest.ViewModels
         }
 
         [RelayCommand]
+        private void RunAudit()
+        {
+            var credentials = accountStore.GetAllCredentials().ToList();
+
+            var weak = 0;
+            var medium = 0;
+            var strong = 0;
+
+            foreach(var credential in credentials)
+            {
+                switch (passwordGenerator.EvaluateStrength(credential.Password))
+                {
+                    case PasswordStrengthLevel.VrloSlaba:
+                    case PasswordStrengthLevel.Slaba:
+                        weak++;
+                        break;
+                    case PasswordStrengthLevel.Srednja:
+                        medium++;
+                        break;
+                    default:
+                        strong++;
+                        break;
+                }
+            }
+
+            WeakCount = weak;
+            MediumCount = medium;
+            StrongCount = strong;
+
+            var total = credentials.Count;
+            Score = total == 0 ? 100 : (int)Math.Round(100.0 * (strong + medium * 0.5) / total);
+
+            Issues.Clear();
+            foreach(var entry in passwordAuditor.AuditPasswords())
+            {
+                var severityColorHex = entry.Reason == "Vrlo slaba lozinka" ? "#D6503C" : "#E0952E";
+
+                Issues.Add(new SecurityModels(
+                    entry.AccountId,
+                    AvatarColorPicker.GetInitial(entry.ServiceName),
+                    AvatarColorPicker.GetColor(entry.ServiceName),
+                    entry.ServiceName,
+                    entry.Reason,
+                    severityColorHex
+                ));
+            }
+        }
+
+        [RelayCommand]
         private void FixIssue(SecurityModels issue)
         {
+            AccountFixRequested?.Invoke(issue.AccountId);
         }
     }
 }
