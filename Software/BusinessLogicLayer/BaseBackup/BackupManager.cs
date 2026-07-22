@@ -1,4 +1,5 @@
 ﻿using BusinessLogicLayer.Authentication;
+using BusinessLogicLayer.Security;
 using DataAccessLayer.Backup;
 using DataAccessLayer.Repository;
 using EntityLayer;
@@ -19,30 +20,57 @@ namespace BusinessLogicLayer.BaseBackup
         private readonly IRepository<Category> categoryRepository;
         private readonly IBackupStore backupStore;
         private readonly IAuthProvider authProvider;
+        private readonly ICryptoService cryptoService;
 
-        public BackupManager(IRepository<Account> accountRepository, IRepository<Category> categoryRepository, IBackupStore backupStore, IAuthProvider authProvider)
+        public BackupManager(IRepository<Account> accountRepository, IRepository<Category> categoryRepository, IBackupStore backupStore, IAuthProvider authProvider, ICryptoService cryptoService)
         {
             this.accountRepository = accountRepository;
             this.categoryRepository = categoryRepository;
             this.backupStore = backupStore;
             this.authProvider = authProvider;
+            this.cryptoService = cryptoService;
         }
 
         public void CreateBackup(string filePath)
         {
+            var currentUser = authProvider.GetCurrentUser() ?? throw new InvalidOperationException("Korisnik mora biti prijvaljen.");
+            var key = authProvider.GetEncryptionKey() ?? throw new InvalidOperationException("Nedostaje enkripcijski ključ.");
+
             var accounts = accountRepository.GetAll(a => a.Categories);
             var categories = categoryRepository.GetAll();
 
             var data = ConvertData(accounts, categories);
+            var encryptedData = cryptoService.Encrypt(data, key);
 
-            backupStore.WriteToFile(data, filePath);
+            var envelope = new BackupEnvelope
+            {
+                Salt = currentUser.MasterPasswordSalt,
+                EncryptedPayload = encryptedData
+            };
+
+            backupStore.WriteToFile(JsonSerializer.Serialize(envelope), filePath);
         }
 
-        public void RestoreBackup(string filePath)
+        public void RestoreBackup(string filePath, string masterPassword)
         {
             var currentUser = authProvider.GetCurrentUser() ?? throw new InvalidOperationException("Korisnik mora biti prijavljen.");
+            var newKey = authProvider.GetEncryptionKey() ?? throw new InvalidOperationException("Nedostaje enkripcijski ključ.");
 
-            var json = backupStore.ReadFromFile(filePath);
+            var envelopeJson = backupStore.ReadFromFile(filePath);
+            var envelope = JsonSerializer.Deserialize<BackupEnvelope>(envelopeJson) ?? throw new InvalidOperationException("Datoteka nije valjana sigurnosna kopija.");
+
+            var backupKey = cryptoService.DeriveKey(masterPassword, envelope.Salt);
+
+            string json;
+            try
+            {
+                json = cryptoService.Decrypt(envelope.EncryptedPayload, backupKey);
+            }
+            catch (Exception)
+            {
+                throw new InvalidOperationException("Neispravna lozinka ili oštećena datoteka.");
+            }
+
             var backup = JsonSerializer.Deserialize<BackupData>(json) ?? throw new InvalidOperationException("Datoteka nije valjana sigurnosna kopija.");
 
             var existingCategories = categoryRepository.GetAll().ToList();
@@ -128,6 +156,12 @@ namespace BusinessLogicLayer.BaseBackup
             };
 
             return JsonSerializer.Serialize(backup);
+        }
+
+        private class BackupEnvelope
+        {
+            public string Salt { get; set; } = string.Empty;
+            public string EncryptedPayload { get; set; } = string.Empty;
         }
 
         private class BackupData

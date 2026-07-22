@@ -15,6 +15,7 @@ namespace PassNest.ViewModels
         private readonly IFIleDialogService fileDialogService;
         private CancellationTokenSource? errorDismissCts;
         private CancellationTokenSource? successDismissCts;
+        private string? pendingRestoreFilePath;
 
         [ObservableProperty]
         private bool twoFactorEnabled = true;
@@ -41,6 +42,13 @@ namespace PassNest.ViewModels
 
         [ObservableProperty]
         private bool hasSuccess;
+
+        [ObservableProperty]
+        private bool isRestorePasswordPromptOpen;
+
+        [ObservableProperty]
+        private string restoreMasterPassword = string.Empty;
+
 
         public SettingsViewModel(IBackupManager backupManager, IFIleDialogService fileDialogService)
         {
@@ -71,15 +79,37 @@ namespace PassNest.ViewModels
             var filePath = await fileDialogService.ChooseOpenLocationAsync();
             if(string.IsNullOrWhiteSpace(filePath)) return;
 
+            pendingRestoreFilePath = filePath;
+            RestoreMasterPassword = string.Empty;
+            IsRestorePasswordPromptOpen = true;
+        }
+
+        [RelayCommand]
+        private void ConfirmRestore()
+        {
+            if (pendingRestoreFilePath == null) return;
+
             try
             {
-                backupManager.RestoreBackup(filePath);
+                backupManager.RestoreBackup(pendingRestoreFilePath, RestoreMasterPassword);
                 ShowSuccess("Vraćanje kopije uspješno.");
             }
             catch (Exception)
             {
-                ShowError("Vraćanje kopije neuspješno.");
+                ShowError("Vraćanje kopije neuspješno — provjeri lozinku i datoteku.");
             }
+
+            RestoreMasterPassword = string.Empty;
+            pendingRestoreFilePath = null;
+            IsRestorePasswordPromptOpen = false;
+        }
+
+        [RelayCommand]
+        private void CancelRestorePrompt()
+        {
+            RestoreMasterPassword = string.Empty;
+            pendingRestoreFilePath = null;
+            IsRestorePasswordPromptOpen = false;
         }
 
         private async void ShowError(string message)

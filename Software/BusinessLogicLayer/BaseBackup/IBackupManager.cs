@@ -9,6 +9,6 @@ namespace BusinessLogicLayer.BaseBackup
     public interface IBackupManager
     {
         void CreateBackup(string filePath);
-        void RestoreBackup(string filePath);
+        void RestoreBackup(string filePath, string masterPassword);
     }
 }
