@@ -9,6 +9,6 @@ namespace DataAccessLayer.Backup
     public interface IBackupStore
     {
         void WriteToFile(string data, string filePath);
-        void ReadFromFile(string filePath);
+        string ReadFromFile(string filePath);
     }
 }
