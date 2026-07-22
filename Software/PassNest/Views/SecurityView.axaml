@@ -29,10 +29,7 @@
                     </StackPanel>
                 </Grid>
                 <StackPanel Grid.Column="1" Margin="24,0,0,0" VerticalAlignment="Center" Spacing="12">
-                    <Grid>
-                        <TextBlock Text="{Binding ScoreHeading}" FontFamily="{StaticResource PlexSans}" FontWeight="Bold" FontSize="20" Foreground="{StaticResource TextPrimary}"/>
-                        <Button Grid.Column="1" Classes="outline-accent" Content="Pokreni analizu" Command="{Binding RunAuditCommand}" VerticalAlignment="Center"/>
-                    </Grid>
+                    <TextBlock Text="{Binding ScoreHeading}" FontFamily="{StaticResource PlexSans}" FontWeight="Bold" FontSize="20" Foreground="{StaticResource TextPrimary}"/>
                     <TextBlock TextWrapping="Wrap" Text="Pronađeno je nekoliko slabih i ponovljenih lozinki. Rješite ih za bolju zaštitu." FontFamily="{StaticResource PlexSans}" FontSize="13" Foreground="{StaticResource TextSecondary}"/>
                     <Grid ColumnDefinitions="*,*,*" Margin="0,4,0,0">
                         <Border Grid.Column="0" Classes="stat-pill" Margin="0,0,8,0">

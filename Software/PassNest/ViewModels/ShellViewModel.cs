@@ -155,6 +155,7 @@ namespace PassNest.ViewModels
                 account.UpdatedAt.ToString("dd.MM.yyyy"),
                 account.CreatedAt.ToString("dd.MM.yyyy"));
 
+            SelectedNavItem = "Trezor";
             OnAccountOpened(card);
         }
 

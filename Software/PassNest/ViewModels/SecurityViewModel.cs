@@ -83,7 +83,6 @@ namespace PassNest.ViewModels
             OnPropertyChanged(nameof(ScoreDashArray));
         }
 
-        [RelayCommand]
         private void RunAudit()
         {
             var credentials = accountStore.GetAllCredentials().ToList();
