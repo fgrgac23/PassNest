@@ -78,15 +78,12 @@ namespace BusinessLogicLayer.BaseBackup
 
             foreach(var categoryData in backup.Categories)
             {
-                if (categoryData.IsSystemDefined)
-                {
-                    var existing = existingCategories.FirstOrDefault(c => c.IsSystemDefined && c.Name == categoryData.Name);
+                var existing = existingCategories.FirstOrDefault(c => c.Name == categoryData.Name && c.IsSystemDefined == categoryData.IsSystemDefined);
 
-                    if(existing != null)
-                    {
-                        categoryIdMap[categoryData.CategoryId] = existing.CategoryId;
-                        continue;
-                    }
+                if (existing != null)
+                {
+                    categoryIdMap[categoryData.CategoryId] = existing.CategoryId;
+                    continue;
                 }
 
                 var category = new Category
@@ -105,18 +102,30 @@ namespace BusinessLogicLayer.BaseBackup
 
             foreach(var accountData in backup.Accounts)
             {
+                string plainPassword;
+                try
+                {
+                    plainPassword = cryptoService.Decrypt(accountData.EncryptedPassword, backupKey);
+                }
+                catch (System.Security.Cryptography.CryptographicException)
+                {
+                    continue;
+                }
+
+                var reEncryptedPassword = cryptoService.Encrypt(plainPassword, newKey);
+
                 var account = new Account
                 {
                     UserId = currentUser.UserId,
                     ServiceName = accountData.ServiceName,
                     UserName = accountData.UserName,
                     Url = accountData.Url,
-                    EncryptedPassword = accountData.EncryptedPassword,
+                    EncryptedPassword = reEncryptedPassword,
                     CreatedAt = accountData.CreatedAt,
                     UpdatedAt = accountData.UpdatedAt,
                 };
 
-                foreach(var oldCategoryId in accountData.CategoryIds)
+                foreach (var oldCategoryId in accountData.CategoryIds)
                 {
                     if(categoryIdMap.TryGetValue(oldCategoryId, out var newCategoryId))
                     {

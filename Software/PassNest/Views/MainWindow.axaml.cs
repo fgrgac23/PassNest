@@ -9,6 +9,7 @@ namespace PassNest.Views
         public MainWindow()
         {
             InitializeComponent();
+            Opened += (_, _) => CenterOnScreen();
             SizeChanged += (_, _) => CenterOnScreen();
             Closing += OnClosing;
 
@@ -40,14 +41,15 @@ namespace PassNest.Views
         private void CenterOnScreen()
         {
             var screen = Screens.ScreenFromVisual(this) ?? Screens.Primary;
-            if(screen is null)
+            if (screen is null)
             {
                 return;
             }
 
             var workingArea = screen.WorkingArea;
-            var pixelWidth = (int)(ClientSize.Width * RenderScaling);
-            var pixelHeight = (int)(ClientSize.Height * RenderScaling);
+            var frameSize = FrameSize ?? ClientSize;
+            var pixelWidth = (int)(frameSize.Width * RenderScaling);
+            var pixelHeight = (int)(frameSize.Height * RenderScaling);
 
             var x = workingArea.X + (workingArea.Width - pixelWidth) / 2;
             var y = workingArea.Y + (workingArea.Height - pixelHeight) / 2;

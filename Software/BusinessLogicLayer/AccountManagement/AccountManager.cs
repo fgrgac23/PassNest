@@ -131,19 +131,29 @@ namespace BusinessLogicLayer.AccountManagement
         public IEnumerable<AccountCredentials> GetAllCredentials()
         {
             var key = authProvider.GetEncryptionKey();
-            if(key == null)
+            if (key == null)
             {
                 yield break;
             }
 
-            foreach(var account in accountRepository.GetAll())
+            foreach (var account in accountRepository.GetAll())
             {
+                string password;
+                try
+                {
+                    password = crypto.Decrypt(account.EncryptedPassword, key);
+                }
+                catch (System.Security.Cryptography.CryptographicException)
+                {
+                    continue;
+                }
+
                 yield return new AccountCredentials
                 {
                     AccountId = account.AccountId,
                     ServiceName = account.ServiceName,
                     UserName = account.UserName,
-                    Password = crypto.Decrypt(account.EncryptedPassword, key)
+                    Password = password
                 };
             }
         }
@@ -154,18 +164,25 @@ namespace BusinessLogicLayer.AccountManagement
         {
             var account = accountRepository.GetById(accountId);
             var key = authProvider.GetEncryptionKey();
-            if(account == null || key == null)
+            if (account == null || key == null)
             {
                 return null;
             }
 
-            return new AccountCredentials
+            try
             {
-                AccountId = account.AccountId,
-                ServiceName = account.ServiceName,
-                UserName = account.UserName,
-                Password = crypto.Decrypt(account.EncryptedPassword, key)
-            };
+                return new AccountCredentials
+                {
+                    AccountId = account.AccountId,
+                    ServiceName = account.ServiceName,
+                    UserName = account.UserName,
+                    Password = crypto.Decrypt(account.EncryptedPassword, key)
+                };
+            }
+            catch (System.Security.Cryptography.CryptographicException)
+            {
+                return null;
+            }
         }
 
         public IEnumerable<Account> SearchAccounts(string query) => accountRepository.GetAll(a => a.Categories).Where(a => a.ServiceName.Contains(query, StringComparison.OrdinalIgnoreCase));

@@ -25,15 +25,17 @@
 
             <ScrollViewer Grid.Row="2">
                 <Panel Margin="40,16,40,32" HorizontalAlignment="Center" VerticalAlignment="Top">
-                    <StackPanel IsVisible="{Binding IsStep1Visible}" Width="440" Spacing="20">
-                        <Image Source="avares://PassNest/Assets/PassNest-Logo.png" Height="150" Stretch="Uniform" HorizontalAlignment="Center"/>
+                    <StackPanel IsVisible="{Binding IsStep1Visible}" Width="440" Spacing="12">
+                        <Image Source="avares://PassNest/Assets/PassNest-Logo.png" Height="100" Stretch="Uniform" HorizontalAlignment="Center"/>
                         <StackPanel>
                             <TextBlock Classes="field-label" Text="Ime"/>
                             <TextBox Classes="form" PlaceholderText="Upišite svoje ime..." Text="{Binding FirstName}"/>
+                            <TextBlock Text="{Binding FirstNameErrorMessage}" IsVisible="{Binding IsFirstNameInvalid}" Foreground="{StaticResource Weak}" FontFamily="{StaticResource PlexSans}" FontSize="12" Margin="0,4,0,0"/>
                         </StackPanel>
                         <StackPanel>
                             <TextBlock Classes="field-label" Text="Prezime"/>
                             <TextBox Classes="form" PlaceholderText="Upišite svoje prezime..." Text="{Binding LastName}"/>
+                            <TextBlock Text="{Binding LastNameErrorMessage}" IsVisible="{Binding IsLastNameInvalid}" Foreground="{StaticResource Weak}" FontFamily="{StaticResource PlexSans}" FontSize="12" Margin="0,4,0,0"/>
                         </StackPanel>
                         <StackPanel>
                             <TextBlock Classes="field-label" Text="E-mail"/>
@@ -68,6 +70,7 @@
                                     </Button>
                                 </TextBox.InnerRightContent>
                             </TextBox>
+                            <TextBlock Text="{Binding MasterPasswordErrorMessage}" IsVisible="{Binding IsMasterPasswordInvalid}" Foreground="{StaticResource Weak}" FontFamily="{StaticResource PlexSans}" FontSize="12" Margin="0,4,0,0"/>
                         </StackPanel>
                         <StackPanel>
                             <TextBlock Classes="field-label" Text="Potvrdite glavnu lozinku"/>

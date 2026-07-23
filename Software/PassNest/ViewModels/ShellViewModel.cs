@@ -131,6 +131,10 @@ namespace PassNest.ViewModels
         {
             var page = new SettingsViewModel(backupManager, fileDialogService, authProvider);
             page.AutoLockChanged += OnAutoLockChanged;
+            page.PropertyChanged += (_, e) =>
+            {
+                if (e.PropertyName == nameof(SettingsViewModel.IsRestorePasswordPromptOpen)) IsDialogOpen = page.IsRestorePasswordPromptOpen;
+            };
             return page;
         }
 

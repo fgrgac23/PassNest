@@ -32,6 +32,18 @@ namespace PassNest.ViewModels
         private string email = string.Empty;
 
         [ObservableProperty]
+        private bool isFirstNameInvalid;
+
+        [ObservableProperty]
+        private string? firstNameErrorMessage;
+
+        [ObservableProperty]
+        private bool isLastNameInvalid;
+
+        [ObservableProperty]
+        private string? lastNameErrorMessage;
+
+        [ObservableProperty]
         private bool isEmailInvalid;
 
         [ObservableProperty]
@@ -51,6 +63,12 @@ namespace PassNest.ViewModels
 
         [ObservableProperty]
         private bool isConfirmPasswordInvalid;
+
+        [ObservableProperty]
+        private bool isMasterPasswordInvalid;
+
+        [ObservableProperty]
+        private string? masterPasswordErrorMessage;
 
         [ObservableProperty]
         private string? confirmPasswordErrorMessage;
@@ -110,8 +128,32 @@ namespace PassNest.ViewModels
             EmailErrorMessage = isValid ? null : "Unesite ispravnu e-mail adresu.";
         }
 
+        partial void OnFirstNameChanged(string value)
+        {
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                IsFirstNameInvalid = false;
+                FirstNameErrorMessage = null;
+            }
+        }
+
+        partial void OnLastNameChanged(string value)
+        {
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                IsLastNameInvalid = false;
+                LastNameErrorMessage = null;
+            }
+        }
+
         partial void OnMasterPasswordChanged(string value)
         {
+            if (value.Length >= 8)
+            {
+                IsMasterPasswordInvalid = false;
+                MasterPasswordErrorMessage = null;
+            }
+
             if (string.IsNullOrEmpty(value))
             {
                 StrengthLabel = string.Empty;
@@ -146,22 +188,33 @@ namespace PassNest.ViewModels
         [RelayCommand]
         private void NextStep()
         {
-            HasError = false;
+            IsFirstNameInvalid = string.IsNullOrWhiteSpace(FirstName);
+            FirstNameErrorMessage = IsFirstNameInvalid ? "Ime je obavezno." : null;
 
-            if(string.IsNullOrWhiteSpace(FirstName) || string.IsNullOrWhiteSpace(LastName) || string.IsNullOrWhiteSpace(Email))
+            IsLastNameInvalid = string.IsNullOrWhiteSpace(LastName);
+            LastNameErrorMessage = IsLastNameInvalid ? "Prezime je obavezno." : null;
+
+            if (string.IsNullOrWhiteSpace(Email))
             {
-                ShowError("Ime, prezime i e-mail su obavezni.");
-                return;
+                IsEmailInvalid = true;
+                EmailErrorMessage = "E-mail je obavezan.";
             }
-
-            if(string.IsNullOrWhiteSpace(email) || IsEmailInvalid)
+            else if (!EmailPattern.IsMatch(Email))
             {
                 IsEmailInvalid = true;
                 EmailErrorMessage = "Unesite ispravnu e-mail adresu.";
+            }
+            else
+            {
+                IsEmailInvalid = false;
+                EmailErrorMessage = null;
+            }
+
+            if (IsFirstNameInvalid || IsLastNameInvalid || IsEmailInvalid)
+            {
                 return;
             }
 
-            ErrorMessage = null;
             CurrentStep = 2;
         }
 
@@ -186,19 +239,29 @@ namespace PassNest.ViewModels
         [RelayCommand]
         private void CreateValut()
         {
-            if(MasterPassword != ConfirmMasterPassword)
+            IsMasterPasswordInvalid = string.IsNullOrWhiteSpace(MasterPassword) || MasterPassword.Length < 8;
+            MasterPasswordErrorMessage = IsMasterPasswordInvalid ? "Master lozinka mora imati barem 8 znakova." : null;
+
+            if (MasterPassword != ConfirmMasterPassword)
             {
                 IsConfirmPasswordInvalid = true;
                 ConfirmPasswordErrorMessage = "Lozinke se ne podudaraju.";
+            }
+            else
+            {
+                IsConfirmPasswordInvalid = false;
+                ConfirmPasswordErrorMessage = null;
+            }
+
+            if (IsMasterPasswordInvalid || IsConfirmPasswordInvalid)
+            {
                 return;
             }
-            IsConfirmPasswordInvalid = false;
-            ConfirmPasswordErrorMessage = null;
 
             var result = authProvider.RegisterUser(FirstName, LastName, Email, MasterPassword);
             if (!result.Success)
             {
-                ErrorMessage = result.ErrorMessage;
+                ShowError(result.ErrorMessage);
                 return;
             }
 
