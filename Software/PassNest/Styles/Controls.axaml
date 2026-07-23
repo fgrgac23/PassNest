@@ -376,6 +376,11 @@
         <Setter Property="Background" Value="#1FD6503C"/>
     </Style>
 
+    <Style Selector="Button.outline-weak:disabled">
+        <Setter Property="BorderBrush" Value="{StaticResource BorderStrong}"/>
+        <Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
+    </Style>
+
     <Style Selector="Button.back-link">
         <Setter Property="FontFamily" Value="{StaticResource PlexSans}"/>
         <Setter Property="FontWeight" Value="SemiBold"/>

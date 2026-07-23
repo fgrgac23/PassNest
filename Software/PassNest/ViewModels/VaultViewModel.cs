@@ -157,7 +157,7 @@ namespace PassNest.ViewModels
             ShowSuccess("Lozinka je uspješno kopirana.");
         }
 
-        private async void ShowSuccess(string message)
+        public async void ShowSuccess(string message)
         {
             SuccessMessage = message;
             HasSuccess = true;

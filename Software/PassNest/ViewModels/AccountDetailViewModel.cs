@@ -87,6 +87,19 @@ namespace PassNest.ViewModels
         [ObservableProperty]
         private bool hasSuccess;
 
+        [ObservableProperty]
+        private bool isDeleteConfirmationOpen;
+
+        [ObservableProperty]
+        private string deleteConfirmationInput = string.Empty;
+
+        public bool CanConfirmDelete => DeleteConfirmationInput == ServiceName;
+
+        partial void OnDeleteConfirmationInputChanged(string value)
+        {
+            OnPropertyChanged(nameof(CanConfirmDelete));
+        }
+
         public ObservableCollection<CategoryOption> EditCategories { get; } = new();
 
         public event Action? BackRequested;
@@ -177,6 +190,7 @@ namespace PassNest.ViewModels
             Categories = EditCategories.Where(c => c.IsSelected).Select(c => new CategoryBadge(c.Name, c.ColorHex)).ToList();
 
             IsEditing = false;
+            ShowSuccess("Račun je uspješno ažuriran.");
         }
 
         [RelayCommand]
@@ -188,8 +202,24 @@ namespace PassNest.ViewModels
         [RelayCommand]
         private void Delete()
         {
+            DeleteConfirmationInput = string.Empty;
+            IsDeleteConfirmationOpen = true;
+        }
+
+        [RelayCommand]
+        private void ConfirmDelete()
+        {
+            if (!CanConfirmDelete) return;
+
             accountStore.DeleteAccount(accountId);
             Deleted?.Invoke();
+        }
+
+        [RelayCommand]
+        private void CancelDelete()
+        {
+            DeleteConfirmationInput = string.Empty;
+            IsDeleteConfirmationOpen = false;
         }
 
         [RelayCommand]

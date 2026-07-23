@@ -11,207 +11,228 @@
         x:DataType="vm:AccountDetailViewModel"
         d:DataContext="{d:DesignInstance vm:AccountDetailViewModel}">
 
-    <ScrollViewer Background="{StaticResource Canvas}">
-        <StackPanel Margin="32,46,32,32" Spacing="24">
-            <Button Classes="back-link" Command="{Binding GoBackCommand}" HorizontalAlignment="Left" IsVisible="{Binding !IsEditing}">
-                <StackPanel Orientation="Horizontal" Spacing="6">
-                    <Border Width="14" Height="14" Background="{Binding $parent[Button].Foreground}">
-                        <Border.OpacityMask>
-                            <ImageBrush Source="avares://PassNest/Assets/back.png" Stretch="Uniform"/>
-                        </Border.OpacityMask>
+    <Panel>
+        <ScrollViewer Background="{StaticResource Canvas}">
+            <StackPanel Margin="32,46,32,32" Spacing="24">
+                <Button Classes="back-link" Command="{Binding GoBackCommand}" HorizontalAlignment="Left" IsVisible="{Binding !IsEditing}">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <Border Width="14" Height="14" Background="{Binding $parent[Button].Foreground}">
+                            <Border.OpacityMask>
+                                <ImageBrush Source="avares://PassNest/Assets/back.png" Stretch="Uniform"/>
+                            </Border.OpacityMask>
+                        </Border>
+                        <TextBlock Text="Natrag" Foreground="{Binding $parent[Button].Foreground}"/>
+                    </StackPanel>
+                </Button>
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                    <Border Grid.Column="0" Width="56" Height="56" CornerRadius="14" Background="{Binding AvatarColor}">
+                        <TextBlock Text="{Binding Initial}" FontFamily="{StaticResource PlexSans}" FontWeight="Bold" FontSize="22" Foreground="{StaticResource TextOnDarkPrimary}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
-                    <TextBlock Text="Natrag" Foreground="{Binding $parent[Button].Foreground}"/>
-                </StackPanel>
-            </Button>
-            <Grid ColumnDefinitions="Auto,*,Auto">
-                <Border Grid.Column="0" Width="56" Height="56" CornerRadius="14" Background="{Binding AvatarColor}">
-                    <TextBlock Text="{Binding Initial}" FontFamily="{StaticResource PlexSans}" FontWeight="Bold" FontSize="22" Foreground="{StaticResource TextOnDarkPrimary}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                </Border>
-                <StackPanel Grid.Column="1" Margin="16,0,0,0" VerticalAlignment="Center" Spacing="6">
-                    <TextBlock Text="{Binding ServiceName}" FontFamily="{StaticResource PlexSans}" FontWeight="Bold" FontSize="22" Foreground="{StaticResource TextPrimary}"/>
-                    <StackPanel Orientation="Horizontal" Spacing="10" IsVisible="{Binding !IsEditing}">
-                        <ItemsControl ItemsSource="{Binding Categories}">
+                    <StackPanel Grid.Column="1" Margin="16,0,0,0" VerticalAlignment="Center" Spacing="6">
+                        <TextBlock Text="{Binding ServiceName}" FontFamily="{StaticResource PlexSans}" FontWeight="Bold" FontSize="22" Foreground="{StaticResource TextPrimary}"/>
+                        <StackPanel Orientation="Horizontal" Spacing="10" IsVisible="{Binding !IsEditing}">
+                            <ItemsControl ItemsSource="{Binding Categories}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel Orientation="Horizontal"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:DataType="models:CategoryBadge">
+                                        <Border Background="{Binding Tint}" CornerRadius="6" Padding="8,3" Margin="0,0,6,0">
+                                            <TextBlock Text="{Binding Name}" FontFamily="{StaticResource PlexSans}" FontSize="11" FontWeight="SemiBold" Foreground="{Binding Foreground}"/>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                            <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                                <Ellipse Width="8" Height="8" Fill="{Binding StrengthColor}"/>
+                                <TextBlock Text="{Binding StrengthLabel}" FontFamily="{StaticResource PlexSans}" FontSize="12" Foreground="{StaticResource TextSecondary}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                    <Button Grid.Column="2" Classes="outline-accent" Command="{Binding EditCommand}" VerticalAlignment="Top" IsVisible="{Binding !IsEditing}">
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <Border Width="16" Height="16" Background="{Binding $parent[Button].Foreground}">
+                                <Border.OpacityMask>
+                                    <ImageBrush Source="avares://PassNest/Assets/edit.png" Stretch="Uniform"/>
+                                </Border.OpacityMask>
+                            </Border>
+                            <TextBlock Text="Uredi" Foreground="{Binding $parent[Button].Foreground}"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+                <StackPanel Spacing="10" IsVisible="{Binding IsEditing}">
+                    <StackPanel Spacing="6">
+                        <TextBlock Classes="field-label" Text="Naziv servisa"/>
+                        <TextBox Classes="form" Text="{Binding EditServiceName}"/>
+                    </StackPanel>
+                    <StackPanel Spacing="6">
+                        <TextBlock Classes="field-label" Text="Korisničko ime"/>
+                        <TextBox Classes="form" Text="{Binding EditUsername}"/>
+                    </StackPanel>
+                    <StackPanel Spacing="6">
+                        <TextBlock Classes="field-label" Text="Lozinka"/>
+                        <TextBox Classes="form" Text="{Binding EditPassword}"/>
+                    </StackPanel>
+                    <StackPanel Spacing="6">
+                        <TextBlock Classes="field-label" Text="URL (opcionalno)"/>
+                        <TextBox Classes="form" PlaceholderText="npr. servis.com/login" Text="{Binding EditUrl}"/>
+                    </StackPanel>
+                    <StackPanel Spacing="6">
+                        <TextBlock Classes="field-label" Text="Kateogrije"/>
+                        <ItemsControl ItemsSource="{Binding EditCategories}">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
-                                    <WrapPanel Orientation="Horizontal"/>
+                                    <UniformGrid Columns="2"/>
                                 </ItemsPanelTemplate>
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
-                                <DataTemplate x:DataType="models:CategoryBadge">
-                                    <Border Background="{Binding Tint}" CornerRadius="6" Padding="8,3" Margin="0,0,6,0">
-                                        <TextBlock Text="{Binding Name}" FontFamily="{StaticResource PlexSans}" FontSize="11" FontWeight="SemiBold" Foreground="{Binding Foreground}"/>
-                                    </Border>
+                                <DataTemplate x:DataType="models:CategoryOption">
+                                    <StackPanel Orientation="Horizontal" Spacing="4" Margin="0,4">
+                                        <CheckBox IsChecked="{Binding IsSelected}">
+                                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                                <Ellipse Width="8" Height="8" Fill="{Binding DotColor}"/>
+                                                <TextBlock Text="{Binding Name}"/>
+                                            </StackPanel>
+                                        </CheckBox>
+                                        <Button Classes="icon-toggle" IsVisible="{Binding !IsSystemDefined}" Command="{Binding #Root.((vm:AccountDetailViewModel)DataContext).DeleteCategoryCommand}" CommandParameter="{Binding}">
+                                            <Border Width="12" Height="12" Background="{StaticResource Weak}">
+                                                <Border.OpacityMask>
+                                                    <ImageBrush Source="avares://PassNest/Assets/trash.png" Stretch="Uniform"/>
+                                                </Border.OpacityMask>
+                                            </Border>
+                                        </Button>
+                                    </StackPanel>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
-                        <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
-                            <Ellipse Width="8" Height="8" Fill="{Binding StrengthColor}"/>
-                            <TextBlock Text="{Binding StrengthLabel}" FontFamily="{StaticResource PlexSans}" FontSize="12" Foreground="{StaticResource TextSecondary}"/>
-                        </StackPanel>
+                        <TextBlock Text="{Binding ErrorMessage}" IsVisible="{Binding HasError}" Foreground="{StaticResource Weak}" FontFamily="{StaticResource PlexSans}" FontSize="12" FontWeight="Bold" Margin="0,4,0,0"/>
                     </StackPanel>
+                    <Grid ColumnDefinitions="*,*">
+                        <Button Grid.Column="0" Classes="secondary" Content="Odustani" Command="{Binding CancelEditCommand}" Margin="0,0,8,0" HorizontalAlignment="Stretch"/>
+                        <Button Grid.Column="1" Classes="primary" Content="Spremi izmjene" Command="{Binding SaveEditCommand}" HorizontalAlignment="Stretch"/>
+                    </Grid>
                 </StackPanel>
-                <Button Grid.Column="2" Classes="outline-accent" Command="{Binding EditCommand}" VerticalAlignment="Top" IsVisible="{Binding !IsEditing}">
-                    <StackPanel Orientation="Horizontal" Spacing="6">
-                        <Border Width="16" Height="16" Background="{Binding $parent[Button].Foreground}">
-                            <Border.OpacityMask>
-                                <ImageBrush Source="avares://PassNest/Assets/edit.png" Stretch="Uniform"/>
-                            </Border.OpacityMask>
-                        </Border>
-                        <TextBlock Text="Uredi" Foreground="{Binding $parent[Button].Foreground}"/>
-                    </StackPanel>
-                </Button>
-            </Grid>
-            <StackPanel Spacing="10" IsVisible="{Binding IsEditing}">
-                <StackPanel Spacing="6">
-                    <TextBlock Classes="field-label" Text="Naziv servisa"/>
-                    <TextBox Classes="form" Text="{Binding EditServiceName}"/>
-                </StackPanel>
-                <StackPanel Spacing="6">
-                    <TextBlock Classes="field-label" Text="Korisničko ime"/>
-                    <TextBox Classes="form" Text="{Binding EditUsername}"/>
-                </StackPanel>
-                <StackPanel Spacing="6">
-                    <TextBlock Classes="field-label" Text="Lozinka"/>
-                    <TextBox Classes="form" Text="{Binding EditPassword}"/>
-                </StackPanel>
-                <StackPanel Spacing="6">
-                    <TextBlock Classes="field-label" Text="URL (opcionalno)"/>
-                    <TextBox Classes="form" PlaceholderText="npr. servis.com/login" Text="{Binding EditUrl}"/>
-                </StackPanel>
-                <StackPanel Spacing="6">
-                    <TextBlock Classes="field-label" Text="Kateogrije"/>
-                    <ItemsControl ItemsSource="{Binding EditCategories}">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <UniformGrid Columns="2"/>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate x:DataType="models:CategoryOption">
-                                <StackPanel Orientation="Horizontal" Spacing="4" Margin="0,4">
-                                    <CheckBox IsChecked="{Binding IsSelected}">
-                                        <StackPanel Orientation="Horizontal" Spacing="8">
-                                            <Ellipse Width="8" Height="8" Fill="{Binding DotColor}"/>
-                                            <TextBlock Text="{Binding Name}"/>
-                                        </StackPanel>
-                                    </CheckBox>
-                                    <Button Classes="icon-toggle" IsVisible="{Binding !IsSystemDefined}" Command="{Binding #Root.((vm:AccountDetailViewModel)DataContext).DeleteCategoryCommand}" CommandParameter="{Binding}">
-                                        <Border Width="12" Height="12" Background="{StaticResource Weak}">
-                                            <Border.OpacityMask>
-                                                <ImageBrush Source="avares://PassNest/Assets/trash.png" Stretch="Uniform"/>
-                                            </Border.OpacityMask>
-                                        </Border>
-                                    </Button>
+                <StackPanel Spacing="10" IsVisible="{Binding !IsEditing}">
+                    <TextBlock Classes="section-label-light" Text="PRISTUPNI PODACI"/>
+                    <Border Classes="settings-card">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <StackPanel Grid.Column="0" Spacing="4">
+                                <TextBlock Text="Korisničko ime" FontFamily="{StaticResource PlexSans}" FontSize="12" Foreground="{StaticResource TextSecondary}"/>
+                                <TextBlock Text="{Binding Username}" FontFamily="{StaticResource PlexSans}" FontSize="15" FontWeight="Bold" Foreground="{StaticResource TextPrimary}"/>
+                            </StackPanel>
+                            <Button Grid.Column="1" Classes="outline-accent" Command="{Binding CopyUsernameCommand}" VerticalAlignment="Center">
+                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                    <Border Width="14" Height="14" Background="{Binding $parent[Button].Foreground}">
+                                        <Border.OpacityMask>
+                                            <ImageBrush Source="avares://PassNest/Assets/copy.png" Stretch="Uniform"/>
+                                        </Border.OpacityMask>
+                                    </Border>
+                                    <TextBlock Text="Kopiraj" Foreground="{Binding $parent[Button].Foreground}"/>
                                 </StackPanel>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                    <TextBlock Text="{Binding ErrorMessage}" IsVisible="{Binding HasError}" Foreground="{StaticResource Weak}" FontFamily="{StaticResource PlexSans}" FontSize="12" FontWeight="Bold" Margin="0,4,0,0"/>
+                            </Button>
+                        </Grid>
+                    </Border>
+                    <Border Classes="settings-card">
+                        <Grid ColumnDefinitions="*,Auto,Auto">
+                            <StackPanel Grid.Column="0" Spacing="4">
+                                <TextBlock Text="Lozinka" FontFamily="{StaticResource PlexSans}" FontSize="12" Foreground="{StaticResource TextSecondary}"/>
+                                <TextBlock Text="{Binding MaskedPassword}" FontFamily="{StaticResource PlexMono}" FontSize="15" FontWeight="Bold" Foreground="{StaticResource TextPrimary}" IsVisible="{Binding !IsPasswordRevealed}"/>
+                                <TextBlock Text="{Binding Password}" FontFamily="{StaticResource PlexMono}" FontSize="15" FontWeight="Bold" Foreground="{StaticResource TextPrimary}" IsVisible="{Binding IsPasswordRevealed}"/>
+                            </StackPanel>
+                            <Button Grid.Column="1" Classes="icon-action" Command="{Binding TogglePasswordRevealCommand}" VerticalAlignment="Center" Margin="0,0,8,0">
+                                <Panel Width="16" Height="16">
+                                    <Border IsVisible="{Binding IsPasswordRevealed}" Background="{StaticResource TextMuted}">
+                                        <Border.OpacityMask>
+                                            <ImageBrush Source="avares://PassNest/Assets/eye.png" Stretch="Uniform"/>
+                                        </Border.OpacityMask>
+                                    </Border>
+                                    <Border IsVisible="{Binding !IsPasswordRevealed}" Background="{StaticResource TextMuted}">
+                                        <Border.OpacityMask>
+                                            <ImageBrush Source="avares://PassNest/Assets/eye-off.png" Stretch="Uniform"/>
+                                        </Border.OpacityMask>
+                                    </Border>
+                                </Panel>
+                            </Button>
+                            <Button Grid.Column="2" Classes="outline-accent" Command="{Binding CopyPasswordCommand}" VerticalAlignment="Center">
+                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                    <Border Width="14" Height="14" Background="{Binding $parent[Button].Foreground}">
+                                        <Border.OpacityMask>
+                                            <ImageBrush Source="avares://PassNest/Assets/copy.png" Stretch="Uniform"/>
+                                        </Border.OpacityMask>
+                                    </Border>
+                                    <TextBlock Text="Kopiraj" Foreground="{Binding $parent[Button].Foreground}"/>
+                                </StackPanel>
+                            </Button>
+                        </Grid>
+                    </Border>
+                    <Border Classes="settings-card">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <StackPanel Spacing="4">
+                                <TextBlock Text="URL" FontFamily="{StaticResource PlexSans}" FontSize="12" Foreground="{StaticResource TextSecondary}"/>
+                                <TextBlock Text="{Binding Url}" FontFamily="{StaticResource PlexMono}" FontSize="15" FontWeight="Bold" Foreground="{StaticResource Accent}"/>
+                            </StackPanel>
+                            <Button Grid.Column="1" Classes="outline-accent" Command="{Binding OpenUrlCommand}" IsEnabled="{Binding HasUrl}" Content="Otvori" VerticalAlignment="Center"/>
+                        </Grid>
+                    </Border>
                 </StackPanel>
-                <Grid ColumnDefinitions="*,*">
-                    <Button Grid.Column="0" Classes="secondary" Content="Odustani" Command="{Binding CancelEditCommand}" Margin="0,0,8,0" HorizontalAlignment="Stretch"/>
-                    <Button Grid.Column="1" Classes="primary" Content="Spremi izmjene" Command="{Binding SaveEditCommand}" HorizontalAlignment="Stretch"/>
+                <Grid ColumnDefinitions="*,Auto" IsVisible="{Binding !IsEditing}">
+                    <Button Grid.Column="0" Classes="primary" Command="{Binding AutoFillCommand}" Padding="0,14" Margin="0,0,12,0" HorizontalAlignment="Stretch">
+                        <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
+                            <Border Width="16" Height="16" Background="{Binding $parent[Button].Foreground}">
+                                <Border.OpacityMask>
+                                    <ImageBrush Source="avares://PassNest/Assets/fill.png" Stretch="Uniform"/>
+                                </Border.OpacityMask>
+                            </Border>
+                            <TextBlock Text="Automatski popuni"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Grid.Column="1" Classes="outline-weak" Command="{Binding DeleteCommand}" Padding="16,14">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <Border Width="16" Height="16" Background="{Binding $parent[Button].Foreground}">
+                                <Border.OpacityMask>
+                                    <ImageBrush Source="avares://PassNest/Assets/trash.png" Stretch="Uniform"/>
+                                </Border.OpacityMask>
+                            </Border>
+                            <TextBlock Text="Izbriši"/>
+                        </StackPanel>
+                    </Button>
                 </Grid>
-            </StackPanel>
-            <StackPanel Spacing="10" IsVisible="{Binding !IsEditing}">
-                <TextBlock Classes="section-label-light" Text="PRISTUPNI PODACI"/>
-                <Border Classes="settings-card">
-                    <Grid ColumnDefinitions="*,Auto">
-                        <StackPanel Grid.Column="0" Spacing="4">
-                            <TextBlock Text="Korisničko ime" FontFamily="{StaticResource PlexSans}" FontSize="12" Foreground="{StaticResource TextSecondary}"/>
-                            <TextBlock Text="{Binding Username}" FontFamily="{StaticResource PlexSans}" FontSize="15" FontWeight="Bold" Foreground="{StaticResource TextPrimary}"/>
-                        </StackPanel>
-                        <Button Grid.Column="1" Classes="outline-accent" Command="{Binding CopyUsernameCommand}" VerticalAlignment="Center">
-                            <StackPanel Orientation="Horizontal" Spacing="6">
-                                <Border Width="14" Height="14" Background="{Binding $parent[Button].Foreground}">
-                                    <Border.OpacityMask>
-                                        <ImageBrush Source="avares://PassNest/Assets/copy.png" Stretch="Uniform"/>
-                                    </Border.OpacityMask>
-                                </Border>
-                                <TextBlock Text="Kopiraj" Foreground="{Binding $parent[Button].Foreground}"/>
-                            </StackPanel>
-                        </Button>
-                    </Grid>
+                <Border Background="#1FE0952E" BorderBrush="{StaticResource Medium}" BorderThickness="1" CornerRadius="8" Padding="12">
+                    <TextBlock TextWrapping="Wrap" FontFamily="{StaticResource PlexSans}" FontSize="13" Foreground="{StaticResource TextPrimary}">
+                        <Run Text="Kako bi iskoristili mogućnost"/>
+                        <Run Text="automatske popune" FontWeight="Bold"/>
+                        <Run Text="morate prvo označiti polje za unos korisničkog imena pa pritisnuti gumb"/>
+                        <Run Text="Automatski popuni." FontWeight="Bold"/>
+                    </TextBlock>
                 </Border>
-                <Border Classes="settings-card">
-                    <Grid ColumnDefinitions="*,Auto,Auto">
-                        <StackPanel Grid.Column="0" Spacing="4">
-                            <TextBlock Text="Lozinka" FontFamily="{StaticResource PlexSans}" FontSize="12" Foreground="{StaticResource TextSecondary}"/>
-                            <TextBlock Text="{Binding MaskedPassword}" FontFamily="{StaticResource PlexMono}" FontSize="15" FontWeight="Bold" Foreground="{StaticResource TextPrimary}" IsVisible="{Binding !IsPasswordRevealed}"/>
-                            <TextBlock Text="{Binding Password}" FontFamily="{StaticResource PlexMono}" FontSize="15" FontWeight="Bold" Foreground="{StaticResource TextPrimary}" IsVisible="{Binding IsPasswordRevealed}"/>
-                        </StackPanel>
-                        <Button Grid.Column="1" Classes="icon-action" Command="{Binding TogglePasswordRevealCommand}" VerticalAlignment="Center" Margin="0,0,8,0">
-                            <Panel Width="16" Height="16">
-                                <Border IsVisible="{Binding IsPasswordRevealed}" Background="{StaticResource TextMuted}">
-                                    <Border.OpacityMask>
-                                        <ImageBrush Source="avares://PassNest/Assets/eye.png" Stretch="Uniform"/>
-                                    </Border.OpacityMask>
-                                </Border>
-                                <Border IsVisible="{Binding !IsPasswordRevealed}" Background="{StaticResource TextMuted}">
-                                    <Border.OpacityMask>
-                                        <ImageBrush Source="avares://PassNest/Assets/eye-off.png" Stretch="Uniform"/>
-                                    </Border.OpacityMask>
-                                </Border>
-                            </Panel>
-                        </Button>
-                        <Button Grid.Column="2" Classes="outline-accent" Command="{Binding CopyPasswordCommand}" VerticalAlignment="Center">
-                            <StackPanel Orientation="Horizontal" Spacing="6">
-                                <Border Width="14" Height="14" Background="{Binding $parent[Button].Foreground}">
-                                    <Border.OpacityMask>
-                                        <ImageBrush Source="avares://PassNest/Assets/copy.png" Stretch="Uniform"/>
-                                    </Border.OpacityMask>
-                                </Border>
-                                <TextBlock Text="Kopiraj" Foreground="{Binding $parent[Button].Foreground}"/>
-                            </StackPanel>
-                        </Button>
-                    </Grid>
-                </Border>
-                <Border Classes="settings-card">
-                    <Grid ColumnDefinitions="*,Auto">
-                        <StackPanel Spacing="4">
-                            <TextBlock Text="URL" FontFamily="{StaticResource PlexSans}" FontSize="12" Foreground="{StaticResource TextSecondary}"/>
-                            <TextBlock Text="{Binding Url}" FontFamily="{StaticResource PlexMono}" FontSize="15" FontWeight="Bold" Foreground="{StaticResource Accent}"/>
-                        </StackPanel>
-                        <Button Grid.Column="1" Classes="outline-accent" Command="{Binding OpenUrlCommand}" IsEnabled="{Binding HasUrl}" Content="Otvori" VerticalAlignment="Center"/>
-                    </Grid>
-                </Border>
-            </StackPanel>
-            <Grid ColumnDefinitions="*,Auto" IsVisible="{Binding !IsEditing}">
-                <Button Grid.Column="0" Classes="primary" Command="{Binding AutoFillCommand}" Padding="0,14" Margin="0,0,12,0" HorizontalAlignment="Stretch">
-                    <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
-                        <Border Width="16" Height="16" Background="{Binding $parent[Button].Foreground}">
-                            <Border.OpacityMask>
-                                <ImageBrush Source="avares://PassNest/Assets/fill.png" Stretch="Uniform"/>
-                            </Border.OpacityMask>
-                        </Border>
-                        <TextBlock Text="Automatski popuni"/>
-                    </StackPanel>
-                </Button>
-                <Button Grid.Column="1" Classes="outline-weak" Command="{Binding DeleteCommand}" Padding="16,14">
-                    <StackPanel Orientation="Horizontal" Spacing="8">
-                        <Border Width="16" Height="16" Background="{Binding $parent[Button].Foreground}">
-                            <Border.OpacityMask>
-                                <ImageBrush Source="avares://PassNest/Assets/trash.png" Stretch="Uniform"/>
-                            </Border.OpacityMask>
-                        </Border>
-                        <TextBlock Text="Izbriši"/>
-                    </StackPanel>
-                </Button>
-            </Grid>
-            <Border Background="#1FE0952E" BorderBrush="{StaticResource Medium}" BorderThickness="1" CornerRadius="8" Padding="12">
-                <TextBlock TextWrapping="Wrap" FontFamily="{StaticResource PlexSans}" FontSize="13" Foreground="{StaticResource TextPrimary}">
-                    <Run Text="Kako bi iskoristili mogućnost"/>
-                    <Run Text="automatske popune" FontWeight="Bold"/>
-                    <Run Text="morate prvo označiti polje za unos korisničkog imena pa pritisnuti gumb"/>
-                    <Run Text="Automatski popuni." FontWeight="Bold"/>
+                <TextBlock FontFamily="{StaticResource PlexSans}" FontSize="12" Foreground="{StaticResource TextMuted}" IsVisible="{Binding !IsEditing}">
+                    <Run Text="Zadnja izmjena: "/>
+                    <Run Text="{Binding LastModified}"/>
+                    <Run Text=" ·  Stvoreno: "/>
+                    <Run Text="{Binding CreatedAt}"/>
                 </TextBlock>
+            </StackPanel>
+        </ScrollViewer>
+        <Border Background="#99101620" IsVisible="{Binding IsDeleteConfirmationOpen}">
+            <Border Background="{StaticResource Surface}" CornerRadius="16" BoxShadow="0 20 60 0 #40000000" HorizontalAlignment="Center" VerticalAlignment="Center" Width="400" Padding="28">
+                <StackPanel Spacing="16">
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="Izbriši račun?" FontFamily="{StaticResource PlexSans}" FontWeight="Bold" FontSize="18" Foreground="{StaticResource TextPrimary}"/>
+                        <TextBlock FontFamily="{StaticResource PlexSans}" FontSize="12" Foreground="{StaticResource TextSecondary}" TextWrapping="Wrap">
+                            <Run Text="Ova radnja je nepovratna. Upiši"/>
+                            <Run Text="{Binding ServiceName}" FontWeight="Bold" Foreground="{StaticResource TextPrimary}"/>
+                            <Run Text="da potvrdiš brisanje."/>
+                        </TextBlock>
+                    </StackPanel>
+                    <TextBox Classes="form" Text="{Binding DeleteConfirmationInput}"/>
+                    <Grid ColumnDefinitions="*,*">
+                        <Button Grid.Column="0" Classes="secondary" Content="Odustani" Command="{Binding CancelDeleteCommand}" Margin="0,0,8,0" HorizontalAlignment="Stretch"/>
+                        <Button Grid.Column="1" Classes="outline-weak" Content="Izbriši" Command="{Binding ConfirmDeleteCommand}" IsEnabled="{Binding CanConfirmDelete}" Padding="0,14" FontSize="14" HorizontalAlignment="Stretch"/>
+                    </Grid>
+                </StackPanel>
             </Border>
-            <TextBlock FontFamily="{StaticResource PlexSans}" FontSize="12" Foreground="{StaticResource TextMuted}" IsVisible="{Binding !IsEditing}">
-                <Run Text="Zadnja izmjena: "/>
-                <Run Text="{Binding LastModified}"/>
-                <Run Text=" ·  Stvoreno: "/>
-                <Run Text="{Binding CreatedAt}"/>
-            </TextBlock>
-        </StackPanel>
-    </ScrollViewer>
+        </Border>
+    </Panel>
 </UserControl>

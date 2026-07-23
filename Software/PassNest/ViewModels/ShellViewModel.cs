@@ -87,11 +87,12 @@ namespace PassNest.ViewModels
         {
             var detail = new AccountDetailViewModel(accountStore, account, clipboardService, autofillEngine);
             detail.BackRequested += OnAccountDetailBackRequested;
-            detail.Deleted += OnAccountDetailBackRequested;
+            detail.Deleted += OnAccountDetailDeleted;
 
             detail.PropertyChanged += (_, e) =>
             {
                 if (e.PropertyName == nameof(AccountDetailViewModel.IsEditing)) UpdateBreadcrumbs();
+                if (e.PropertyName == nameof(AccountDetailViewModel.IsDeleteConfirmationOpen)) IsDialogOpen = detail.IsDeleteConfirmationOpen;
             };
 
             CurrentPage = detail;
@@ -100,6 +101,13 @@ namespace PassNest.ViewModels
         private void OnAccountDetailBackRequested()
         {
             CurrentPage = CreateVaultPage();
+        }
+
+        private void OnAccountDetailDeleted()
+        {
+            var vault = CreateVaultPage();
+            CurrentPage = vault;
+            vault.ShowSuccess("Račun je uspješno izbrisan.");
         }
 
         partial void OnSelectedNavItemChanged(string value)
