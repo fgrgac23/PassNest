@@ -192,26 +192,6 @@
         <Setter Property="Background" Value="{StaticResource Accent}"/>
     </Style>
 
-    <Style Selector="Button.copy-action">
-        <Setter Property="FontFamily" Value="{StaticResource PlexSans}"/>
-        <Setter Property="FontWeight" Value="SemiBold"/>
-        <Setter Property="FontSize" Value="12"/>
-        <Setter Property="Padding" Value="10,6"/>
-        <Setter Property="CornerRadius" Value="8"/>
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="BorderBrush" Value="{StaticResource Accent}"/>
-        <Setter Property="Background" Value="{StaticResource AccentTint}"/>
-        <Setter Property="Foreground" Value="{StaticResource Accent}"/>
-        <Setter Property="Cursor" Value="Hand"/>
-        <Setter Property="HorizontalContentAlignment" Value="Center"/>
-        <Setter Property="VerticalContentAlignment" Value="Center"/>
-    </Style>
-
-    <Style Selector="Button.copy-action:pointerover">
-        <Setter Property="Background" Value="{StaticResource Accent}"/>
-        <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
-    </Style>
-
     <Style Selector="Button.secondary-dark">
         <Setter Property="FontFamily" Value="{StaticResource PlexSans}"/>
         <Setter Property="FontSize" Value="14"/>
@@ -291,10 +271,22 @@
         <Setter Property="Foreground" Value="{StaticResource Accent}"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="Template">
+           <ControlTemplate>
+              <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="{TemplateBinding CornerRadius}" Padding="{TemplateBinding Padding}">
+                 <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/> 
+              </Border>
+           </ControlTemplate> 
+        </Setter>
     </Style>
 
     <Style Selector="Button.outline-accent:pointerover">
-        <Setter Property="Background" Value="{StaticResource AccentTint}"/>
+        <Setter Property="Background" Value="#1F1E8A91"/>
+    </Style>
+
+    <Style Selector="Button.outline-accent:disabled">
+        <Setter Property="BorderBrush" Value="{StaticResource BorderStrong}"/>
+        <Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
     </Style>
 
     <Style Selector="Border.settings-card">
@@ -371,6 +363,13 @@
         <Setter Property="Foreground" Value="{StaticResource Weak}"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="Template">
+           <ControlTemplate>
+              <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="{TemplateBinding CornerRadius}" Padding="{TemplateBinding Padding}">
+                 <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/> 
+              </Border>
+           </ControlTemplate> 
+        </Setter>
     </Style>
 
     <Style Selector="Button.outline-weak:pointerover">
