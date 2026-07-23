@@ -44,7 +44,7 @@
                         <StackPanel Spacing="14">
                             <TextBlock TextWrapping="Wrap" Text="Izradite enkriptiranu kopiju cijele baze ili ju vratite na novom uređaju." FontFamily="{StaticResource PlexSans}" FontSize="13" Foreground="{StaticResource TextSecondary}"/>
                             <StackPanel Orientation="Horizontal" Spacing ="12">
-                                <Button Classes="primary backup-export" Command="{Binding ExportBackupCommand}" Padding="20,14">
+                                <Button Classes="primary" Command="{Binding ExportBackupCommand}" Padding="20,14">
                                     <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
                                         <Border Width="14" Height="14" Background="{Binding $parent[Button].Foreground}">
                                             <Border.OpacityMask>

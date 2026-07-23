@@ -358,10 +358,6 @@
         <Setter Property="Background" Value="{StaticResource Canvas}"/>
     </Style>
 
-    <Style Selector="Button.primary.backup-export:pointerover">
-       <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/> 
-    </Style>
-
     <Style Selector="Button.outline-weak">
         <Setter Property="FontFamily" Value="{StaticResource PlexSans}"/>
         <Setter Property="FontSize" Value="13"/>
