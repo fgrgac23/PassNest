@@ -163,7 +163,12 @@ namespace PassNest.ViewModels
         {
             if (category.IsSystemDefined) return;
 
-            accountStore.DeleteCategory(category.CategoryId);
+            if (!accountStore.DeleteCategory(category.CategoryId))
+            {
+                ShowError($"Kategorija '{category.Name}' se koristi na barem jednom računu. Makni je s računa prije brisanja.");
+                return;
+            }
+
             EditCategories.Remove(category);
         }
 
