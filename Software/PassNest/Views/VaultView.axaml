@@ -181,7 +181,16 @@
                                 </StackPanel>
                             </Button>
                             <local:PasswordGeneratorOptions DataContext="{Binding Generator}"/>
-                            <Button Classes="secondary" Content="Generiraj ponovno" Command="{Binding Generator.GenerateCommand}" HorizontalAlignment="Stretch"/>
+                            <Button Classes="outline-accent" Command="{Binding Generator.GenerateCommand}" Padding="0,14" HorizontalAlignment="Stretch">
+                                <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
+                                    <Border Width="18" Height="18" Background="{Binding $parent[Button].Foreground}">
+                                        <Border.OpacityMask>
+                                            <ImageBrush Source="avares://PassNest/Assets/reload.png" Stretch="Uniform"/>
+                                        </Border.OpacityMask>
+                                    </Border>
+                                    <TextBlock Text="Generiraj ponovno" FontSize="15" Foreground="{Binding $parent[Button].Foreground}"/>
+                                </StackPanel>
+                            </Button>
                         </StackPanel>
                     </Border>
                 </Grid>

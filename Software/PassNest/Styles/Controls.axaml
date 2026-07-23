@@ -67,9 +67,10 @@
         </Setter>
     </Style>
     
+    
     <Style Selector="Button.secondary:pointerover">
-        <Setter Property="Background" Value="{StaticResource AccentTint}"/>
-        <Setter Property="BorderBrush" Value="{StaticResource Accent}"/>
+        <Setter Property="Background" Value="{StaticResource BorderStrong}"/>
+        <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
     </Style>
 
     <Style Selector="Button.icon-toggle">
