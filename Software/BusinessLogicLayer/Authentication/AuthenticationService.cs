@@ -88,30 +88,40 @@ namespace BusinessLogicLayer.Authentication
         public AuthResult Login(string masterPassword)
         {
             var user = UserRepository.GetAll().FirstOrDefault();
-            if(user is null)
+            if (user is null)
             {
                 return AuthResult.Fail("korisnik nije registriran.");
             }
 
-            if(!Crypto.VerifyPassword(masterPassword, user.MasterPasswordHash, user.MasterPasswordSalt))
+            if (!Crypto.VerifyPassword(masterPassword, user.MasterPasswordHash, user.MasterPasswordSalt))
             {
                 return AuthResult.Fail("Neispravna lozinka.");
             }
 
-            CurrentUser = user;
-            EncryptionKey = Crypto.DeriveKey(masterPassword, user.MasterPasswordSalt);
-
             if (user.Is2FAEnabled)
             {
-                PendingTwoFactorCode = TwoFactorCodeGenerator.GenerateCode();
-                TwoFactorExpiresAt = DateTime.UtcNow.AddMinutes(5);
+                var code = TwoFactorCodeGenerator.GenerateCode();
+                var expiresAt = DateTime.UtcNow.AddMinutes(5);
 
-                EmailSender.SendEmail(user.Email, "PassNest - kod za prijavu", $"Vaš jednokratni kod za prijavu je: {PendingTwoFactorCode}. Kod vrijedi 5 minuta.");
+                try
+                {
+                    EmailSender.SendEmail(user.Email, "PassNest - kod za prijavu", $"Vaš jednokratni kod za prijavu je: {code}. Kod vrijedi 5 minuta.");
+                }
+                catch (Exception)
+                {
+                    return AuthResult.Fail("Provjerite internetsku vezu za slanje 2FA koda i pokušajte ponovno.");
+                }
 
+                CurrentUser = user;
+                EncryptionKey = Crypto.DeriveKey(masterPassword, user.MasterPasswordSalt);
+                PendingTwoFactorCode = code;
+                TwoFactorExpiresAt = expiresAt;
                 IsAuthenticated = false;
                 return AuthResult.Ok(requiresTwoFactor: true);
             }
 
+            CurrentUser = user;
+            EncryptionKey = Crypto.DeriveKey(masterPassword, user.MasterPasswordSalt);
             IsAuthenticated = true;
             return AuthResult.Ok();
         }
@@ -152,17 +162,28 @@ namespace BusinessLogicLayer.Authentication
             UserRepository.SaveChanges();
         }
 
-        public void ResendTwoFactorCode()
+        public AuthResult ResendTwoFactorCode()
         {
-            if(CurrentUser is null)
+            if (CurrentUser is null)
             {
                 throw new InvalidOperationException("Korisnik mora biti prijavljen.");
             }
 
-            PendingTwoFactorCode = TwoFactorCodeGenerator.GenerateCode();
-            TwoFactorExpiresAt = DateTime.UtcNow.AddMinutes(5);
+            var code = TwoFactorCodeGenerator.GenerateCode();
+            var expiresAt = DateTime.UtcNow.AddMinutes(5);
 
-            EmailSender.SendEmail(CurrentUser.Email, "PassNest - kod za prijavu", $"Vaš jednokratni kod za prijavu je: {PendingTwoFactorCode}. Kod vrijedi 5 minuta.");
+            try
+            {
+                EmailSender.SendEmail(CurrentUser.Email, "PassNest - kod za prijavu", $"Vaš jednokratni kod za prijavu je: {code}. Kod vrijedi 5 minuta.");
+            }
+            catch (Exception)
+            {
+                return AuthResult.Fail("Provjerite internetsku vezu za slanje 2FA koda i pokušajte ponovno.");
+            }
+
+            PendingTwoFactorCode = code;
+            TwoFactorExpiresAt = expiresAt;
+            return AuthResult.Ok();
         }
 
         public bool VerifyTwoFactor(string code)

@@ -9,7 +9,7 @@ namespace BusinessLogicLayer.Authentication
         AuthResult Login(string masterPassword);
         void EnableTwoFactor(string email);
         void DisableTwoFactor();
-        void ResendTwoFactorCode();
+        AuthResult ResendTwoFactorCode();
         void SetAutoLockMinutes(int minutes);
         bool VerifyTwoFactor(string code);
         User? GetCurrentUser();

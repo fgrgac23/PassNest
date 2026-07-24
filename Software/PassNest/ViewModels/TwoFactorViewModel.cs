@@ -137,7 +137,13 @@ namespace PassNest.ViewModels
         [RelayCommand]
         private void ResendCode()
         {
-            authProvider.ResendTwoFactorCode();
+            var result = authProvider.ResendTwoFactorCode();
+
+            if (!result.Success)
+            {
+                ShowError(result.ErrorMessage);
+                return;
+            }
 
             Digit1 = string.Empty;
             Digit2 = string.Empty;
