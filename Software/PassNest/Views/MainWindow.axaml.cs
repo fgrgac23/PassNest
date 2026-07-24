@@ -1,6 +1,10 @@
 using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Threading;
 using System;
+using System.Diagnostics;
+using System.IO;
 
 namespace PassNest.Views
 {
@@ -12,6 +16,7 @@ namespace PassNest.Views
             Opened += (_, _) => CenterOnScreen();
             SizeChanged += (_, _) => CenterOnScreen();
             Closing += OnClosing;
+            AddHandler(KeyDownEvent, OnKeyDown, RoutingStrategies.Tunnel);
 
             DataContextChanged += (_, _) =>
             {
@@ -20,6 +25,26 @@ namespace PassNest.Views
                     vm.ShowMainWindowRequested += OnShowMainWindowRequested;
                 }
             };
+        }
+
+        private void OnKeyDown(object? sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.F1)
+            {
+                OpenUserManual();
+            }
+        }
+
+        private static void OpenUserManual()
+        {
+            var manualPath = Path.Combine(AppContext.BaseDirectory, "Docs", "PASSNEST-KorisnickiPrirucnik.pdf");
+
+            if (!File.Exists(manualPath))
+            {
+                return;
+            }
+
+            Process.Start(new ProcessStartInfo(manualPath) { UseShellExecute = true });
         }
 
         private void OnClosing(object? sender, WindowClosingEventArgs e)

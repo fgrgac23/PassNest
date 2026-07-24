@@ -36,6 +36,12 @@
   </ItemGroup>
 
   <ItemGroup>
+	<Folder Include="Assets\Fonts\" />
+	<AvaloniaResource Include="Assets\**" />
+	<None Include="Docs\**" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Update="Views\SecurityView.axaml.cs">
       <DependentUpon>SecurityView.axaml</DependentUpon>
     </Compile>

@@ -39,6 +39,9 @@ namespace PassNest.ViewModels
         [ObservableProperty]
         private bool isDialogOpen;
 
+        [ObservableProperty]
+        private bool isWelcomeDialogOpen;
+
         public VaultViewModel? CurrentVault => CurrentPage as VaultViewModel;
         public AccountDetailViewModel? CurrentDetail => CurrentPage as AccountDetailViewModel;
         public GeneratorViewModel? CurrentGenerator => CurrentPage as GeneratorViewModel;
@@ -51,7 +54,7 @@ namespace PassNest.ViewModels
 
         public event Action? VaultLocked;
 
-        public ShellViewModel(IAccountStore accountStore, IPasswordGenerator passwordGenerator, IClipboardService clipboardService, IAuthProvider authProvider, IAutofillEngine autofillEngine, IBackupManager backupManager, IFIleDialogService fileDialogService, IIdleTimerService idleTimerService, IPasswordAuditor passwordAuditor)
+        public ShellViewModel(IAccountStore accountStore, IPasswordGenerator passwordGenerator, IClipboardService clipboardService, IAuthProvider authProvider, IAutofillEngine autofillEngine, IBackupManager backupManager, IFIleDialogService fileDialogService, IIdleTimerService idleTimerService, IPasswordAuditor passwordAuditor, bool showWelcomeMessage = false)
         {
             this.accountStore = accountStore;
             this.passwordGenerator = passwordGenerator;
@@ -68,6 +71,12 @@ namespace PassNest.ViewModels
             idleTimerService.TimedOut += OnIdleTimedOut;
             var autoLockMinutes = authProvider.GetCurrentUser()?.AutoLockMinutes ?? 0;
             idleTimerService.Start(ToTimeout(autoLockMinutes));
+
+            if (showWelcomeMessage)
+            {
+                IsWelcomeDialogOpen = true;
+                IsDialogOpen = true;
+            }
         }
 
         private VaultViewModel CreateVaultPage()
@@ -186,6 +195,13 @@ namespace PassNest.ViewModels
             OnPropertyChanged(nameof(CurrentGenerator));
             OnPropertyChanged(nameof(CurrentSettings));
             UpdateBreadcrumbs();
+        }
+
+        [RelayCommand]
+        private void CloseWelcomeDialog()
+        {
+            IsWelcomeDialogOpen = false;
+            IsDialogOpen = false;
         }
 
         [RelayCommand]

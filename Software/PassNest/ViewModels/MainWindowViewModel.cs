@@ -54,7 +54,7 @@ namespace PassNest.ViewModels
         private LoginViewModel CreateLoginPage()
         {
             var vm = new LoginViewModel(authProvider);
-            vm.LoginSucceded += OnAuthenticated;
+            vm.LoginSucceded += () => OnAuthenticated(isNewRegistration: false);
             vm.TwoFacotrRequired += OnTwoFactorRequired;
             return vm;
         }
@@ -62,7 +62,7 @@ namespace PassNest.ViewModels
         private void OnTwoFactorRequired()
         {
             var vm = new TwoFactorViewModel(authProvider);
-            vm.VerificationSucceeded += OnAuthenticated;
+            vm.VerificationSucceeded += () => OnAuthenticated(isNewRegistration: false);
             vm.BackRequested += () => CurrentPage = CreateLoginPage();
             CurrentPage = vm;
         }
@@ -70,20 +70,20 @@ namespace PassNest.ViewModels
         private RegisterViewModel CreateRegisterPage()
         {
             var vm = new RegisterViewModel(authProvider, passwordGenerator);
-            vm.RegistrationSucceeded += OnAuthenticated;
+            vm.RegistrationSucceeded += () => OnAuthenticated(isNewRegistration: true);
             return vm;
         }
 
-        private async void OnAuthenticated()
+        private async void OnAuthenticated(bool isNewRegistration = false)
         {
             CurrentPage = new LoadingViewModel();
             await Task.Delay(1500);
-            CurrentPage = CreateShellPage();
+            CurrentPage = CreateShellPage(isNewRegistration);
         }
 
-        private ShellViewModel CreateShellPage()
+        private ShellViewModel CreateShellPage(bool showWelcomeMessage = false)
         {
-            var vm = new ShellViewModel(accountStore, passwordGenerator, clipboardService, authProvider, autofillEngine, backupManager, fIleDialogService, idleTimerService, passwordAuditor);
+            var vm = new ShellViewModel(accountStore, passwordGenerator, clipboardService, authProvider, autofillEngine, backupManager, fIleDialogService, idleTimerService, passwordAuditor, showWelcomeMessage);
             vm.VaultLocked += OnVaultLocked;
             return vm;
         }

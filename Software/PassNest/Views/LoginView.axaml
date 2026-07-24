@@ -52,7 +52,7 @@
                 </Panel>
             </ScrollViewer>
         </Grid>
-        <Border Classes="error-toast" Classes.visible="{Binding HasError}" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="24,56,24,0" Background="#1FD6503C" BorderBrush="{StaticResource Weak}" BorderThickness="1" CornerRadius="10" Padding="16,12">
+        <Border Classes="error-toast" Classes.visible="{Binding HasError}" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="24,56,24,0" Background="#1FD6503C" BorderBrush="{StaticResource Weak}" BorderThickness="1" CornerRadius="10" Padding="16,8">
             <TextBlock Text="{Binding ErrorMessage}" Foreground="{StaticResource Weak}" FontFamily="{StaticResource PlexSans}" FontSize="15" FontWeight="Bold" TextWrapping="Wrap" HorizontalAlignment="Center"/>
         </Border>
     </Panel>
