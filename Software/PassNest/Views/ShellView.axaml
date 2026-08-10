@@ -168,19 +168,20 @@
                 <TextBlock Text="{Binding CurrentSettings.ErrorMessage}" Foreground="{StaticResource TextOnDarkPrimary}" FontFamily="{StaticResource PlexSans}" FontSize="15" FontWeight="Bold" TextWrapping="Wrap" HorizontalAlignment="Center"/>
             </Border>
             <Border Background="#99101620" IsVisible="{Binding IsWelcomeDialogOpen}">
-                <Border Background="{StaticResource Surface}" CornerRadius="16" BoxShadow="0 20 60 0 #40000000" HorizontalAlignment="Center" VerticalAlignment="Center" Width="420" Padding="28">
-                    <StackPanel Spacing="16">
-                        <StackPanel Spacing="10" HorizontalAlignment="Center">
-                            <Image Source="avares://PassNest/Assets/PassNest-Logo.png" Height="60" Stretch="Uniform" HorizontalAlignment="Center"/>
-                            <TextBlock Text="Dobrodošli u PassNest!" FontFamily="{StaticResource PlexSans}" FontWeight="Bold" FontSize="20" Foreground="{StaticResource TextPrimary}" HorizontalAlignment="Center" TextAlignment="Center"/>
-                            <TextBlock TextWrapping="Wrap" TextAlignment="Center" FontFamily="{StaticResource PlexSans}" FontSize="13" Foreground="{StaticResource TextSecondary}">
-                                <Run Text="Vaš trezor je uspješno stvoren. Za rješavanje nejasnoća u bilo kojem trenutku pritisnite tipku"/>
-                                <Run Text=" F1 " FontWeight="Bold" Foreground="{StaticResource TextPrimary}"/>
-                                <Run Text="za otvaranje korisničkog priručnika."/>
-                            </TextBlock>
+                <Border Background="#99101620" IsVisible="{Binding IsUnsupportedOsNoticeOpen}">
+                    <Border Background="{StaticResource Surface}" CornerRadius="16" BoxShadow="0 20 60 0 #40000000" HorizontalAlignment="Center" VerticalAlignment="Center" Width="420" Padding="28">
+                        <StackPanel Spacing="16">
+                            <StackPanel Spacing="8" HorizontalAlignment="Center">
+                                <TextBlock Text="Ograničena funkcionalnost" FontFamily="{StaticResource PlexSans}" FontWeight="Bold" FontSize="20" Foreground="{StaticResource TextPrimary}" HorizontalAlignment="Center" TextAlignment="Center"/>
+                                <TextBlock TextWrapping="Wrap" TextAlignment="Center" FontFamily="{StaticResource PlexSans}" FontSize="13" Foreground="{StaticResource TextSecondary}">
+                                    <Run Text="Automatsko popunjavanje obrazaca i globalni prečac (Ctrl+Alt+P) trenutno su dostupni"/>
+                                    <Run Text=" samo na Windowsu." FontWeight="Bold" Foreground="{StaticResource TextPrimary}"/>
+                                    <Run Text="Ostale funkcionalnosti PassNesta rade normalno na ovom operacijskom sustavu."/>
+                                </TextBlock>
+                            </StackPanel>
+                            <Button Classes="primary" Content="Razumijem" Command="{Binding CloseUnsupportedOsNoticeCommand}" HorizontalAlignment="Stretch"/>
                         </StackPanel>
-                        <Button Classes="primary" Content="U redu" Command="{Binding CloseWelcomeDialogCommand}" HorizontalAlignment="Stretch"/>
-                    </StackPanel>
+                    </Border>
                 </Border>
             </Border>
         </Panel>

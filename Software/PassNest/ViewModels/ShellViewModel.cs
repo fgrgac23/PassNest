@@ -42,6 +42,9 @@ namespace PassNest.ViewModels
         [ObservableProperty]
         private bool isWelcomeDialogOpen;
 
+        [ObservableProperty]
+        private bool isUnsupportedOsNoticeOpen;
+
         public VaultViewModel? CurrentVault => CurrentPage as VaultViewModel;
         public AccountDetailViewModel? CurrentDetail => CurrentPage as AccountDetailViewModel;
         public GeneratorViewModel? CurrentGenerator => CurrentPage as GeneratorViewModel;
@@ -75,6 +78,11 @@ namespace PassNest.ViewModels
             if (showWelcomeMessage)
             {
                 IsWelcomeDialogOpen = true;
+                IsDialogOpen = true;
+            }
+            else if (!OperatingSystem.IsWindows())
+            {
+                IsUnsupportedOsNoticeOpen = true;
                 IsDialogOpen = true;
             }
         }
@@ -201,6 +209,13 @@ namespace PassNest.ViewModels
         private void CloseWelcomeDialog()
         {
             IsWelcomeDialogOpen = false;
+            IsDialogOpen = false;
+        }
+
+        [RelayCommand]
+        private void CloseUnsupportedOsNotice()
+        {
+            IsUnsupportedOsNoticeOpen = false;
             IsDialogOpen = false;
         }
 
