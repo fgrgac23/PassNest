@@ -42,6 +42,8 @@ namespace BusinessLogicLayer.Autofill
 
         public event Action? HotkeyPressed;
 
+        public bool IsSupported => true;
+
         public AutofillEngine(IAccountStore accountStore)
         {
             this.accountStore = accountStore;

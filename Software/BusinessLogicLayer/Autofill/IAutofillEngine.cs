@@ -8,6 +8,8 @@ namespace BusinessLogicLayer.Autofill
 {
     public interface IAutofillEngine
     {
+        bool IsSupported { get; }
+
         event Action? HotkeyPressed;
 
         void RegisterHotkeys();
