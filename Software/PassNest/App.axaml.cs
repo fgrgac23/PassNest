@@ -56,7 +56,14 @@ namespace PassNest
             service.AddSingleton<IPasswordGenerator, PasswordGenerator>();
             service.AddSingleton<IAccountStore, AccountManager>();
             service.AddSingleton<IClipboardService, ClipboardService>();
-            service.AddSingleton<IAutofillEngine, AutofillEngine>();
+            if (OperatingSystem.IsWindows())
+            {
+                service.AddSingleton<IAutofillEngine, AutofillEngine>();
+            }
+            else
+            {
+                service.AddSingleton<IAutofillEngine, UnsupportedAutofillEngine>();
+            }
             service.AddSingleton<IBackupStore, FileBackupStore>();
             service.AddSingleton<IBackupManager, BackupManager>();
             service.AddSingleton<IFIleDialogService, FileDialogService>();

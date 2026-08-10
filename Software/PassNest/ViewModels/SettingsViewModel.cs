@@ -52,6 +52,8 @@ namespace PassNest.ViewModels
         [ObservableProperty]
         private string restoreMasterPassword = string.Empty;
 
+        public bool IsAutofillSupported => OperatingSystem.IsWindows();
+
         public event Action<int>? AutoLockChanged;
 
         public SettingsViewModel(IBackupManager backupManager, IFIleDialogService fileDialogService, IAuthProvider authProvider)

@@ -230,6 +230,12 @@ namespace PassNest.ViewModels
         [RelayCommand]
         private void AutoFill()
         {
+            if (!autofillEngine.IsSupported)
+            {
+                ShowError("Automatsko popunjavanje nije dostupno na ovom operacijskom sustavu.");
+                return;
+            }
+
             var success = autofillEngine.TriggerAutofill(accountId);
 
             if (success)
