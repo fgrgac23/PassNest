@@ -1,10 +1,12 @@
 ﻿using BusinessLogicLayer.AccountManagement;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Threading;
 
 namespace BusinessLogicLayer.Autofill
 {
+    [ExcludeFromCodeCoverage]
     public class AutofillEngine : IAutofillEngine
     {
         private const int HOTKEY_ID = 1;

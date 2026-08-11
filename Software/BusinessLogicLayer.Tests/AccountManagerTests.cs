@@ -144,5 +144,149 @@ namespace BusinessLogicLayer.Tests
             Assert.Single(credentials);
             Assert.Equal("Github", credentials[0].ServiceName);
         }
+
+        [Fact]
+        public void DeleteAccount_RemovesAccountFromRepository()
+        {
+            var sut = CreateSut();
+            sut.AddAccount("Github", "filip", "Lozinka1!", Array.Empty<int>());
+            var accountId = accountRepository.Items.Single().AccountId;
+
+            sut.DeleteAccount(accountId);
+
+            Assert.Empty(accountRepository.Items);
+        }
+
+        [Fact]
+        public void DeleteAccount_NonExistentAccount_DoesNothing()
+        {
+            var sut = CreateSut();
+
+            sut.DeleteAccount(999);
+
+            Assert.Empty(accountRepository.Items);
+        }
+
+        [Fact]
+        public void UpdateAccount_NonExistentAccount_DoesNothing()
+        {
+            var sut = CreateSut();
+
+            sut.UpdateAccount(999, "Github", "filip", "Lozinka1!", null, Array.Empty<int>());
+
+            Assert.Empty(accountRepository.Items);
+        }
+
+        [Fact]
+        public void UpdateAccount_ReplacesCategories()
+        {
+            categoryRepository.Add(new Category { Name = "Posao", IsSystemDefined = true });
+            categoryRepository.Add(new Category { Name = "Osobno", IsSystemDefined = true });
+            var sut = CreateSut();
+            sut.AddAccount("Github", "filip", "Lozinka1!", new[] { 1 });
+            var accountId = accountRepository.Items.Single().AccountId;
+
+            sut.UpdateAccount(accountId, "Github", "filip", "Lozinka1!", null, new[] { 2 });
+
+            var updated = accountRepository.Items.Single();
+            Assert.Single(updated.Categories);
+            Assert.Equal("Osobno", updated.Categories.Single().Name);
+        }
+
+        [Fact]
+        public void GetAllAccounts_ReturnsAllStoredAccounts()
+        {
+            var sut = CreateSut();
+            sut.AddAccount("Github", "filip", "Lozinka1!", Array.Empty<int>());
+            sut.AddAccount("Spotify", "filip", "Lozinka2!", Array.Empty<int>());
+
+            Assert.Equal(2, sut.GetAllAccounts().Count());
+        }
+
+        [Fact]
+        public void SearchAccounts_ReturnsMatchingServiceNameCaseInsensitive()
+        {
+            var sut = CreateSut();
+            sut.AddAccount("Github", "filip", "Lozinka1!", Array.Empty<int>());
+            sut.AddAccount("Spotify", "filip", "Lozinka2!", Array.Empty<int>());
+
+            var result = sut.SearchAccounts("git");
+
+            Assert.Single(result);
+            Assert.Equal("Github", result.Single().ServiceName);
+        }
+
+        [Fact]
+        public void SearchAccounts_NoMatch_ReturnsEmpty()
+        {
+            var sut = CreateSut();
+            sut.AddAccount("Github", "filip", "Lozinka1!", Array.Empty<int>());
+
+            Assert.Empty(sut.SearchAccounts("nepostojece"));
+        }
+
+        [Fact]
+        public void FilterByCategory_ReturnsOnlyAccountsInThatCategory()
+        {
+            categoryRepository.Add(new Category { Name = "Posao", IsSystemDefined = true });
+            var sut = CreateSut();
+            sut.AddAccount("Github", "filip", "Lozinka1!", new[] { 1 });
+            sut.AddAccount("Spotify", "filip", "Lozinka2!", Array.Empty<int>());
+
+            var result = sut.FilterByCategory(1);
+
+            Assert.Single(result);
+            Assert.Equal("Github", result.Single().ServiceName);
+        }
+
+        [Fact]
+        public void GetCategories_ReturnsAllCategories()
+        {
+            categoryRepository.Add(new Category { Name = "Posao", IsSystemDefined = true });
+            categoryRepository.Add(new Category { Name = "Osobno", IsSystemDefined = true });
+            var sut = CreateSut();
+
+            Assert.Equal(2, sut.GetCategories().Count());
+        }
+
+        [Fact]
+        public void AddCategory_NoCurrentUser_ThrowsInvalidOperationException()
+        {
+            authProvider.Setup(a => a.GetCurrentUser()).Returns((User?)null);
+            var sut = CreateSut();
+
+            Assert.Throws<InvalidOperationException>(() => sut.AddCategory("Nova", "#000000"));
+        }
+
+        [Fact]
+        public void GetCredentials_ValidAccount_ReturnsDecryptedCredentials()
+        {
+            var sut = CreateSut();
+            sut.AddAccount("Github", "filip", "TajnaLozinka1!", Array.Empty<int>());
+            var accountId = accountRepository.Items.Single().AccountId;
+
+            var credentials = sut.GetCredentials(accountId);
+
+            Assert.NotNull(credentials);
+            Assert.Equal("TajnaLozinka1!", credentials!.Password);
+        }
+
+        [Fact]
+        public void GetCredentials_AccountNotFound_ReturnsNull()
+        {
+            var sut = CreateSut();
+
+            Assert.Null(sut.GetCredentials(999));
+        }
+
+        [Fact]
+        public void GetAllCredentials_NoEncryptionKey_ReturnsEmpty()
+        {
+            authProvider.Setup(a => a.GetEncryptionKey()).Returns((byte[]?)null);
+            var sut = CreateSut();
+            sut.AddAccount("Github", "filip", "Lozinka1!", Array.Empty<int>());
+
+            Assert.Empty(sut.GetAllCredentials());
+        }
     }
 }
