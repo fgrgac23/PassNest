@@ -72,5 +72,11 @@ namespace BusinessLogicLayer.Tests
 
             Assert.True(result is PasswordStrengthLevel.VrloSlaba or PasswordStrengthLevel.Slaba);
         }
+
+        [Fact]
+        public void EvaluateStrength_MixedCaseTwelveChars_ReturnsSrednja()
+        {
+            Assert.Equal(PasswordStrengthLevel.Srednja, generator.EvaluateStrength("Abcdefghijkl"));
+        }
     }
 }
