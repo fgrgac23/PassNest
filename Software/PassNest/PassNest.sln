@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccessLayer", "..\DataA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLogicLayer", "..\BusinessLogicLayer\BusinessLogicLayer.csproj", "{AFD1DDAE-788F-4DDA-B1CB-14D29755E08B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLogicLayer.Tests", "..\BusinessLogicLayer.Tests\BusinessLogicLayer.Tests.csproj", "{2735D1BC-9BC8-D101-78BA-62A3DAE51583}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{AFD1DDAE-788F-4DDA-B1CB-14D29755E08B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AFD1DDAE-788F-4DDA-B1CB-14D29755E08B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AFD1DDAE-788F-4DDA-B1CB-14D29755E08B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2735D1BC-9BC8-D101-78BA-62A3DAE51583}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2735D1BC-9BC8-D101-78BA-62A3DAE51583}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2735D1BC-9BC8-D101-78BA-62A3DAE51583}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2735D1BC-9BC8-D101-78BA-62A3DAE51583}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
