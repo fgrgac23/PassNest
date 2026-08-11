@@ -1,6 +1,5 @@
 ﻿using BusinessLogicLayer.Security;
 using System.Security.Cryptography;
-using Xunit;
 
 namespace BusinessLogicLayer.Tests
 {
