@@ -282,9 +282,10 @@ namespace BusinessLogicLayer.Tests
         [Fact]
         public void GetAllCredentials_NoEncryptionKey_ReturnsEmpty()
         {
-            authProvider.Setup(a => a.GetEncryptionKey()).Returns((byte[]?)null);
             var sut = CreateSut();
             sut.AddAccount("Github", "filip", "Lozinka1!", Array.Empty<int>());
+
+            authProvider.Setup(a => a.GetEncryptionKey()).Returns((byte[]?)null);
 
             Assert.Empty(sut.GetAllCredentials());
         }
