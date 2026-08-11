@@ -117,5 +117,41 @@ namespace BusinessLogicLayer.Tests
             var restored = accountRepository.Items.Single();
             Assert.Equal("TajnaLozinka1!", crypto.Decrypt(restored.EncryptedPassword, newKey));
         }
+
+        [Fact]
+        public void RestoreBackup_AccountWithCorruptedPassword_IsSkipped()
+        {
+            var key = authProvider.Object.GetEncryptionKey()!;
+            accountRepository.Add(new Account { UserId = 1, ServiceName = "Github", UserName = "filip", EncryptedPassword = crypto.Encrypt("TajnaLozinka1!", key) });
+            accountRepository.Add(new Account { UserId = 1, ServiceName = "Oštećeno", UserName = "filip", EncryptedPassword = Convert.ToBase64String(new byte[20]) });
+
+            var sut = CreateSut();
+            sut.CreateBackup("backup.pnbackup");
+            accountRepository.Clear();
+
+            sut.RestoreBackup("backup.pnbackup", OriginalPassword);
+
+            Assert.Equal("Github", accountRepository.Items.Single().ServiceName);
+        }
+
+        [Fact]
+        public void RestoreBackup_NoCurrentUser_ThrowsInvalidOperationException()
+        {
+            var sut = CreateSut();
+            sut.CreateBackup("backup.pnbackup");
+            authProvider.Setup(a => a.GetCurrentUser()).Returns((User?)null);
+
+            Assert.Throws<InvalidOperationException>(() => sut.RestoreBackup("backup.pnbackup", OriginalPassword));
+        }
+
+        [Fact]
+        public void RestoreBackup_NoEncryptionKey_ThrowsInvalidOperationException()
+        {
+            var sut = CreateSut();
+            sut.CreateBackup("backup.pnbackup");
+            authProvider.Setup(a => a.GetEncryptionKey()).Returns((byte[]?)null);
+
+            Assert.Throws<InvalidOperationException>(() => sut.RestoreBackup("backup.pnbackup", OriginalPassword));
+        }
     }
 }
