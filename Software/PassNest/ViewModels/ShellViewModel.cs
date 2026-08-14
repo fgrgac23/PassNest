@@ -4,6 +4,7 @@ using BusinessLogicLayer.Autofill;
 using BusinessLogicLayer.BaseBackup;
 using BusinessLogicLayer.PasswordAudit;
 using BusinessLogicLayer.PasswordGeneration;
+using BusinessLogicLayer.UpdateCheck;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using PassNest.Models;
@@ -11,7 +12,10 @@ using PassNest.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
 
 namespace PassNest.ViewModels
 {
@@ -26,6 +30,7 @@ namespace PassNest.ViewModels
         private readonly IFIleDialogService fileDialogService;
         private readonly IIdleTimerService idleTimerService;
         private readonly IPasswordAuditor passwordAuditor;
+        private readonly IUpdateChecker updateChecker;
 
         [ObservableProperty]
         private string selectedNavItem = "Trezor";
@@ -45,6 +50,18 @@ namespace PassNest.ViewModels
         [ObservableProperty]
         private bool isUnsupportedOsNoticeOpen;
 
+        [ObservableProperty]
+        private bool isUpdateNoticeOpen;
+
+        [ObservableProperty]
+        private string updateVersion = string.Empty;
+
+        [ObservableProperty]
+        private string updateReleaseNotes = string.Empty;
+
+        [ObservableProperty]
+        private string updateReleaseUrl = string.Empty;
+
         public VaultViewModel? CurrentVault => CurrentPage as VaultViewModel;
         public AccountDetailViewModel? CurrentDetail => CurrentPage as AccountDetailViewModel;
         public GeneratorViewModel? CurrentGenerator => CurrentPage as GeneratorViewModel;
@@ -57,7 +74,7 @@ namespace PassNest.ViewModels
 
         public event Action? VaultLocked;
 
-        public ShellViewModel(IAccountStore accountStore, IPasswordGenerator passwordGenerator, IClipboardService clipboardService, IAuthProvider authProvider, IAutofillEngine autofillEngine, IBackupManager backupManager, IFIleDialogService fileDialogService, IIdleTimerService idleTimerService, IPasswordAuditor passwordAuditor, bool showWelcomeMessage = false)
+        public ShellViewModel(IAccountStore accountStore, IPasswordGenerator passwordGenerator, IClipboardService clipboardService, IAuthProvider authProvider, IAutofillEngine autofillEngine, IBackupManager backupManager, IFIleDialogService fileDialogService, IIdleTimerService idleTimerService, IPasswordAuditor passwordAuditor, IUpdateChecker updateChecker, bool showWelcomeMessage = false)
         {
             this.accountStore = accountStore;
             this.passwordGenerator = passwordGenerator;
@@ -68,6 +85,7 @@ namespace PassNest.ViewModels
             this.fileDialogService = fileDialogService;
             this.idleTimerService = idleTimerService;
             this.passwordAuditor = passwordAuditor;
+            this.updateChecker = updateChecker;
             currentPage = CreateVaultPage();
             UpdateBreadcrumbs();
 
@@ -84,6 +102,10 @@ namespace PassNest.ViewModels
             {
                 IsUnsupportedOsNoticeOpen = true;
                 IsDialogOpen = true;
+            }
+            else
+            {
+                _ = CheckForUpdateAsync();
             }
         }
 
@@ -210,12 +232,51 @@ namespace PassNest.ViewModels
         {
             IsWelcomeDialogOpen = false;
             IsDialogOpen = false;
+            _ = CheckForUpdateAsync();
         }
 
         [RelayCommand]
         private void CloseUnsupportedOsNotice()
         {
             IsUnsupportedOsNoticeOpen = false;
+            IsDialogOpen = false;
+            _ = CheckForUpdateAsync();
+        }
+
+        private async Task CheckForUpdateAsync()
+        {
+            try
+            {
+                var currentVersion = Assembly.GetExecutingAssembly().GetName().Version ?? new Version(0, 0, 0);
+                var result = await updateChecker.CheckForUpdatesAsync(currentVersion);
+                if (result.IsUpdateAvailable)
+                {
+                    UpdateVersion = result.LatestVersion;
+                    UpdateReleaseNotes = result.ReleaseNotes;
+                    UpdateReleaseUrl = result.ReleaseUrl;
+                    IsUpdateNoticeOpen = true;
+                    IsDialogOpen = true;
+                }
+            }
+            catch
+            {
+            }
+        }
+
+        [RelayCommand]
+        private void OpenUpdateDownload()
+        {
+            if(string.IsNullOrWhiteSpace(UpdateReleaseUrl)) return;
+            Process.Start(new ProcessStartInfo(UpdateReleaseUrl) { UseShellExecute = true });
+
+            IsUpdateNoticeOpen = false;
+            IsDialogOpen = false;
+        }
+
+        [RelayCommand]
+        private void DismissUpdateNotice()
+        {
+            IsUpdateNoticeOpen = false;
             IsDialogOpen = false;
         }
 
