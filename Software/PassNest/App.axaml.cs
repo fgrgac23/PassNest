@@ -13,10 +13,12 @@ using BusinessLogicLayer.BaseBackup;
 using BusinessLogicLayer.PasswordAudit;
 using BusinessLogicLayer.PasswordGeneration;
 using BusinessLogicLayer.Security;
+using BusinessLogicLayer.UpdateCheck;
 using DataAccessLayer.Backup;
 using DataAccessLayer.Data;
 using DataAccessLayer.Email;
 using DataAccessLayer.Repository;
+using DataAccessLayer.UpdateCheck;
 using EntityLayer;
 using Microsoft.Extensions.DependencyInjection;
 using PassNest.Services;
@@ -24,6 +26,7 @@ using PassNest.ViewModels;
 using PassNest.Views;
 using System;
 using System.Linq;
+using System.Net.Http;
 
 namespace PassNest
 {
@@ -69,6 +72,11 @@ namespace PassNest
             service.AddSingleton<IFIleDialogService, FileDialogService>();
             service.AddSingleton<IIdleTimerService, IdleTimerService>();
             service.AddSingleton<IPasswordAuditor, PasswordAuditor>();
+
+            var httpClient = new HttpClient();
+            service.AddSingleton<IUpdateSource>(new GitHubReleaseClient(httpClient, "fgrgac23", "PassNest"));
+            service.AddSingleton<IUpdateChecker, UpdateChecker>();
+
             service.AddSingleton<MainWindowViewModel>();
 
             provider = service.BuildServiceProvider();
