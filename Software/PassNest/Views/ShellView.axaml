@@ -167,6 +167,25 @@
             <Border Classes="error-toast" Classes.visible="{Binding CurrentSettings.HasError}" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="16,16,16,0" Background="#F5D6503C" BorderBrush="{StaticResource Weak}" BorderThickness="1" CornerRadius="10" Padding="24,14">
                 <TextBlock Text="{Binding CurrentSettings.ErrorMessage}" Foreground="{StaticResource TextOnDarkPrimary}" FontFamily="{StaticResource PlexSans}" FontSize="15" FontWeight="Bold" TextWrapping="Wrap" HorizontalAlignment="Center"/>
             </Border>
+            <Border Background="#99101620" IsVisible="{Binding IsUpdateNoticeOpen}">
+                <Border Background="{StaticResource Surface}" CornerRadius="16" BoxShadow="0 20 60 0 #40000000" HorizontalAlignment="Center" VerticalAlignment="Center" Width="420" MaxHeight="560" Padding="28">
+                    <Grid RowDefinitions="Auto,*,Auto">
+                        <StackPanel Grid.Row="0" Spacing="4" HorizontalAlignment="Center" Margin="0,0,0,16">
+                            <TextBlock Text="PATCH NOTE" FontFamily="{StaticResource PlexSans}" FontWeight="Bold" FontSize="24" Foreground="{StaticResource TextPrimary}" HorizontalAlignment="Center" TextAlignment="Center"/>
+                            <TextBlock Text="{Binding UpdateVersion, StringFormat='Verzija v{0}'}" FontFamily="{StaticResource PlexSans}" FontWeight="SemiBold" FontSize="14" Foreground="{StaticResource TextSecondary}" HorizontalAlignment="Center"/>
+                        </StackPanel>
+
+                        <ScrollViewer Grid.Row="1" MaxHeight="320" VerticalScrollBarVisibility="Auto">
+                            <TextBlock Text="{Binding UpdateReleaseNotes}" TextWrapping="Wrap" TextAlignment="Center" FontFamily="{StaticResource PlexSans}" FontSize="13" Foreground="{StaticResource TextSecondary}"/>
+                        </ScrollViewer>
+
+                        <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center" Margin="0,20,0,0">
+                            <Button Classes="secondary-dark" Content="Kasnije" Command="{Binding DismissUpdateNoticeCommand}" Width="150"/>
+                            <Button Classes="primary" Content="Preuzmi" Command="{Binding OpenUpdateDownloadCommand}" Width="150"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </Border>
             <Border Background="#99101620" IsVisible="{Binding IsWelcomeDialogOpen}">
                 <Border Background="#99101620" IsVisible="{Binding IsUnsupportedOsNoticeOpen}">
                     <Border Background="{StaticResource Surface}" CornerRadius="16" BoxShadow="0 20 60 0 #40000000" HorizontalAlignment="Center" VerticalAlignment="Center" Width="420" Padding="28">
