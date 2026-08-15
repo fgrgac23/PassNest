@@ -171,7 +171,7 @@
                 <Border Background="{StaticResource Surface}" CornerRadius="16" BoxShadow="0 20 60 0 #40000000" HorizontalAlignment="Center" VerticalAlignment="Center" Width="420" MaxHeight="560" Padding="28">
                     <Grid RowDefinitions="Auto,*,Auto">
                         <StackPanel Grid.Row="0" Spacing="4" HorizontalAlignment="Center" Margin="0,0,0,16">
-                            <TextBlock Text="PATCH NOTE" FontFamily="{StaticResource PlexSans}" FontWeight="Bold" FontSize="24" Foreground="{StaticResource TextPrimary}" HorizontalAlignment="Center" TextAlignment="Center"/>
+                            <TextBlock Text="NOVA VERZIJA" FontFamily="{StaticResource PlexSans}" FontWeight="Bold" FontSize="24" Foreground="{StaticResource TextPrimary}" HorizontalAlignment="Center" TextAlignment="Center"/>
                             <TextBlock Text="{Binding UpdateVersion, StringFormat='Verzija v{0}'}" FontFamily="{StaticResource PlexSans}" FontWeight="SemiBold" FontSize="14" Foreground="{StaticResource TextSecondary}" HorizontalAlignment="Center"/>
                         </StackPanel>
 
@@ -180,7 +180,7 @@
                         </ScrollViewer>
 
                         <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center" Margin="0,20,0,0">
-                            <Button Classes="secondary-dark" Content="Kasnije" Command="{Binding DismissUpdateNoticeCommand}" Width="150"/>
+                            <Button Classes="secondary" Content="Kasnije" Command="{Binding DismissUpdateNoticeCommand}" Width="150"/>
                             <Button Classes="primary" Content="Preuzmi" Command="{Binding OpenUpdateDownloadCommand}" Width="150"/>
                         </StackPanel>
                     </Grid>
