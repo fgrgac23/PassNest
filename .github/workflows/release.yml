@@ -40,6 +40,7 @@ jobs:
 
           echo "should_release=true" >> "$GITHUB_OUTPUT"
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "version_number=${VERSION#v}" >> "$GITHUB_OUTPUT"
           echo "notes<<EOF" >> "$GITHUB_OUTPUT"
           echo "$NOTES" >> "$GITHUB_OUTPUT"
           echo "EOF" >> "$GITHUB_OUTPUT"
@@ -54,6 +55,16 @@ jobs:
         if: steps.version.outputs.should_release == 'true'
         run: dotnet publish Software/PassNest/PassNest.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o publish
 
+      - name: Install Inno Setup
+        if: steps.version.outputs.should_release == 'true'
+        run: choco install innosetup -y
+
+      - name: Build installer
+        if: steps.version.outputs.should_release == 'true'
+        shell: pwsh
+        run: |
+          & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" /DMyAppVersion=${{ steps.version.outputs.version_number }} installer\PassNest.iss
+
       - name: Create tag
         if: steps.version.outputs.should_release == 'true'
         run: |
@@ -67,4 +78,4 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release create ${{ steps.version.outputs.version }} publish/PassNest.exe --title "PassNest ${{ steps.version.outputs.version }}" --notes "${{ steps.version.outputs.notes }}"
+          gh release create ${{ steps.version.outputs.version }} installer-output\PassNest-Setup.exe --title "PassNest ${{ steps.version.outputs.version }}" --notes "${{ steps.version.outputs.notes }}"
