@@ -60,10 +60,11 @@ namespace PassNest.Views
                 WindowState = WindowState.Normal;
                 Show();
                 Activate();
+                Dispatcher.UIThread.Post(CenterOnScreen, DispatcherPriority.Loaded);
             });
         }
 
-        private void CenterOnScreen()
+        internal void CenterOnScreen()
         {
             var screen = Screens.ScreenFromVisual(this) ?? Screens.Primary;
             if (screen is null)

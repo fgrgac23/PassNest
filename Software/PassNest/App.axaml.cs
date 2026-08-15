@@ -119,11 +119,16 @@ namespace PassNest
 
         private void OnTrayOpenClick(object? sender, EventArgs e)
         {
-            if(ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop && desktop.MainWindow != null)
+            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop && desktop.MainWindow != null)
             {
                 desktop.MainWindow.WindowState = WindowState.Normal;
                 desktop.MainWindow.Show();
                 desktop.MainWindow.Activate();
+
+                if (desktop.MainWindow is Views.MainWindow mainWindow)
+                {
+                    Avalonia.Threading.Dispatcher.UIThread.Post(mainWindow.CenterOnScreen, Avalonia.Threading.DispatcherPriority.Loaded);
+                }
             }
         }
 
