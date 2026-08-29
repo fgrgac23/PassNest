@@ -3,7 +3,7 @@
              xmlns:converters="using:Avalonia.Markup.Xaml.Converters"
              x:Class="PassNest.App"
              xmlns:local="using:PassNest"
-             RequestedThemeVariant="Default">
+             RequestedThemeVariant="Light">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
     
     <Application.DataTemplates>
