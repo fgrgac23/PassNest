@@ -1,6 +1,8 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using System;
 using System.Diagnostics;
@@ -13,6 +15,7 @@ namespace PassNest.Views
         public MainWindow()
         {
             InitializeComponent();
+            RenderOptions.SetBitmapInterpolationMode(this, BitmapInterpolationMode.HighQuality);
             Opened += (_, _) => CenterOnScreen();
             SizeChanged += (_, _) => CenterOnScreen();
             Closing += OnClosing;
