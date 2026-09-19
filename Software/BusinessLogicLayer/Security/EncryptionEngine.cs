@@ -14,6 +14,7 @@ namespace BusinessLogicLayer.Security
         private const int KeySize = 32;
         private const int Iteration = 100_000;
         private static readonly HashAlgorithmName Algorithm = HashAlgorithmName.SHA256;
+        private static readonly byte[] VerifierLabel = Encoding.UTF8.GetBytes("PassNest.MasterPasswordVerifier.v1");
 
         public string GenerateSalt() => Convert.ToBase64String(RandomNumberGenerator.GetBytes(SaltSize));
 
@@ -23,13 +24,21 @@ namespace BusinessLogicLayer.Security
             return Rfc2898DeriveBytes.Pbkdf2(Encoding.UTF8.GetBytes(password), saltBytes, Iteration, Algorithm, KeySize);
         }
 
-        public string HashPassword(string password, string salt) => Convert.ToBase64String(DeriveKey(password, salt));
+        public string HashPassword(string password, string salt)
+        {
+            var key = DeriveKey(password, salt);
+            return Convert.ToBase64String(HMACSHA256.HashData(key, VerifierLabel));
+        }
 
         public bool VerifyPassword(string password, string hash, string salt)
         {
-            var computed = Convert.FromBase64String(HashPassword(password, salt));
+            var key = DeriveKey(password, salt);
             var expected = Convert.FromBase64String(hash);
-            return CryptographicOperations.FixedTimeEquals(computed, expected);
+
+            var matchesNewFormat = CryptographicOperations.FixedTimeEquals(HMACSHA256.HashData(key, VerifierLabel), expected);
+            var matchesLegacyFormat = CryptographicOperations.FixedTimeEquals(key, expected);
+
+            return matchesNewFormat | matchesLegacyFormat;
         }
 
         public string Encrypt(string plainText, byte[] key)

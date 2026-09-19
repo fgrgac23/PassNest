@@ -98,6 +98,8 @@ namespace BusinessLogicLayer.Authentication
                 return AuthResult.Fail("Neispravna lozinka.");
             }
 
+            UpgradePasswordHashIfNeeded(user, masterPassword);
+
             if (user.Is2FAEnabled)
             {
                 var code = TwoFactorCodeGenerator.GenerateCode();
@@ -125,6 +127,19 @@ namespace BusinessLogicLayer.Authentication
             IsAuthenticated = true;
             return AuthResult.Ok();
         }
+        private void UpgradePasswordHashIfNeeded(User user, string masterPassword)
+        {
+            var currentHash = Crypto.HashPassword(masterPassword, user.MasterPasswordSalt);
+            if (user.MasterPasswordHash == currentHash)
+            {
+                return;
+            }
+
+            user.MasterPasswordHash = currentHash;
+            UserRepository.Update(user);
+            UserRepository.SaveChanges();
+        }
+
         public void EnableTwoFactor(string email)
         {
             if(CurrentUser is null)
